@@ -351,7 +351,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Foundation_Account__c</field>
+            <field>Touchpoint_Master_ID__c</field>
             <value>
                 <elementReference>$Record.Foundation_Account__c</elementReference>
             </value>
