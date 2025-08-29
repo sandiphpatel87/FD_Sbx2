@@ -1,0 +1,10 @@
+Hi Onboarding Team, 
+
+{!Onboarding__c.Account__c} has requested to launch early. 
+
+Kindly reach out to the appropriate dealership point of contact to discuss the available early launch options, if any.
+
+Please review what is still needed to launch this account and change status to Dealer Approved if applicable. 
+
+Thank you,
+{!Onboarding__c.RPM_Name__c}

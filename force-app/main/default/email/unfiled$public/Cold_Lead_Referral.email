@@ -1,0 +1,8 @@
+Good Afternoon {!Lead.FirstName},
+
+I believe you spoke with one of our clients, XX, who passed your information along to us. I appreciate your interest in Foundation Direct. I'm {!Lead.OwnerFirstName}, one of the Co-Founders and I'd be happy to connect with you in the coming days to learn more about your business and share some information about ours. If you could let me know a few days/times that work for you, I'll make it work on my end. 
+
+Thanks!
+{!Lead.OwnerFirstName} {!Lead.OwnerLastName}
+{!Lead.OwnerEmail}
+{!Lead.OwnerPhone}

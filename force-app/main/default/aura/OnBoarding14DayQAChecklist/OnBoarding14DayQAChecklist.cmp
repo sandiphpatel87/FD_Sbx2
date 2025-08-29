@@ -1,0 +1,76 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div >
+        
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <!-- COMMENTED OUT OLD FIELDS - START -->
+        <!--
+        <h3 class="slds-section-title__divider"> Apollo QAs </h3>
+			<span> <lightning:input aura:id='checkboxField14' label="Review Pacing Reports"  checked="{!v.onboardRecord.Review_Pacing_Reports__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        <h3 class="slds-section-title__divider">Google QAs</h3>
+        <span> <lightning:input aura:id='checkboxField14' label="Check Impression Share / Auction Insights (Rank, Budget)"  checked="{!v.onboardRecord.Check_Impression_Share_Auction_Insight__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField14' label="Manually Review Search Terms report" checked="{!v.onboardRecord.Manually_Review_Search_Terms_report__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField14' label="Disable any Duplicate Click-to-Call Conversion Action(s) (keep the one with the CPE-Click-To-Call naming convention from Foundation GA Views)" checked="{!v.onboardRecord.Disable_any_Duplicate_Click_to_Call_Conv__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField14' label="Remove all Non-Standard FD Goals from Google Ads (AMSI, Penske and Lithia accounts are NOT being addressed currently)" checked="{!v.onboardRecord.Remove_all_Non_Standard_FD_Goals_from_Go__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField14' label="Ensure that Ad Words Conversion Tracking is Properly Set Up in The Account and Recording Conversions" checked="{!v.onboardRecord.Ensure_that_Ad_Words_Conversion_Tracking__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField14' label="Set up AWCT if you were unable to during launch (due to Google Tag not being on site)" checked="{!v.onboardRecord.Set_up_AWCT_if_you_were_unable_to_during__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField14' label="Check Google Tag Status (Check Vistadash Setup Doc to ensure GTM is on the site. If it is, Google Tag should be active)" checked="{!v.onboardRecord.Check_Google_Tag_Status_Check_Vistadash__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        -->
+        <!-- COMMENTED OUT OLD FIELDS - END -->
+        
+        <!-- NEW FIELD STRUCTURE - START -->
+        <h3 class="slds-section-title--divider">Apollo QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check to see if there are any products (VAs/FB/YT/PMAX/etc) not yet live that have budget" checked="{!v.onboardRecord.Check_to_see_if_there_are_any_products__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Google QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check Impression Share and CPCs" checked="{!v.onboardRecord.Check_Impression_Share_and_CPCs__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Search Term Audit" checked="{!v.onboardRecord.Search_Term_Audit__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check conversions are imported and add values" checked="{!v.onboardRecord.Check_conversions_are_imported_and_add_v__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Ensure Google Ads Tag is firing.  If not firing, email Lisa Cascone and Ariel Boston with tag code" checked="{!v.onboardRecord.Ensure_Google_Ads_Tag_is_firing_If_not__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Set up AWCT if Google Tag is firing and add to necessary campaigns (VAs, PMAX Custom Goal, etc)" checked="{!v.onboardRecord.Set_up_AWCT_if_Google_Tag_is_firing_and__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Video QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check daily budgets.  Make sure the campaign's daily budgets are fairly even." checked="{!v.onboardRecord.Check_daily_budgets_Make_sure_the_camp__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="If video was set live after launch and 7 day QA, go through launch day steps to ensure proper setup" checked="{!v.onboardRecord.If_video_was_set_live_after_launch_go_t__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Bing QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check pacing and daily budgets" checked="{!v.onboardRecord.Check_pacing_and_daily_budgets__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        <!-- NEW FIELD STRUCTURE - END -->
+        <div>
+            <br/>
+            <br/>
+            
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+        <!--<aura:set attribute="else">
+                <b> Record is not available</b>
+            </aura:set>-->
+        
+        <br/><br/>
+    </div>
+</aura:component>

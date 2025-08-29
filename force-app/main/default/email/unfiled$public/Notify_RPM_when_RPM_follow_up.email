@@ -1,0 +1,13 @@
+Hi {!Onboarding__c.RPM_Name__c},
+
+The onboarding team is requesting assistance with the following task for the launch of {!Onboarding__c.Account__c}:
+
+{!Onboarding__c.Follow_up_fields__c}
+
+Please check the below link for more details 
+{!Onboarding__c.Link}
+
+Thank you for your assistance!
+
+Foundation Support
+support@foundationdirect.com

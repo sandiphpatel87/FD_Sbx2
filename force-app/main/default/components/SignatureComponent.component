@@ -1,0 +1,444 @@
+<apex:component controller="SignatureComponentController" allowDML="true" >
+    <apex:attribute name="parentId" type="id" description="The Id of the record for Signature" required="true" assignTo="{!objParentId}"/>
+    
+    <head>  <link rel="stylesheet"
+                  href= 
+                  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> 
+        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" ></link>
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <style type="text/css">
+
+        
+        .toast-buttons { 
+        max-width: 700px; 
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        gap: 15px; 
+        margin: 2em auto; 
+        } 
+        
+        .toast-row { 
+        display: flex; 
+        justify-content: center; 
+        margin: 1em 0; 
+        padding: 1rem; 
+        flex-wrap: wrap; 
+        } 
+        
+        button.custom-toast { 
+        padding: 0.5rem 1rem; 
+        border: none; 
+        color: #fff; 
+        font-weight: 500; 
+        border-radius: 5px; 
+        box-shadow: 2px 2px 10px
+        rgba(0, 0, 0, 0.785); 
+        cursor: pointer; 
+        width: 250px; 
+        margin: 0.5em; 
+        transition: filter 0.2s ease-in-out, 
+        transform 0.3s ease-in-out; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        font-size: 1rem; 
+        background-color: transparent; 
+        outline: none; 
+        background: #3498db; 
+        color: #fff; 
+        } 
+        
+        button.custom-toast:hover { 
+        filter: brightness(0.9); 
+        } 
+        
+        button.success-toast { 
+        background-color: #2ecc71; 
+        } 
+        
+        
+        h1 { 
+        color: green; 
+        } 
+        
+        .toast { 
+        position: fixed; 
+        top: 25px; 
+        right: 25px; 
+        max-width: 300px; 
+        background: #fff; 
+        padding: 0.5rem; 
+        border-radius: 4px; 
+        box-shadow: -1px 1px 10px
+        rgba(0, 0, 0, 0.3); 
+        z-index: 1023; 
+        animation: slideInRight 0.3s 
+        ease-in-out forwards, 
+        fadeOut 0.5s ease-in-out 
+        forwards 3s; 
+        transform: translateX(110%); 
+        } 
+        
+        .toast.closing { 
+        animation: slideOutRight 0.5s 
+        ease-in-out forwards; 
+        } 
+        
+        .toast-progress { 
+        position: absolute; 
+        display: block; 
+        bottom: 0; 
+        left: 0; 
+        height: 4px; 
+        width: 100%; 
+        background: #b7b7b7; 
+        animation: toastProgress 3s 
+        ease-in-out forwards; 
+        } 
+        
+        .toast-content-wrapper { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        } 
+        
+        .toast-icon { 
+        padding: 0.35rem 0.5rem; 
+        font-size: 1.5rem; 
+        } 
+        
+        .toast-message { 
+        flex: 1; 
+        font-size: 0.9rem; 
+        color: #000000; 
+        padding: 0.5rem; 
+        } 
+        
+        .toast.toast-success { 
+        background: #95eab8; 
+        } 
+        
+        .toast.toast-success .toast-progress { 
+        background-color: #2ecc71; 
+        } 
+        
+        .toast.toast-danger { 
+        background: #efaca5; 
+        } 
+        
+        .toast.toast-danger .toast-progress { 
+        background-color: #e74c3c; 
+        }.toast.toast-warning { 
+        background: #ead994; 
+        } 
+        
+        .toast.toast-warning .toast-progress { 
+        background-color: #f1c40f; 
+        } 
+        @keyframes slideInRight { 
+        0% { 
+        transform: translateX(110%); 
+        } 
+        
+        75% { 
+        transform: translateX(-10%); 
+        } 
+        
+        100% { 
+        transform: translateX(0%); 
+        } 
+        } 
+        
+        @keyframes slideOutRight { 
+        0% { 
+        transform: translateX(0%); 
+        } 
+        
+        25% { 
+        transform: translateX(-10%); 
+        } 
+        
+        100% { 
+        transform: translateX(110%); 
+        } 
+        } 
+        
+        @keyframes fadeOut { 
+        0% { 
+        opacity: 1; 
+        } 
+        
+        100% { 
+        opacity: 0; 
+        } 
+        } 
+        
+        @keyframes toastProgress { 
+        0% { 
+        width: 100%; 
+        } 
+        
+        100% { 
+        width: 0%; 
+        } 
+        }
+    </style>
+</head> 
+
+<body>
+    <div data-role="page" id="signatureCaptureHome" style="display: contents !important;"> 
+        <div data-role="content">
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <!--<h1 id="recordSigId">Record Signature:</h1>-->
+                        <canvas id="sig-canvas" width="500" height="200" style="border:2px solid black"/>
+                        <canvas id="blankCanvas" width="500" height="200"  style="border:2px solid black;display:none"></canvas>
+                    </td>
+                </tr>
+            </table>
+            <table style="width:40%">
+                <tr>
+                    <td>
+                        <button id="sig-clearBtn" style="margin-top: 2%;padding: 5px 15px 5px 15px !important;font-size: medium;background: black;color: white;width: max-content;">
+                            Clear Area
+                        </button>
+                    </td>
+                    
+                    
+                    <td>
+                        
+                        <button id="sig-submitBtn"  status="loadStatus" rerender="myForm" style="margin-top: 2%;padding: 5px 15px 5px 15px !important;font-size: medium;background: black;color: white;width: max-content;">
+                            Accept Signature
+                        </button>
+                    </td>
+                </tr>
+            </table></div></div>
+    
+    
+    <div class="toast-overlay" 
+         id="toast-overlay"></div> 
+    
+</body>
+
+
+
+
+<script>
+
+let icon = { 
+    success: 
+    '<span class="material-symbols-outlined">task_alt</span>', 
+    danger: 
+    '<span class="material-symbols-outlined">error</span>', 
+    warning: 
+    '<span class="material-symbols-outlined">warning</span>', 
+}; 
+
+const showToast = ( 
+    message = "Sample Message", 
+    toastType = "info", 
+    duration = 7000) => { 
+    if ( 
+    !Object.keys(icon).includes(toastType)) 
+    toastType = "info"; 
+    
+    let box = document.createElement("div"); 
+    box.classList.add( 
+    "toast", `toast-${toastType}`); 
+box.innerHTML = ` <div class="toast-content-wrapper"> 
+    <div class="toast-icon"> 
+        ${icon[toastType]} 
+</div> 
+<div class="toast-message">${message}</div> 
+<div class="toast-progress"></div> 
+</div>`; 
+duration = duration || 5000; 
+box.querySelector(".toast-progress").style.animationDuration = 
+    `${duration / 1000}s`; 
+
+let toastAlready =  
+    document.body.querySelector(".toast"); 
+if (toastAlready) { 
+    toastAlready.remove(); 
+} 
+
+document.body.appendChild(box)}; 
+
+
+
+(function() {
+    // Get a regular interval for drawing to the screen
+    window.requestAnimFrame = (function (callback) {
+        return window.requestAnimationFrame || 
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimaitonFrame ||
+            function (callback) {
+            window.setTimeout(callback, 1000/60);
+        };
+    })();
+    
+    // Set up the canvas
+    var canvas = document.getElementById("sig-canvas");
+    var blankcanvas = document.getElementById("blankCanvas");
+    var ctx = canvas.getContext("2d");
+    var ctxB = blankcanvas.getContext("2d");
+    ctx.strokeStyle = "#222222";
+    ctx.lineWith = 2;
+     ctxB.strokeStyle = "#222222";
+    ctxB.lineWith = 2;
+    var parentId = "{!objParentId}";
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        // true for mobile device
+        console.log("mobile device");
+        ctx.canvas.width=300;  
+        ctxB.canvas.width=300;
+    }
+    // Set up the UI
+    //var sigText = document.getElementById("sig-dataUrl");
+    //var sigImage = document.getElementById("sig-image");
+    var clearBtn = document.getElementById("sig-clearBtn");
+    var submitBtn = document.getElementById("sig-submitBtn");
+    clearBtn.addEventListener("click", function (e) {
+        clearCanvas();
+        //sigText.innerHTML = "Data URL for your signature will go here!";
+        //sigImage.setAttribute("src", "");
+    }, false);
+    submitBtn.addEventListener("click", function (e) {
+        
+        if (canvas.toDataURL() == blankcanvas.toDataURL()) {
+            e.preventDefault(); 
+            showToast(" ! Signature is Empty","warning",5000); 
+            console.log('Nothing drawn on canvas.. AKA, Canvas is Empty');
+            debugger;
+        }
+        else
+        {
+            var dataUrl = canvas.toDataURL();
+            //sigText.innerHTML = dataUrl;
+            //sigImage.setAttribute("src", dataUrl);
+            dataUrl = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+            SignatureComponentController.saveSignature(dataUrl,parentId,processResult);
+            //window.location.reload();
+            e.preventDefault(); 
+            //showToast("Signature Submitted Successfully. Please give some time to reflect changes here. Contract PDF will be generated and emailed to you soon.","success",7000); 
+            //debugger; 
+            
+            window.open('/apex/CommunitySuccessMsgPage', "_self");
+            //top.location.href='/s/';
+        }}, false);
+    
+    function processResult(result){
+        if(result){
+            
+            //top.location.href='/s/';
+        }else{
+            e.preventDefault(); 
+            showToast("Unexpected error occurred while saving the signature. Please try again.","danger",7000);   
+            //alert('An error occurred while saving the signature. Please try again.');
+        }
+        console.log(result);
+        
+    }
+    // Set up mouse events for drawing
+    var drawing = false;
+    var mousePos = { x:0, y:0 };
+    var lastPos = mousePos;
+    canvas.addEventListener("mousedown", function (e) {
+        drawing = true;
+        lastPos = getMousePos(canvas, e);
+    }, false);
+    canvas.addEventListener("mouseup", function (e) {
+        drawing = false;
+    }, false);
+    canvas.addEventListener("mousemove", function (e) {
+        mousePos = getMousePos(canvas, e);
+    }, false);
+    
+    // Set up touch events for mobile, etc
+    canvas.addEventListener("touchstart", function (e) {
+        mousePos = getTouchPos(canvas, e);
+        var touch = e.touches[0];
+        var mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        canvas.dispatchEvent(mouseEvent);
+    }, false);
+    canvas.addEventListener("touchend", function (e) {
+        var mouseEvent = new MouseEvent("mouseup", {});
+        canvas.dispatchEvent(mouseEvent);
+    }, false);
+    canvas.addEventListener("touchmove", function (e) {
+        var touch = e.touches[0];
+        var mouseEvent = new MouseEvent("mousemove", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        canvas.dispatchEvent(mouseEvent);
+    }, false);
+    
+    // Prevent scrolling when touching the canvas
+    document.body.addEventListener("touchstart", function (e) {
+        if (e.target == canvas) {
+            e.preventDefault();
+        }
+    }, false);
+    document.body.addEventListener("touchend", function (e) {
+        if (e.target == canvas) {
+            e.preventDefault();
+        }
+    }, false);
+    document.body.addEventListener("touchmove", function (e) {
+        if (e.target == canvas) {
+            e.preventDefault();
+        }
+    }, false);
+    
+    // Get the position of the mouse relative to the canvas
+    function getMousePos(canvasDom, mouseEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+            x: mouseEvent.clientX - rect.left,
+            y: mouseEvent.clientY - rect.top
+        };
+    }
+    
+    // Get the position of a touch relative to the canvas
+    function getTouchPos(canvasDom, touchEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+            x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top
+        };
+    }
+    
+    // Draw to the canvas
+    function renderCanvas() {
+        if (drawing) {
+            ctx.moveTo(lastPos.x, lastPos.y);
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.stroke();
+            lastPos = mousePos;
+        }
+    }
+    
+    // Clear the canvas
+    function clearCanvas() {
+        canvas.width = canvas.width;
+    }
+    
+    
+    // Allow for animation
+    (function drawLoop () {
+        requestAnimFrame(drawLoop);
+        renderCanvas();
+    })();
+    
+})();
+</script>
+</apex:component>

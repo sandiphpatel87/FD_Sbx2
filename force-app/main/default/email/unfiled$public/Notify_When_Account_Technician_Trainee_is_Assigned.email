@@ -1,0 +1,6 @@
+Hi {!Account.Account_Technician_Trainee__c},
+
+You’ve been assigned as the Account Technician Trainee for {!Account.Name}.
+
+The AT is {!Account.Account_Technician_Name__c}
+The RPM is {!Account.Regional_Performance_Manager_Name__c}

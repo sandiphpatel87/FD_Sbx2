@@ -1,0 +1,38 @@
+Hi <font color="#9B3AD6"> {!Contact.FirstName}!</font>
+</br></br>
+We’re<font color="#9B3AD6"> XX </font>away from the <font color="#9B3AD6">{!Onboarding__c.Planned_Launch_Date__c} </font>launch of your new Digital Ads. I’m following up on the additional items and guidance we'll need from you before launch.
+
+
+<ul type = "disc">
+<li style="color:blue"><b>Please Email Us: </b></li>
+    <ul>
+   <li><b>Your Dealer Logo</b> (high res vector or .png file)</li>
+   <li><b>Zips To Target</b> (or exclude)</li>
+   <li><b>Approved Monthly Budget Maximums</b></li>
+    </ul>
+<li style="color:blue"><b>Please Accept Our Request To Access: </b></li>
+   <ul>
+   <li><b>Google My Business Access:</b> Request sent <font color="#9B3AD6">today,</font></li>
+   <li><b>Facebook Access:</b>Request sent <font color="#9B3AD6">today,</font></li>
+   </ul>
+
+<li style="color:blue"><b>Please Grant <font color="#1484B5">readonly@foundationdirect.com</font> Access To:</b></li>
+<ul>
+   <li><b>Your Existing Google Ads Account </b>(used to set performance benchmarks)</li>
+   <li><b>Your Existing Google Analytics Account</b> (used to import conversion goals into Google Ads for measurement & optimization)
+</li>
+  </ul>
+
+<li style="color:blue"><b>Please Advise on: </b></li>
+<ul>
+   <li>Which Google Analytics View contains the Goals you'd like us to import as conversions</li>
+  </ul>
+</ul>
+
+</br></br>
+Please don't hesitate to call, email or text with any questions!
+</br></br></br>
+Thanks again!</br>
+Jackie Puliam</br>
+Jackie@foundationdirect.com</br>
+571-370-3032

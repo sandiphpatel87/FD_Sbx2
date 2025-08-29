@@ -1,0 +1,6 @@
+Hi {!Case.Case_Assign_To__c}
+
+The {!Case.Request_Type__c} for {!Case.Account} that was opened on {!Case.CreatedDate} has not been completed. Please review, update, and close the case as soon as possible. Please reach out to your manager if you need additional time.
+Record Link:{!Case.Link}
+Thank you
+Support@foundationdirect.com

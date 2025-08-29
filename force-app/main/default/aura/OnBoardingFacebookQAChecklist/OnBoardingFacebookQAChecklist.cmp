@@ -1,0 +1,50 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div>
+     <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+    <h3 class="slds-section-title--divider">Facebook QAs </h3>
+    <!--<span> <lightning:input aura:id="checkboxField" label="Click on an ad in every campaign to confirm landing pages" checked="{!v.onboardRecord.ad_in_every_campaign_to_confirm_landing__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Ensure Accurate Daily Budgets" checked="{!v.onboardRecord.Ensure_Accurate_Daily_Budgets__c}" type="checkbox" onchange='{!c.change}'/></span>-->
+        <span> <lightning:input aura:id="checkboxField" label="Requested Facebook Launch" checked="{!v.onboardRecord.Requested_Facebook_Launch__c }" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Confirm Accurate Account Spending Limit" checked="{!v.onboardRecord.Accurate_Account_Spending_Limit__c}" type="checkbox" onchange='{!c.change}'/></span>
+    <!--<span> <lightning:input aura:id="checkboxField" label="Audit Facebook Catalog For Title And Landing Pages" checked="{!v.onboardRecord.Audit_Facebook_Catalog__c}" type="checkbox" onchange='{!c.change}'/></span>-->
+    <!-- <span> <lightning:input aura:id="checkboxField" label="Confirm Allocations for AIA Campaigns" checked="{!v.onboardRecord.Confirm_Allocations_for_AIA_Campaigns__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Update the Actual Facebook Launch Date in Onboarding" checked="{!v.onboardRecord.Update_the_Actual_Facebook_Launch_Date__c}" type="checkbox" onchange='{!c.change}'/></span>-->
+    <span> <lightning:input aura:id="checkboxField" label="Confirm Accurate Lifetime Budgets" checked="{!v.onboardRecord.Confirm_Accurate_Lifetime_Budgets__c}" type="checkbox" onchange='{!c.change}'/></span>
+    
+    <!--<span> <lightning:input aura:id='checkboxField7' label="Check FB Pacing and Adjust As Needed" checked="{!v.onboardRecord.Check_FB_Pacing_Adjust_As_Needed__c}" type="checkbox" onchange='{!c.change}'/></span>-->
+    <span> <lightning:input aura:id='checkboxField7' label="Confirm Pixel Firing" checked="{!v.onboardRecord.Confirm_Pixel_Firing__c}" type="checkbox" onchange='{!c.change}'/></span>
+        
+        <span> <lightning:input aura:id='checkboxField' label="Confirm Catalog is connected to Facebook Pixel" checked="{!v.onboardRecord.Confirm_Catalog_is_connected_to_Facebook__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Confirm Catalog Inventory  &amp;  Landing Pages" checked="{!v.onboardRecord.Confirm_Catalog_Inventory_Landing_Page__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Confirm Campaigns &amp; Ads are in the Facebook Account" checked="{!v.onboardRecord.Confirm_Campaigns_Ads_are_in_the_FB__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Ensure Proper Budget Allocations in Products Tab" checked="{!v.onboardRecord.Ensure_Proper_Budget_Allocations_in_Prod__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Set Campaigns Live" checked="{!v.onboardRecord.Set_Campaigns_Live__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Update “Actual Facebook Launch Date” in the Onboarding Object" checked="{!v.onboardRecord.Update_Actual_Facebook_Launch_Date_in__c}" type="checkbox" onchange='{!c.change}'/></span>
+    <br/>    
+    <div>
+            
+            
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+ </div>   
+</aura:component>

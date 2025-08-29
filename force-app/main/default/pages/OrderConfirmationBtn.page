@@ -1,0 +1,29 @@
+<apex:page standardController="Opportunity"  extensions="OrderConfirmationBtnController"  lightningStylesheets="true"> 
+    <apex:pageMessages />
+     
+    
+    <apex:actionStatus id="actStatusId" >
+        <apex:facet name="start">
+        <div style="z-index: 1000; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: black; opacity: 0.25">
+            
+        </div>
+        <div style="z-index: 1001; text-align: center; vertical-align: middle; position: fixed; top: 50%; left: 50%; padding: 1em; margin: -2em -10em; width: 20em; height: 60px; background: white; border-radius: 5px">
+            <img src="/img/loading32.gif" style="vertical-align: middle; padding-right: 1em" />
+            Loading...
+        </div>
+        </apex:facet>
+    </apex:actionStatus>
+    
+    <apex:form >
+        <apex:commandButton styleclass="slds-button slds-button_brand" style="float: right;font-size: larger;background: #0176d3;border-color: #0176d3;color: white;"
+                            value="Attach File & Send Email" action="{!savePDF}"  reRender="pgBlckId" status="actStatusId"/>
+        
+             <apex:iframe src="/apex/OrderConfirmationPDF?renderAs=html&id={!opportunity.Id} " scrolling="true" />
+        
+       <!-- <apex:include pageName="OrderConfirmationPDF">
+        </apex:include>-->
+        
+
+        
+    </apex:form>
+</apex:page>

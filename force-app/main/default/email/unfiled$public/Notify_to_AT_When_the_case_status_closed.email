@@ -1,0 +1,7 @@
+Hii {!Account.Account_Technician_Name__c},
+
+The case was closed, and below is the link to that record.
+
+{!Case.Link}
+
+Thanks.

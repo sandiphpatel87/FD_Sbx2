@@ -1,0 +1,7 @@
+<apex:component access="global" Controller="OnboardingCheckList">
+     <apex:attribute name="onboardingId" type="String" description="getting Scholar Id" assignTo="{!objId}"/>
+    
+   
+    {!followUp}
+   
+</apex:component>

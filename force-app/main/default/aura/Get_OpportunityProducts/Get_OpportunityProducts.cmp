@@ -1,0 +1,28 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" controller = "OpportunityLineItemController" access="global" >
+    
+    <aura:handler name="init" action="{!c.getProductList}" value="{!this}" />
+    <aura:attribute name="productList" type="List" />
+    <lightning:card class="slds-card__header-link baseCard__header-title-container" variant="Narrow" title="Products" iconName="standard:account">
+        <p class="slds-p-horizontal_small">
+        <aura:iteration items="{!v.productList}" var="product">
+            
+            <lightning:recordViewForm recordId="{!product.Id}" objectApiName="OpportunityLineItem" > 
+                <div class="slds-box slds=theme_default">
+                <!--label for="ProdName">Product Name</label-->
+                <!--lightning:outputField aura:id="ProdName" fieldName="Name" variant="label-hidden"/-->
+                <!--label for="MRR">Product MRR</label-->
+                <!--label for="Profitcenters">Profit centers</label-->
+                <div class="slds-list_horizontal">    
+                <lightning:outputField aura:id="Profitcenters1" fieldName="Profit_center_new__c"/>
+                <lightning:outputField aura:id="Profitcenters3" fieldName="Profit_center_used__c"/>
+                <lightning:outputField aura:id="Profitcenters2" fieldName="Profit_center_service__c"/>
+                </div>
+                <lightning:outputField aura:id="ProdName" fieldName="Name"/>    
+                <lightning:outputField aura:id="MRR" fieldName="MRR__c"/>    
+                </div>
+            </lightning:recordViewForm>
+            <br/>
+            </aura:iteration>
+        	</p>
+     </lightning:card>
+</aura:component>

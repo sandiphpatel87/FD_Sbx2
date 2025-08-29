@@ -1,0 +1,396 @@
+ .toast-buttons { 
+        max-width: 700px; 
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        gap: 15px; 
+        margin: 2em auto; 
+        } 
+       @page {
+                size: letter;
+                margin: 5mm;
+                
+            }
+            .page-break {
+                display:block;
+                page-break-after:always;
+            }
+            body {
+                font-family: sans-serif; font-size: 8.5pt;
+            }
+        .toast-row { 
+        display: flex; 
+        justify-content: center; 
+        margin: 1em 0; 
+        padding: 1rem; 
+        flex-wrap: wrap; 
+        } 
+        
+        button.custom-toast { 
+        padding: 0.5rem 1rem; 
+        border: none; 
+        color: #fff; 
+        font-weight: 500; 
+        border-radius: 5px; 
+        box-shadow: 2px 2px 10px
+        rgba(0, 0, 0, 0.785); 
+        cursor: pointer; 
+        width: 250px; 
+        margin: 0.5em; 
+        transition: filter 0.2s ease-in-out, 
+        transform 0.3s ease-in-out; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        font-size: 1rem; 
+        background-color: transparent; 
+        outline: none; 
+        background: #3498db; 
+        color: #fff; 
+        } 
+        
+        button.custom-toast:hover { 
+        filter: brightness(0.9); 
+        } 
+        
+        button.success-toast { 
+        background-color: #2ecc71; 
+        } 
+        
+        
+        h1 { 
+        color: green; 
+        } 
+        
+        .toast { 
+        position: fixed; 
+        top: 25px; 
+        right: 25px; 
+        max-width: 300px; 
+        background: #fff; 
+        padding: 0.5rem; 
+        border-radius: 4px; 
+        box-shadow: -1px 1px 10px
+        rgba(0, 0, 0, 0.3); 
+        z-index: 1023; 
+        animation: slideInRight 0.3s 
+        ease-in-out forwards, 
+        fadeOut 0.5s ease-in-out 
+        forwards 3s; 
+        transform: translateX(110%); 
+        } 
+        
+        .toast.closing { 
+        animation: slideOutRight 0.5s 
+        ease-in-out forwards; 
+        } 
+        
+        .toast-progress { 
+        position: absolute; 
+        display: block; 
+        bottom: 0; 
+        left: 0; 
+        height: 4px; 
+        width: 100%; 
+        background: #b7b7b7; 
+        animation: toastProgress 3s 
+        ease-in-out forwards; 
+        } 
+        
+        .toast-content-wrapper { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        } 
+        
+        .toast-icon { 
+        padding: 0.35rem 0.5rem; 
+        font-size: 1.5rem; 
+        } 
+        
+        .toast-message { 
+        flex: 1; 
+        font-size: 0.9rem; 
+        color: #000000; 
+        padding: 0.5rem; 
+        } 
+        
+        .toast.toast-success { 
+        background: #95eab8; 
+        } 
+        
+        .toast.toast-success .toast-progress { 
+        background-color: #2ecc71; 
+        } 
+        
+        .toast.toast-danger { 
+        background: #efaca5; 
+        } 
+        
+        .toast.toast-danger .toast-progress { 
+        background-color: #e74c3c; 
+        }.toast.toast-warning { 
+        background: #ead994; 
+        } 
+        
+        .toast.toast-warning .toast-progress { 
+        background-color: #f1c40f; 
+        } 
+        @keyframes slideInRight { 
+        0% { 
+        transform: translateX(110%); 
+        } 
+        
+        75% { 
+        transform: translateX(-10%); 
+        } 
+        
+        100% { 
+        transform: translateX(0%); 
+        } 
+        } 
+        
+        @keyframes slideOutRight { 
+        0% { 
+        transform: translateX(0%); 
+        } 
+        
+        25% { 
+        transform: translateX(-10%); 
+        } 
+        
+        100% { 
+        transform: translateX(110%); 
+        } 
+        } 
+        
+        @keyframes fadeOut { 
+        0% { 
+        opacity: 1; 
+        } 
+        
+        100% { 
+        opacity: 0; 
+        } 
+        } 
+        
+        @keyframes toastProgress { 
+        0% { 
+        width: 100%; 
+        } 
+        
+        100% { 
+        width: 0%; 
+        } 
+        }
+		.pdftable tr{
+        padding: 1px !important;
+        } 
+		html body.sfdcBody{
+        background: #FFF !important;
+        }
+        button.ui-btn.ui-shadow.ui-corner-all{
+        margin-top: 2%;
+    padding: 5px 15px 5px 15px !important;
+    font-size: medium;
+    background: black;
+    color: white;
+        }
+        form
+        {
+        padding: 1% 5% 1% 5%;
+        }
+        .heading{
+        font-size: large;
+        }
+        h4.blackHeading{
+        background: black;
+        color: white;
+        display: block;
+        padding: 10px;
+        margin-bottom: 1%;
+        margin-top: 1%;
+        }
+        h4.blackHeadingpdf{
+        background: black;
+        color: white;
+                padding: 5px;
+        margin-bottom: 1%;
+        margin-top: 1%;
+        }
+        table, tr, td, th{
+        
+        padding: 5px;
+        
+        border: none;
+        
+        }
+         .myTable table{
+          border-collapse: collapse;
+         }
+         table {
+  border-collapse: collapse;
+}
+
+
+        body div#j_id0\:j_id2\:j_id4{
+        background: white;
+        border-block: none;
+        }
+        body .bPageBlock .pbBody .dataCol{
+        width: 100%;
+        border: none;
+        }
+        body .labelCol {
+        border: none;
+        }
+        body .bPageBlock .detailList table th
+        {
+        border-bottom-style: solid;
+        }
+        body .bPageBlock .detailList table td
+        {
+        border-bottom-style: solid;
+        }
+        * {
+        box-sizing: border-box;
+        }
+        .column h2{display: grid;width:100%}
+        /* Create four equal columns that floats next to each other */
+        .column {
+        float: left;
+        width: 25%;
+        padding: 10px;
+        }
+        
+        /* Clear floats after the columns */
+        .row:after {
+        content: "";
+        display: table;
+        clear: both;
+        }
+        input.btn  
+        {
+        margin-top: 2%;
+        padding: 5px 15px 5px 15px !important;
+        font-size: medium;
+        background: black;
+        color: white;
+        }
+        .myDiv{display: inline-block;
+		}
+		.h1{width: 50%;height: 100Px;}
+		
+		.h1pdf{width: 50%;height: 100Px;}
+		
+		.h2{width: 65%;}
+		
+		.h2pdf{width: 100%;}
+		
+		.h3{font-weight: 600;color: white;font-size: large;}
+		
+		.h3pdf{color: white;}
+		.flogo{margin-left: -16PX;width: 40%;margin-bottom: -40px;}
+		.mobileTrTh{display:none;}
+        .signCmp{margin-left: 25px;}
+         
+		  @media screen and (max-width: 600px) {
+			  .mbFlogo{
+				  margin-left: -35px;
+				  width:70% !important;
+			  }
+			 .mbHead {font-size: smaller;}
+         canvas#myCanvas {
+       width: 300px !important;
+    height: 150px !important;
+}.mobileTrTh{display:block;}
+        .signCmp{margin-left: 10px;}
+        input#j_id0\:j_id3\:fName {
+        margin-bottom: 10px !important;
+        }input#j_id0\:j_id3\:j_id22 {
+        margin-bottom: 10px !important;
+        }input#j_id0\:j_id3\:j_id42{
+        margin-bottom: 10px !important;
+        }input#j_id0\:j_id3\:j_id41 {
+        margin-top: -20px !important;
+        }input#j_id0\:j_id3\:j_id21 {
+        margin-top: -20px !important;
+        }
+        .ui-content {padding: 0em !important;}
+        .dealerInfo table tr{display: grid;}
+        .billingInfo table tr{display: grid;}
+        select{width: 97% !important;}
+        .myTable2 input{width: 97% !important;}
+        .myTable2 tr{
+        display: grid;
+        }
+        .myTable3 {width:100%;}
+        .myTable3 tr{
+        display: grid;
+        }
+input#j_id0\:j_id4\:dPostalCode {
+    margin: 10px 10px 10px 0px !important;
+}
+input#j_id0\:j_id4\:lName {
+    margin: 10px 10px 10px 0px !important;
+}
+input#j_id0\:j_id4\:bPostalCode {
+    margin: 10px 10px 10px 0px !important;
+}
+
+        .myTable3 input{width: 97% !important;}
+        
+        
+        .dealerInfo input{width: 97% !important;}
+        .billingInfo input{width: 97% !important;}
+        .dealerInfo textarea{width: 97% !important;}
+        .billingInfo textarea{width: 97% !important;}
+        .dealerInfo{
+        width: 100%; float: left;display: contents; 
+        }
+        .billingInfo{
+        float: left;display: contents;
+        }
+        .flogo{
+        margin-inline: auto !important;
+        width: 100% !important;
+        }
+        .flogoPDF{
+        margin-inline: auto !important;
+        width: 100% !important;
+        }
+        .myTable table .mobileTr {
+        display: none;
+        }
+        .myTable table td {
+        display: flow;
+        }
+        
+        .myTable table td::before {
+        content: attr(label);
+        font-weight: bold;
+        width: 120px;
+        min-width: 120px;
+        }
+        }
+        .flogo{
+        margin-left: -44px;width: 35%;MARGIN-BOTTOM: -35px;
+        }
+        .flogoPDF{
+        margin-left: -15px;width: 45%;
+        }
+        .dealerInfo{
+        width: 54%; float: left; 
+        }
+        .billingInfo{
+        margin-left: 55%;
+        }
+        .savebtn{margin-bottom: 5%;}
+        canvas#myCanvas {
+    width: 500px; 
+    height: 200px;
+}
+ .requiredInput {
+    display: contents;
+} .requiredInput {    display: inline-block;
+        } 

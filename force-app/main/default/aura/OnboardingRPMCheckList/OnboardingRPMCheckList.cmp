@@ -1,0 +1,169 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+       
+    <aura:attribute name="options" type="List" />
+    
+    <div>
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        
+        <h3 class="slds-section-title--divider ">Links </h3>
+        
+        <div class="slds-form_horizontal slds-grid slds-wrap ">
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Shared Drive Folder Created" type="checkbox" checked="{!v.onboardRecord.Shared_Drive_Folder_Created__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="url5" label="Sales Deck Link" type="url" disabled="true" value="{!v.onboardRecord.Sales_Desk_Link__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span><lightning:input aura:id="url1" label="Kickoff Call Deck"  value="{!v.onboardRecord.Kickoff_Call_Deck__c}" type="url" onchange='{!c.change}'/></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="url2" label="Kickoff Call Recording Link"  type="url" value="{!v.onboardRecord.Kickoff_Call_Recording_Link__c}"  onchange='{!c.change}'/></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span><lightning:input aura:id="url3" label="Pre-Pre Link"  value="{!v.onboardRecord.Pre_Pre_Link__c}" type="url"  onchange='{!c.change}'/></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="url4" label="Pre-Post Link" value="{!v.onboardRecord.Pre_Post_Link__c}"  type="url" onchange='{!c.change}'/></span>
+            </div>
+        </div>
+
+        <h3 class="slds-section-title--divider ">Kick Off Call </h3>
+        
+        <div class="slds-form_horizontal slds-grid slds-wrap ">
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date1" label="Complete Kickoff Call" type="date" value="{!v.onboardRecord.Complete_Kickoff_Call__c}" /></span>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date2" label="Verify Inventory Pricing" type="date" value="{!v.onboardRecord.Verify_Inventory_Pricing_Date__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="New Inventory Verified" type="checkbox" checked="{!v.onboardRecord.New_Inventory_RPM_Verified__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="New Vehicle Pricing Verified" type="checkbox" checked="{!v.onboardRecord.New_Vehicle_Pricing_RPM_Verified__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Used Inventory Verified" type="checkbox" checked="{!v.onboardRecord.Used_Inventory_RPM_Verified__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Used Vehicle Pricing Verified" type="checkbox" checked="{!v.onboardRecord.Used_Vehicle_Pricing_RPM_Verified__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:select aura:id="pl1" label="Is there a Dealer Mark-Up?" value="{!v.onboardRecord.Is_there_a_Dealer_Mark_Up__c}">
+                    <option value="Please Select">Please Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    </lightning:select>
+                </span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date3" label="Call Tracking #s Verified" type="date" value="{!v.onboardRecord.Call_Tracking_s_Verified__c}" /></span>
+            </div>
+        </div>
+
+        <h3 class="slds-section-title--divider ">Preparing for Launch </h3>
+        
+        <div class="slds-form_horizontal slds-grid slds-wrap ">
+        	<div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date5" label="Proposed Budgets Sent" type="date" value="{!v.onboardRecord.Proposed_Budgets_Sent__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date6" label="Budgets Dealer Approved" type="date" value="{!v.onboardRecord.Budgets_Ready_to_Send__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Prorate Budget" type="checkbox" disabled="true" checked="{!v.onboardRecord.Prorate_Budget__c}" /></span>
+            </div>	
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Coop Requested" type="checkbox" disabled="true" checked="{!v.onboardRecord.Coop_Requested__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Geos Received" type="checkbox" checked="{!v.onboardRecord.Geos_Received__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date10" label="Geos Approved" type="date" value="{!v.onboardRecord.Geos_Ready_To_Send__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date7" label="Advertised Payments Sent" type="date" value="{!v.onboardRecord.Advertised_Payments_Ready_to_Send__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date8" label="Advertised Payments Approved" type="date" value="{!v.onboardRecord.Advertised_Payments_Approved__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Primary and Secondary Roles Assigned" type="checkbox" checked="{!v.onboardRecord.Primary_and_Secondary_Contacts_Added__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Media Budget Role Assigned" type="checkbox" checked="{!v.onboardRecord.Media_Budget_Contact_Added__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date4" label="Differentiators Verified in DigAd" type="date" value="{!v.onboardRecord.Differentiators_Verified_in_DigAd__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="checkboxField" label="Account Segmentation Updated" type="checkbox" checked="{!v.onboardRecord.Account_Segmentation_Updated__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:select aura:id="pl2" label="Launch Date" value="{!v.onboardRecord.Launch_Date__c}">
+                    <option value="Please Select">Please Select</option>
+                    <option value="Confirmed Planned Launch Date">Confirmed Planned Launch Date</option>
+                    <option value="Requested to Launch Early">Requested to Launch Early</option>
+                    <option value="Requested to Delay Launch">Requested to Delay Launch</option>
+                    </lightning:select>
+                </span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date9" label="Date of Scheduled Dashboard Call" type="date" value="{!v.onboardRecord.Date_of_Scheduled_Dashboard__c}" /></span>
+            </div>
+        </div>
+
+        <h3 class="slds-section-title--divider ">Goals at Launch </h3>
+        
+        <div class="slds-form_horizontal slds-grid slds-wrap ">
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:input aura:id="date11" label="Review Goals" type="date" value="{!v.onboardRecord.Review_Goals__c}" /></span>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+            	<span> <lightning:input aura:id="text2" label="Goals Inactive at Dashboard Call" type="text" value="{!v.onboardRecord.Goals_Inactive_at_Dashboard_Call__c}" /> </span>
+            </div>
+        </div>
+        
+        <h3 class="slds-section-title--divider ">Notes </h3>
+        
+        <div class="slds-form_horizontal slds-grid slds-wrap ">
+            <div class="slds-col slds-size_1-of-2">
+                <span> <lightning:textarea aura:id="text1" label="RPM Onboarding Notes" value="{!v.onboardRecord.RPM_Onboarding_Notes__c}"> </lightning:textarea></span>
+            </div>
+        </div>
+        <br/>
+        <div>
+            <br/>
+            <br/>
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+        <!--<aura:set attribute="else">
+                <b> Record is not available</b>
+            </aura:set>-->
+        
+        <br/><br/>
+    </div>
+    
+</aura:component>

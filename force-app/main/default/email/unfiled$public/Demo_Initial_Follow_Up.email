@@ -1,0 +1,8 @@
+Hello {!Contact.FirstName}
+ 
+Thanks again for taking the time to meet with me this afternoon. As committed, attached is the presentation I ran you through. I'll plan to follow up in the coming days but if you have any questions in the meantime, please don't hesitate to reach out. 
+
+Thanks!
+{!Lead.OwnerFirstName} {!Lead.OwnerLastName}
+{!Lead.OwnerEmail}
+{!Lead.OwnerPhone}

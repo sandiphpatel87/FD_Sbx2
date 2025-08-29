@@ -1,0 +1,9 @@
+Hi  {!Onboarding__c.AT_Name__c}
+The onboarding team is requesting assistance with the following task for the launch of {!Onboarding__c.Account__c}:
+
+Field: {!Onboarding__c.AT_Follow_Up__c}
+
+Thank you for your assistance!
+
+Foundation Support
+support@foundationdirect.com

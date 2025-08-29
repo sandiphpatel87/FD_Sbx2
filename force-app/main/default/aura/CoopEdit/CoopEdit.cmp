@@ -1,0 +1,125 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:availableForFlowScreens,force:lightningQuickActionWithoutHeader" access="global" Controller="CoopEditController">
+    <aura:attribute name="simpleRecord" type="Object"/>
+    
+    <aura:attribute name="coopRecord" type="Coop__c" default="[]"/>
+    <aura:attribute name="oldCoopRecord" type="List" default="[]"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="isRecord" type="Boolean"/>
+    <aura:attribute name="year" type="String[]" default="2020,2021,2022,2023,2024,2025"/>
+    <aura:attribute name="month" type="String[]" default="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"/>
+    <aura:attribute name="GenreList" type="List" default="[]" description="Genre Picklist Values"/>
+    <aura:attribute name="selectedGenreList" type="List" default="[]" description="Selected Genre Picklist Values"/>
+    <aura:attribute name="selectedLookUpAccount" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact2" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact3" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact4" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact" type="sObject" default="{}"/>
+    
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:html tag="style">
+        .slds-modal__container{
+        width: 85% !important;
+        max-width: 85% !important;
+        }
+        .slds-modal__container .cuf-content {
+        padding:0 !important;
+        }
+        .slds-modal__container .slds-p-around--medium {
+        padding: 0rem !important;
+        height: auto !important;
+    max-height: none !important;
+        } 
+    </aura:html>
+    <div >	
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Coop</h2>
+        </header>
+        <br/>
+        <form style="padding-left: 1.2rem;}">
+            <aura:if isTrue="{!v.isRecord}">
+                <ui:message title="Error" severity="error" closable="true">
+                    Record of previous month is not available.
+                </ui:message>
+            </aura:if>
+            
+            <div class="slds-form_horizontal slds-grid slds-wrap">
+                <div class='first-div'>  
+                    <div class="slds-col">
+                        <span>  <c:customLookup objectAPIName="account" IconName="standard:account" label="Account"  value="{!v.coopRecord.Account__r.Name}"  selectedRecord="{!v.selectedLookUpAccount}"/></span>
+                    </div>
+                    <div class="slds-col ">
+                        <span> <lightning:input Name="" label="Date" value="{!v.coopRecord.Date__c}" type="date"/></span>
+                    </div>
+                    <div class="slds-col ">
+                        <span>  <lightning:select name="select1" label="Month" required="true" aura:id='monthId'>
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.month}" var="month">
+                                <option value="{!month}">{!month}</option>
+                            </aura:iteration>
+                            </lightning:select></span>
+                    </div>
+                    <div class="slds-col">
+                        <span>  <lightning:select name="select1" label="Year" required="true" aura:id='yearId'>
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.year}" var="year">
+                                <option value="{!year}">{!year}</option>
+                            </aura:iteration>
+                            </lightning:select></span>
+                    </div>
+                    <div class="slds-col">
+                        <span><c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact" value="{!v.coopRecord.Contact__r.Name}" selectedRecord="{!v.selectedLookUpContact}"/></span>
+                    </div>
+                    
+                    <div class="slds-col">
+                        <span>  <c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact 2" value="{!v.coopRecord.Contact_2__r.Name}" selectedRecord="{!v.selectedLookUpContact2}"/></span>
+                    </div>
+                    
+                    <div class="slds-col">
+                        <span><c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact 3" selectedRecord="{!v.selectedLookUpContact3}" value="{!v.coopRecord.Contact3__r.Name}" /></span>
+                    </div>
+                    
+                    <div class="slds-col">
+                        <span>  <c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact 4" value="{!v.coopRecord.Contact_4__r.Name}" selectedRecord="{!v.selectedLookUpContact4}"/></span>
+                    </div>
+                    
+                    <div class="slds-col">
+                        <span> <lightning:textarea Name="" label="Notes" type="textarea" value="{!v.coopRecord.Notes__c}"/></span>
+                    </div>
+                    
+                    <div class="slds-col " >
+                        <span><lightning:dualListbox aura:id="selectGenre" name="Notary Required" class="dualbox"
+                                                     label="Notary Required"
+                                                     sourceLabel="Available"
+                                                     selectedLabel="Chosen"
+                                                     options="{!v.GenreList }"
+                                                     value="{!v.selectedGenreList}"
+                                                     size="3" /></span>
+                    </div>
+                </div> 
+                <div class='second-div'>
+                     <aura:iteration items="{!v.oldCoopRecord}" var="item" indexVar="key">
+                        
+					                    
+                    <div class="slds-col ">
+                        <span> <lightning:input Name="" label="{!item.key}" value="{!item.value}" checked="{!item.checked}" type="checkbox" onchange='{!c.change}'/></span>
+                    </div>
+                    </aura:iteration>
+                </div>
+            </div>
+        </form>
+        <footer class="slds-modal__footer">
+            <lightning:button variant="neutral" 
+                              label="Cancel"
+                              title="Cancel"
+                              onclick="{! c.closeModel }"/>
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+        </footer>
+    </div>
+</aura:component>

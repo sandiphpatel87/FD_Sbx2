@@ -1,0 +1,1305 @@
+<apex:page controller="OpportunityVfFileController" action="{!onLoadGetOppData}" docType="html-5.0"
+           renderAs="{!if($CurrentPage.parameters.isPdf == null, null, 'pdf')}" showHeader="false" >
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cedarville+Cursive" /> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <apex:includeScript value="/soap/ajax/29.0/connection.js"/>
+    <apex:includeScript value="/soap/ajax/29.0/apex.js"/>
+    <apex:stylesheet value="{!$Resource.styleCSSOpportunityVfFile}" />
+    <style type="text/css">
+        
+    </style>
+    
+    <script>
+    var letters = /^[A-Za-z]+$/;
+    var emailformat= /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var phonePattern = /^(\+?\d{1,4}[\s-]?)?(\(?\d{1,4}\)?[\s-]?)?[\d\s-]{7,15}$/;
+    
+    var vis = (function(){
+        var stateKey, eventKey, keys = {
+            hidden: "visibilitychange",
+            webkitHidden: "webkitvisibilitychange",
+            mozHidden: "mozvisibilitychange",
+            msHidden: "msvisibilitychange"
+        };
+        for (stateKey in keys) {
+            if (stateKey in document) {
+                eventKey = keys[stateKey];
+                break;
+            }
+        }
+        return function(c) {
+            if (c) document.addEventListener(eventKey, c);
+            return !document[stateKey];
+        }
+    })();
+    vis(function(){
+        if(vis() )
+        {
+            var answer = window.confirm("Apply changes to this agreement?");
+            if(answer) 
+            {
+                if(document.getElementById("err1").style.visibility           == "visible"  || 
+                   document.getElementById("errBilling").style.visibility     == "visible"  ||
+                   document.getElementById("errAuthPhone").style.visibility    == "visible"  ||
+                   document.getElementById("errBillingEmail").style.visibility == "visible"  ||
+                   document.getElementById("errPaidEmail").style.visibility    == "visible"  ||
+                   document.getElementById("errNCMEmail").style.visibility     == "visible"  ||
+                   document.getElementById("errAuthEmail").style.visibility    == "visible"  )
+                {
+                    showToast("Review error, try again after correcting data. ","danger",5000); 
+                }
+                else{
+                    myFunction();
+                }
+                
+            } 
+        }
+    });
+     window.addEventListener('beforeunload', function (e) {
+         alert('hi');
+         debugger;
+         
+
+                if(document.getElementById("err1").style.visibility           == "visible"  || 
+                   document.getElementById("errBilling").style.visibility     == "visible"  ||
+                   document.getElementById("errAuthPhone").style.visibility    == "visible"  ||
+                   document.getElementById("errBillingEmail").style.visibility == "visible"  ||
+                   document.getElementById("errPaidEmail").style.visibility    == "visible"  ||
+                   document.getElementById("errNCMEmail").style.visibility     == "visible"  ||
+                   document.getElementById("errAuthEmail").style.visibility    == "visible"  )
+                {
+                    showToast("Review error, try again after correcting data. ","danger",5000); 
+                }
+                else{
+                    myFunction();
+                    e.preventDefault();
+                }
+                
+                    });
+    function checkPhone(){  
+        var phone=document.getElementById("j_id0:j_id6:GAContactPhone").value;
+        /*phone.length!=10 || phone.match(letters)*/
+        var phoneNumber = phone.replace(/\D/g, '');
+        if(phoneNumber.length!=10 || !phonePattern.test(phone))
+        {
+            document.getElementById("err1").innerHTML="Phone must be 10 digits long and can not contain Letters.";
+            document.getElementById("err1").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("err1").innerHTML="";
+            document.getElementById("err1").style.visibility = "hidden";
+        }
+    }
+    
+    function checkBillingPhone(){  
+        var phone=document.getElementById("j_id0:j_id6:phone").value;
+        /*phone.length!=10 || phone.match(letters)*/
+        var phoneNumber = phone.replace(/\D/g, '');
+        if(phoneNumber.length!=10 || !phonePattern.test(phone)){
+            document.getElementById("errBilling").innerHTML="Phone must be 10 digits long and can not contain Letters.";
+            document.getElementById("errBilling").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("errBilling").innerHTML="";
+            document.getElementById("errBilling").style.visibility = "hidden";
+        }
+    }
+    
+    function checkAuthPhone(){  
+        var phone=document.getElementById("j_id0:j_id6:authPhone").value;
+        /*phone.length!=10 || phone.match(letters)*/
+        var phoneNumber = phone.replace(/\D/g, '');
+        if(phoneNumber.length!=10 || !phonePattern.test(phone)){
+            document.getElementById("errAuthPhone").innerHTML="Phone must be 10 digits long and can not contain Letters.";
+            document.getElementById("errAuthPhone").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("errAuthPhone").innerHTML="";
+            document.getElementById("errAuthPhone").style.visibility = "hidden";
+        }
+    }
+    
+    function checkBillingEmail(){  
+        var email=document.getElementById("j_id0:j_id6:billingEmail");
+        
+        if (!emailformat.test(email.value)) {
+            document.getElementById("errBillingEmail").innerHTML="Please provide a valid email address."; 
+            document.getElementById("errBillingEmail").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("errBillingEmail").innerHTML="";
+            document.getElementById("errBillingEmail").style.visibility = "hidden";
+        }
+        
+    }
+    
+    function checkPaidEmail(){  
+        var email=document.getElementById("j_id0:j_id6:GAContactEmail");
+        
+        if (!emailformat.test(email.value)) {
+            document.getElementById("errPaidEmail").innerHTML="Please provide a valid email address."; 
+            document.getElementById("errPaidEmail").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("errPaidEmail").innerHTML="";
+            document.getElementById("errPaidEmail").style.visibility = "hidden";
+        }
+        
+    }
+    
+    function checkNCMEmail(){  
+        var email=document.getElementById("j_id0:j_id6:NCMEmail");
+        
+        if (!emailformat.test(email.value)) {
+            document.getElementById("errNCMEmail").innerHTML="Please provide a valid email address."; 
+            document.getElementById("errNCMEmail").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("errNCMEmail").innerHTML="";
+            document.getElementById("errNCMEmail").style.visibility = "hidden";
+        }
+        
+    }
+    
+    function checkAuthEmail(){  
+        var email=document.getElementById("j_id0:j_id6:j_id158");
+        
+        if (!emailformat.test(email.value)) {
+            document.getElementById("errAuthEmail").innerHTML="Please provide a valid email address."; 
+            document.getElementById("errAuthEmail").style.visibility = "visible";
+        }
+        else
+        {
+            document.getElementById("errAuthEmail").innerHTML="";
+            document.getElementById("errAuthEmail").style.visibility = "hidden";
+        }
+        
+    }
+    function checkForError(){
+        debugger;            
+        if(document.getElementById("err1").style.visibility           == "visible"  || 
+           document.getElementById("errBilling").style.visibility     == "visible"  ||
+           document.getElementById("errAuthPhone").style.visibility    == "visible"  ||
+           document.getElementById("errBillingEmail").style.visibility == "visible"  ||
+           document.getElementById("errPaidEmail").style.visibility    == "visible"  ||
+           document.getElementById("errNCMEmail").style.visibility     == "visible"  ||
+           document.getElementById("errAuthEmail").style.visibility    == "visible"  )
+        {
+            debugger;
+            showToast("Review error, try again after correcting data. ","danger",5000); 
+        }
+        else{
+            debugger;
+            //OpportunityVfFileController.updateRecord();
+            myFunction();
+            //updateRecord();
+        }
+    }
+    let icon = { 
+        success: 
+        '<span class="material-symbols-outlined">task_alt</span>', 
+        danger: 
+        '<span class="material-symbols-outlined">error</span>', 
+        warning: 
+        '<span class="material-symbols-outlined">warning</span>', 
+    }; 
+    
+    
+    const showToast = ( 
+        message = "Sample Message", 
+        toastType = "info", 
+        duration = 7000) => { 
+        if ( 
+        !Object.keys(icon).includes(toastType)) 
+        toastType = "info"; 
+        
+        let box = document.createElement("div"); 
+        box.classList.add( 
+        "toast", `toast-${toastType}`); 
+    box.innerHTML = ` <div class="toast-content-wrapper"> 
+        <div class="toast-icon"> 
+            ${icon[toastType]} 
+    </div> 
+    <div class="toast-message">${message}</div> 
+    <div class="toast-progress"></div> 
+    </div>`; 
+    duration = duration || 5000; 
+    box.querySelector(".toast-progress").style.animationDuration = 
+        `${duration / 1000}s`; 
+    
+    let toastAlready =  
+        document.body.querySelector(".toast"); 
+    if (toastAlready) { 
+        toastAlready.remove(); 
+    } 
+    
+    document.body.appendChild(box)}; 
+    
+    
+    
+    
+    window.addEventListener("DOMContentLoaded", (event) => {
+        
+        // Set up the canvas
+        var canvas = document.getElementById("sig-canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "#222222";
+        ctx.lineWith = 2;
+        
+        
+        function sendToCanvas( ob ){
+        var img = new Image();
+        img.setAttribute('crossOrigin', 'anonymous');
+        img.addEventListener('load', function(){
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.font = ob.fontWeight+' '+ob.fontSize+' '+ob.fontFamily;
+        ctx.textAlign = 'start';
+        ctx.fillStyle = ob.color;
+        ctx.fillText(ob.text, 0, canvas.height/2);
+    });
+    debugger;
+    img.src = ob.image;
+    }
+    
+    // Defaults
+    var cvsObj = {
+        text       : "",
+        image      : "{!$Resource.Community_PlainBG_Sign}",
+        fontFamily : "Cedarville Cursive",
+        fontWeight : "bold",
+        fontSize   : "110%",
+        color      : "rgb(14, 14, 14)"
+    };
+    
+    sendToCanvas( cvsObj ); // Send default data on init
+    
+    document.getElementById("text").addEventListener("input", function(){
+        cvsObj.text = this.value; // Modify cvsObj text
+        sendToCanvas( cvsObj );   // Send custom data on input
+    });
+    });
+    
+    var parentId = "{!opportunityDetails.Id}";
+    
+    function afterComplete(){
+        //var submitBtn = document.getElementById("sig-submitBtn");      
+        //if(submitBtn){
+        var canvas = document.getElementById("sig-canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "#222222";
+        ctx.lineWith = 2;
+        
+        if ( document.getElementById("text").value == '') {
+            showToast(" ! Signature is Empty","warning",5000); 
+            console.log('Nothing drawn on canvas.. AKA, Canvas is Empty');
+            debugger;
+        }
+        else
+        {
+            debugger; 
+            var dataUrl = canvas.toDataURL();
+            
+            dataUrl = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+            if(document.querySelector("[id$='accountName']").value           != '' &&
+               document.querySelector("[id$='websiteURL']").value            != '' &&
+               document.querySelector("[id$='websiteProvider']").value       != '' &&
+               document.querySelector("[id$='dStreet']").value               != '' &&
+               document.querySelector("[id$='dCity']").value                 != '' &&
+               document.querySelector("[id$='dState']").value                != '' &&
+               document.querySelector("[id$='dPostalCode']").value           != '' &&
+               document.querySelector("[id$='dCountry']").value              != '' &&
+               document.querySelector("[id$='fName']").value                 != '' &&
+               document.querySelector("[id$='lName']").value                 != '' &&
+               document.querySelector("[id$='billingEmail']").value          != '' &&
+               document.querySelector("[id$='phone']").value                 != '' &&
+               document.querySelector("[id$='bStreet']").value               != '' &&
+               document.querySelector("[id$='bCity']").value                 != '' &&
+               document.querySelector("[id$='bState']").value                != '' &&
+               document.querySelector("[id$='bPostalCode']").value           != '' &&
+               document.querySelector("[id$='bCountry']").value              != '' &&
+               document.querySelector("[id$='newCar']").value                != '' &&
+               document.querySelector("[id$='usedCar']").value               != '' &&
+               //document.querySelector("[id$='paidProvider']").value          != '' &&
+               //document.querySelector("[id$='GAContactName']").value         != '' &&
+               //document.querySelector("[id$='GAContactEmail']").value        != '' &&
+               //document.querySelector("[id$='GAContactPhone']").value        != '' &&
+               document.querySelector("[id$='NCMName']").value               != '' &&
+               document.querySelector("[id$='NCMEmail']").value              != '' &&
+               document.querySelector("[id$='NCMTitle']").value              != '' &&
+               document.querySelector("[id$='aggregate']").value             != '' &&
+               document.querySelector("[id$='approve']").value               != '' &&
+               document.querySelector("[id$='authSign']").value              != '' &&
+               document.querySelector("[id$='authPhone']").value             != '')
+            {
+                debugger;                     
+                OpportunityVfFileController.saveSignature(dataUrl,parentId,processResult);
+                top.location.href='/apex/CommunitySuccessMsgPage';
+            }
+            
+        }
+        //}
+    }
+    function processResult(result){
+        if(result){
+            
+            //top.location.href='/s/';
+        }else{
+            
+            showToast("Unexpected error occurred while saving the signature. Please try again.","danger",7000);   
+            //alert('An error occurred while saving the signature. Please try again.');
+        }
+        console.log(result);
+        
+    }
+    </script>
+    <apex:form >  
+        <span class="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , '','myFontCls')}">
+            <!-- <div style="float: right;">
+<apex:commandButton action="{!downloadPDF}" value="Download PDF" rendered="{!if(pdfId == null, false, true)}"/> 
+</div>-->
+            <c:LoadingIconForVFPage />
+            
+            <!-- <table style="background-image: url('{!$Resource.Contract_header_bg}');
+width: 100%;height:100px;
+margin-right: 10px;">
+<tr>
+<td style="{!if($CurrentPage.parameters.isPdf == null,'width: 40%;' ,'width: 30%;')}"> 
+<img src="{!$Resource.Contract_foundation_logo}" style="{!if($CurrentPage.parameters.isPdf == null,'width: 70%;height: 100Px;' ,'width: 100%;height: 100Px;')}" />
+</td>
+<td style="{!if($CurrentPage.parameters.isPdf == null,'width: 20%;' ,'width: 15%;')}"> 
+<img src="{!$Resource.Contract_NCM_logo}" class="{!if($CurrentPage.parameters.isPdf == null, 'h2','h2pdf')}" /> 
+</td>
+<td>
+<center>
+<span class="{!if($CurrentPage.parameters.isPdf == null, 'h3','h3pdf')}">
+
+PERFORMANCE COMPOSITE
+</span>
+</center>
+</td>
+</tr>
+</table>-->
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+            
+            <table style="{!if($CurrentPage.parameters.isPdf == null, '','margin-bottom: -20px;margin-top: -20px;')}">
+                <tr>
+                    <td style="{!if($CurrentPage.parameters.isPdf == null,'width: 20%;' ,'width: 20%;')}"> 
+                        <img src="{!$Resource.NCM_Associates}" />
+                    </td>
+                    <td style="{!if($CurrentPage.parameters.isPdf == null,'width: 80%;' ,'width: 80%;')}"> 
+                        <img src="{!$Resource.Foundation_Logo}"  class="{!if($CurrentPage.parameters.isPdf == null, 'flogo','flogoPDF')}" /> 
+                    </td>
+                    
+                </tr>
+            </table>
+            
+            
+            
+            <p style="
+                      margin-top: 0px;
+                      margin-bottom: 0px;
+                      ">
+                <b class="heading">NCM DIGITAL PERFORMANCE COMPOSITE AGREEMENT</b> <br/>(provided by Foundation Data)
+                
+            </p>
+            
+            <p>This Service Agreement (Agreement) is entered into by Foundation Data, LLC (Foundation Data) and the entity
+                identified below (Client) as of the date last entered below (Effective Date). 
+            </p>
+            
+            <h4 class="{!if($CurrentPage.parameters.isPdf == null, 'blackHeading','blackHeadingpdf')}">
+                SERVICES &amp; PRICING
+            </h4>
+            
+            <div class="myTable">
+                <table>
+                    <thead>
+                        <tr class="mobileTr">
+                            <th style='width: 60%; border: 1px solid black;'>Services</th>
+                            <th style='width: 20%; border: 1px solid black;'>Monthly Fee </th>
+                            <th style='width: 20%; border: 1px solid black;'>One Time Setup Fee</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td class="mobileTrTh" style='border: 1px solid black;font-weight: 600;'>Services </td>
+                        <td style='border: 1px solid black;'>
+                            
+                            <b>NCM Digital Performance Composite (provided by Foundation Direct)</b>
+                            Includes: One login to NCM Digital Performance Composite; Tagging
+                            configuration of one website URL for inclusion in NCM Digital Performance
+                            Composite; Custom NCM 20 Group Digital Metric Averages; In-meeting,
+                            facilitated review of Digital Performance Composite Data; Ongoing website
+                            analytics monitoring &amp; troubleshooting
+                            [{!opportunityDetails.NCM_20_Group_Code__c}]
+                            
+                        </td>
+                        <td class="mobileTrTh" style='border: 1px solid black;font-weight: 600;'>Monthly Fee </td>
+                        <td style='border: 1px solid black;'>${!opportunityDetails.Total_MRR__c} </td>
+                        <td class="mobileTrTh" style='border: 1px solid black;font-weight: 600;'>One Time Setup Fee </td>
+                        <td style='border: 1px solid black;'>${!opportunityDetails.Setup_Fee__c} </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 5px;')}">
+                <b>Terms &amp; Conditions:</b> 6 months, automatically renews on a month to month basis, unless canceled with 30 days prior notice. This
+                Agreement is subject to the Terms &amp; Conditions at <a href="http://www.foundationdirect.com/terms">http://www.foundationdirect.com/terms</a>
+                {!opportunityDetails.Special_contract_notes__c}
+            </p>
+            <!-- <p>
+Approved, as of the Effective Date:
+</p>
+<p>
+<b> Foundation Direct, LLC</b><br/>
+a Delaware limited liability company
+</p>-->
+            <div style=" {!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , 'width: 100%;display:block' , 'width: 100%;display:none')}">
+                <div class="dealerInfo" > 
+                    <table style="width:100%">
+                        
+                        <tr>
+                            <td><b>Dealership Name: </b></td>
+                            <td>
+                                <apex:inputField required="true" value="{!accountDetails.Name}" id="accountName" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!accountDetails.Name}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Website URL: </b></td>
+                            <td>
+                                <apex:inputField required="true" value="{!opportunityDetails.Website_URL__c}" id="websiteURL" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Website_URL__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Website Provider: </b></td>
+                            <td>
+                                <apex:inputField required="true" value="{!opportunityDetails.Website_Provider__c}" id="websiteProvider" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Website_Provider__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Dealership Address: </b></td>
+                            <td >
+                                <apex:inputField required="true" html-placeholder="Street"  id="dStreet"   value="{!accountDetails.ShippingStreet}"     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin:0px 10px 0px 0px;"/>
+                                <apex:outputText value="{!accountDetails.ShippingStreet} "    rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/><br/>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td></td>
+                            <td >
+                                <apex:inputField required="true" html-placeholder="City"    id="dCity"   value="{!accountDetails.ShippingCity}"       rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin:0px 10px 10px 0px;"/>
+                                <apex:inputField required="true" html-placeholder="State"     id="dState" value="{!accountDetails.ShippingState}"      rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:inputField required="true" html-placeholder="PostalCode" id="dPostalCode" value="{!accountDetails.ShippingPostalcode}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin:0px 10px 10px 0px;"/>
+                                <apex:inputField required="true" html-placeholder="Country"   id="dCountry" value="{!accountDetails.ShippingCountry}"    rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                
+                                <apex:outputText value="{!accountDetails.ShippingCity} "       rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.ShippingState} "      rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.ShippingPostalcode} " rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.ShippingCountry}"     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr> 
+                    </table>
+                </div>
+                <div class="billingInfo"> 
+                    <table style="width:100%">
+                        <tr>
+                            <td><b>Billing Contact: </b></td>
+                            <td>
+                                <apex:inputtext required="true" html-placeholder="First Name" id="fName" value="{!opportunityDetails.Billing_Contact_First_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin: 0px 10px 0px 0px"/>
+                                <apex:inputtext required="true" html-placeholder="Last Name" id="lName" value="{!opportunityDetails.Billing_Contact_Last_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" />
+                                <!--<apex:inputField value="{!accountDetails.Billing_Contact__r.Name}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>-->
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_First_Name__c} " rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_Last_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Billing Email: </b></td>
+                            <td>
+                                <apex:inputField onchange="checkBillingEmail();" required="true" id="billingEmail" value="{!opportunityDetails.Billing_Contact_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <div id="errBillingEmail" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Billing Phone: </b></td>
+                            <td>
+                                <apex:inputField onchange="checkBillingPhone();" required="true" id="phone" value="{!opportunityDetails.Billing_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <div id="errBilling" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td><b>Billing Address: </b></td>
+                            <td> 
+                                <apex:inputField required="true" id="bStreet" html-placeholder="Billing Street"     value="{!accountDetails.BillingStreet}"     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin:0px 10px 0px 0px;"/>
+                                <apex:outputText value="{!accountDetails.BillingStreet} "     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/><br/>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td></td>
+                            <td> 
+                                <apex:inputField required="true" id="bCity" html-placeholder="Billing City"       value="{!accountDetails.BillingCity}"       rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin:0px 10px 10px 0px;"/>
+                                <apex:inputField required="true" id="bState" html-placeholder="Billing State"      value="{!accountDetails.BillingState}"      rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:inputField required="true" id="bPostalCode" html-placeholder="Billing PostalCode" value="{!accountDetails.BillingPostalcode}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}" style="margin:0px 10px 10px 0px;"/>
+                                <apex:inputField required="true" id="bCountry" html-placeholder="Billing Country"    value="{!accountDetails.BillingCountry}"    rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                
+                                <apex:outputText value="{!accountDetails.BillingCity} "       rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.BillingState} "      rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.BillingPostalcode} " rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.BillingCountry}"     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div><br/>
+            
+            <div style=" {!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , 'width: 100%;display:none' , 'width: 100%;display:block')}" class="page-break">
+                
+                <div class="dealerInfo" style="Width:40%">
+                    <p>Approved, as of the Effective Date:</p>
+                    <p>
+                        <b> Foundation Data, LLC</b><br/>
+                        a Delaware limited liability company
+                    </p>
+                    <table >
+                        
+                        <tr>
+                            <td><b>Signature: </b></td>
+                            <td>
+                                <div style=" (ISBLANK(opportunityDetails.Contract_Signed_Date__c),display: none;,height: 50px;width: 100px;display: flex;gap: 20px;)" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}">
+                                    <div style=" object-fit: contain;">
+                                        <apex:image value="{!URLFOR($Resource.NCM_Contract_Signature)}"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Name: </b></td>
+                            <td>
+                                <apex:outputText value="Ashley Lepczyk" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Title: </b></td>
+                            <td>
+                                <apex:outputText value="Chief Operating Officer" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Date: </b></td>
+                            <td>
+                                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                                    <apex:param value="{!opportunityDetails.Contract_Signed_Date__c}"  /> 
+                                </apex:outputText>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Address: </b></td>
+                            <td>
+                                <!--<apex:outputText value="22713 Commerce Center Court"/>-->
+                                <apex:outputText value="525-K East Market Street"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <!--<apex:outputText value="Sterling, VA 20166"/>-->
+                                <apex:outputText value="Suite #284, Leesburg, VA 20176"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Billing: </b></td>
+                            <td>
+                                <apex:outputText value="accounting@FoundationDirect.com" />
+                            </td>
+                        </tr><tr>
+                        <td><b>Legal Notices: </b></td>
+                        <td>
+                            <apex:outputText value="legal@FoundationDirect.com" />
+                        </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="billingInfo" style="margin-left:40%"> 
+                    <table style="width:100%">
+                        <tr>
+                            <td><b>Dealership Name: </b></td>
+                            <td>
+                                <apex:outputText value="{!accountDetails.Name}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td ><b>Authorized Signature: </b></td>
+                            <td style="{!if(ISBLANK(opportunityDetails.Contract_Signed_Date__c), 'display:none','')}">
+                                <div style=" (ISBLANK(opportunityDetails.Contract_Signed_Date__c),display: none;,height: 50px;width: 100px;display: flex;gap: 20px;)" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}">
+                                    <div style=" object-fit: contain;">
+                                        <apex:image url="/servlet/servlet.FileDownload?file={!fileId}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td ><b>Authorized Signer Name: </b></td>
+                            <td>
+                                <apex:inputField value="{!opportunityDetails.Contract_Signer__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td ><b>Authorized Signer Title: </b></td>
+                            <td>
+                                <apex:inputField value="{!opportunityDetails.Contract_Signer_Title__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer_Title__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="Width:45%"><b>Authorized Signer Cell Phone: </b></td>
+                            <td>
+                                <apex:inputField value="{!opportunityDetails.Contract_Signer_Phone__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr style="{!if( AND ($CurrentPage.parameters.isPdf  == null ,(ISBLANK(opportunityDetails.Contract_Signed_Date__c)) ),'display:none' ,'')}">
+                            <td style="width: 35%;"><b> Contract Signed Date: </b></td>
+                            <td>
+                                <apex:outputText value="{!contractDisplayDate}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Website URL: </b></td>
+                            <td>
+                                <apex:outputText value="{!opportunityDetails.Website_URL__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Website Provider: </b></td>
+                            <td>
+                                <apex:outputText value="{!opportunityDetails.Website_Provider__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Dealership Address: </b></td>
+                            <td >
+                                <apex:outputText value="{!accountDetails.ShippingStreet} "    rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/><br/>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td></td>
+                            <td > 
+                                <apex:outputText value="{!accountDetails.ShippingCity} "       rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.ShippingState} "      rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.ShippingPostalcode} " rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.ShippingCountry}"     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td><b>Billing Contact: </b></td>
+                            <td>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_First_Name__c} " rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_Last_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Billing Email: </b></td>
+                            <td>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Billing Phone: </b></td>
+                            <td>
+                                <apex:outputText value="{!opportunityDetails.Billing_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td><b>Billing Address: </b></td>
+                            <td> 
+                                <apex:outputText value="{!accountDetails.BillingStreet} "     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/><br/>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td></td>
+                            <td> 
+                                
+                                <apex:outputText value="{!accountDetails.BillingCity} "       rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.BillingState} "      rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.BillingPostalcode} " rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <apex:outputText value="{!accountDetails.BillingCountry}"     rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+            </div>
+            
+            
+            
+            <div class="myDiv" style="display: block;">
+                <!--<p Style="font-size: medium;
+font-weight: 600;">
+INVENTORY &amp; ANALYTICS APPROVAL 
+</p>-->
+                <h4 class="{!if($CurrentPage.parameters.isPdf == null, 'blackHeading','blackHeadingpdf')}" style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 20px')}">
+                    INVENTORY PROVIDER DETAILS <!--OFFICIAL DEALERSHIP APPROVAL TO SHARE INVENTORY AND PRICING-->
+                </h4>
+                <!--<p>I, {!opportunityDetails.Name} (Client Name) from {!accountDetails.Name} (Dealership) APPROVES the
+request, on behalf of Foundation Direct, for the following inventory partners to provide inventory feed access
+to HomeNet inclusive of Invoice Price, MSRP and Selling Price: </p>-->
+                
+                <table class="myTable2" style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 20px;margin-bottom: 20px;')}">
+                    <tr>
+                        <td> <b>New Car Inventory Provider:</b> </td>
+                        <td>
+                            <apex:inputField required="true" id="newCar" value="{!opportunityDetails.Inventory_Feed_Provider_New_Car__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <apex:outputText value="{!opportunityDetails.Inventory_Feed_Provider_New_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/> </td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicles in New Car Inventory Feed:</b> </td>
+                        <td>
+                            <apex:inputField value="{!opportunityDetails.InventoryFeed_Expected_of_New_car__c}" id="newCarNumber"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+                            <apex:outputText value="{!opportunityDetails.InventoryFeed_Expected_of_New_car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Used Car Inventory Provider:</b> </td>
+                        <td>
+                            <apex:inputField required="true" id="usedCar" value="{!opportunityDetails.Inventory_Feed_Provider_Used_Car__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+                            <apex:outputText value="{!opportunityDetails.Inventory_Feed_Provider_Used_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicles in Used Car Inventory Feed:</b> </td>
+                        <td>
+                            <apex:inputField value="{!opportunityDetails.InventoryFeed_Expected_of_Used_Car__c}" id="usedCarNumber" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+                            <apex:outputText value="{!opportunityDetails.InventoryFeed_Expected_of_Used_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+<td style='width: 10%;'> </td>
+<td style='width: 45%;'> 
+<apex:inputField value="{!opportunityDetails.Inventory_Feed_Provider_New_Car__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Feed_Provider_New_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>New Car Inventory Feed Provider</td>
+</tr>
+<tr>
+<td> </td>
+<td> 
+<apex:inputField value="{!opportunityDetails.InventoryFeed_Expected_of_New_car__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+<apex:outputText value="{!opportunityDetails.InventoryFeed_Expected_of_New_car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>Expected Number of Vehicles in New Car Inventory Feed</td>
+</tr>
+<tr>
+<td> </td>
+<td> 
+<apex:inputField value="{!opportunityDetails.Inventory_Feed_Provider_Used_Car__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+<apex:outputText value="{!opportunityDetails.Inventory_Feed_Provider_Used_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>Used Car Inventory Feed Provider</td>
+</tr>
+<tr>
+<td> </td>
+<td> 
+<apex:inputField value="{!opportunityDetails.InventoryFeed_Expected_of_Used_Car__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+<apex:outputText value="{!opportunityDetails.InventoryFeed_Expected_of_Used_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>Expected Number of Vehicles in Used Car Inventory Feed</td>
+</tr> -->
+                </table>
+                
+                <!--<table>
+<tr>
+<td>Dealership Contact for Inventory Feed Questions: </td>
+<td>
+<apex:inputField value="{!opportunityDetails.Inventory_Contact_Name__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Contact_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>
+<apex:inputField value="{!opportunityDetails.Inventory_Contact_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Contact_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>
+<apex:inputField value="{!opportunityDetails.Inventory_Contact_Phone__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>
+Name
+</td>
+<td>
+Email
+</td>
+<td>
+Phone
+</td>
+</tr>
+</table>-->
+                <!--<div class="row">
+<div class="column">
+<h2>Dealership Contact for Inventory Feed Questions </h2>
+</div>
+<div class="column">
+<h2>
+<apex:inputField value="{!opportunityDetails.Inventory_Contact_Name__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Contact_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Name</center></p>
+</div>
+
+<div class="column">
+<h2>
+<apex:inputField value="{!opportunityDetails.Inventory_Contact_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Contact_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Email</center></p>
+</div>
+<div class="column">
+<h2 >
+<apex:inputField value="{!opportunityDetails.Inventory_Contact_Phone__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Inventory_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Phone</center></p>
+</div>
+</div>-->
+            </div >
+            
+            <div>
+                <h4 class="{!if($CurrentPage.parameters.isPdf == null, 'blackHeading','blackHeadingpdf')}">
+                    PAID SEARCH PROVIDER DETAILS <!--OFFICIAL DEALERSHIP APPROVAL TO SHARE WEBSITE ANALYTICS DATA-->
+                </h4>
+                <!--<p>I authorize Foundation Direct to configure and aggregate my Google Analytics data for inclusion in my NCM
+Digital Performance Composite.
+</p>
+<br/>-->
+                
+                <!--<table>
+<tr>
+<td style='width: 10%;'> </td>
+<td style='width: 45%;'>
+<apex:inputField value="{!opportunityDetails.Existing_Paid_Search_Provider__c}"   rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+<apex:outputText value="{!opportunityDetails.Existing_Paid_Search_Provider__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>Existing Paid Search Provider</td>
+</tr>-->
+                <!--<tr>
+<td > </td>
+<td > 
+<apex:inputField value="{!opportunityDetails.Google_Ads_Account_CID__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Google_Ads_Account_CID__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>Google Ads Account CID</td>
+</tr>
+<tr>
+<td > </td>
+<td > 
+<apex:inputField value="{!opportunityDetails.Paid_Search_Provider__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.Paid_Search_Provider__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</td>
+<td>Paid Search Provider</td>
+</tr>
+</table>-->
+                
+                <table  class="myTable3" style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 20px;margin-bottom: 20px;')}">
+                    <tr>
+                        <td><b>Provider Name:</b> </td>
+                        <td>
+                            <apex:inputField id="paidProvider" value="{!opportunityDetails.Existing_Paid_Search_Provider__c}"   rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/> 
+                            <apex:outputText value="{!opportunityDetails.Existing_Paid_Search_Provider__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Contact Name:</b> </td>
+                        <td>
+                            <apex:inputField id="GAContactName" value="{!opportunityDetails.GA_Contact_Name__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <apex:outputText value="{!opportunityDetails.GA_Contact_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Email:</b> </td>
+                        <td>
+                            <apex:inputField onchange="checkPaidEmail();" id="GAContactEmail" value="{!opportunityDetails.GA_Contact_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <div id="errPaidEmail" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                            <apex:outputText value="{!opportunityDetails.GA_Contact_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Phone:</b> </td>
+                        <td>
+                            <apex:inputField onchange="checkPhone();" id="GAContactPhone" value="{!opportunityDetails.GA_Contact_Phone__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <div id="err1" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                            <apex:outputText value="{!opportunityDetails.GA_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+<td></td>
+<td>
+Existing Paid Search Provider                    
+</td>
+<td>
+Name
+</td>
+<td>
+Email
+</td>
+<td>
+Phone
+</td>
+</tr>-->
+                </table>
+                <!--<div class="row">
+<div class="column">
+<h2>Paid Search Provider Contact Information </h2>
+</div>
+<div class="column">
+<h2>
+<apex:inputField value="{!opportunityDetails.GA_Contact_Name__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.GA_Contact_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Name</center></p>
+</div>
+
+<div class="column">
+<h2>      
+<apex:inputField value="{!opportunityDetails.GA_Contact_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.GA_Contact_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Email</center></p>
+</div>
+<div class="column">
+<h2 >
+<apex:inputField value="{!opportunityDetails.GA_Contact_Phone__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.GA_Contact_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Phone</center></p>
+</div>
+</div>-->
+            </div>
+            
+            <div >
+                <h4 class="{!if($CurrentPage.parameters.isPdf == null, 'blackHeading','blackHeadingpdf')}">
+                    NCM DIGITAL COMPOSITE LOGIN
+                </h4>
+                <p>
+                    The email address the Dealership will use to access the NCM Digital Performance Composite.
+                </p>
+                
+                <table class="myTable3" style="{!if($CurrentPage.parameters.isPdf == null, '','margin-bottom: 20px;')}">
+                    <tr>
+                        <td><b>Name:</b> </td>
+                        <td>
+                            <apex:inputField required="true"  id="NCMName" value="{!opportunityDetails.NCM_Composite_Name__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <apex:outputText value="{!opportunityDetails.NCM_Composite_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Email:</b> </td>
+                        <td>
+                            <apex:inputField onchange="checkNCMEmail();" required="true" id="NCMEmail" value="{!opportunityDetails.NCM_Composite_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <div id="errNCMEmail" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                            <apex:outputText value="{!opportunityDetails.NCM_Composite_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Title:</b> </td>
+                        <td>
+                            <apex:inputField required="true" id="NCMTitle" value="{!opportunityDetails.NCM_Composite_Title__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                            <apex:outputText value="{!opportunityDetails.NCM_Composite_Title__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+<td></td>
+<td>
+Name
+</td>
+<td>
+Email
+</td>
+<td>
+Title
+</td>
+</tr> -->
+                </table>
+                <!--<div class="row">
+<div class="column">
+<h2>Login for Composite  </h2>
+</div>
+<div class="column">
+<h2>
+<apex:inputField value="{!opportunityDetails.NCM_Composite_Name__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.NCM_Composite_Name__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Name</center></p>
+</div>
+
+<div class="column">
+<h2>
+<apex:inputField value="{!opportunityDetails.NCM_Composite_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.NCM_Composite_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Email</center></p>
+</div>
+<div class="column">
+<h2 >
+<apex:inputField value="{!opportunityDetails.NCM_Composite_Title__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+<apex:outputText value="{!opportunityDetails.NCM_Composite_Title__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</h2>
+<p><center>Title</center></p>
+</div>
+</div>-->
+            </div>
+            
+            <!-- <br rendered="{!if($CurrentPage.parameters.isPdf == null, 'false','true')}"/>
+<br rendered="{!if($CurrentPage.parameters.isPdf == null, 'false','true')}"/>-->
+            <div style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 10px')}" class="page-break">
+                <h4 class="{!if($CurrentPage.parameters.isPdf == null, 'blackHeading','blackHeadingpdf')}">
+                    AUTHORIZATION TO BE INCLUDED IN NCM DIGITAL PERFORMANCE COMPOSITE <!--Authorization to be included in NCM Digital Performance Composite-->
+                </h4>
+                <p>
+                    <apex:inputField required="true" id="aggregate" value="{!opportunityDetails.aggregate_my_Google_Analytics_data__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                    <apex:outputField value="{!opportunityDetails.aggregate_my_Google_Analytics_data__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                    
+                    I authorize Foundation Data to configure and aggregate my Google Analytics data for inclusion in my NCM 20 Group Digital Performance Composite.
+                </p>
+                <p> 
+                    <apex:inputField required="true" id="approve" value="{!opportunityDetails.APPROVE_the_request_on_behalf_of_FD__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                    <apex:outputField value="{!opportunityDetails.APPROVE_the_request_on_behalf_of_FD__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                    I authorize HomeNet to provide Foundation Data access to my inventory feed inclusive of Price, MSRP and Selling Price. 
+                    <!--I, {!opportunityDetails.Contract_Signer__c}, from {!accountDetails.Name} (Dealership) APPROVE the request, on behalf of Foundation Direct, for inventory partners to provide inventory feed access to HomeNet inclusive of Price, MSRP and Selling Price-->
+                </p>
+                <div style="width: 100%;">
+                    
+                    <table style="width:100%" class="myTable3"  >
+                        <tr >
+                            <td ><b>Authorized Signature: </b></td>
+                            <td style="{!if(ISBLANK(opportunityDetails.Contract_Signed_Date__c), '','display:none')}">
+                                <input id="text" type="text" maxlength = "20" />
+                            </td>
+                            <td style="{!if(ISBLANK(opportunityDetails.Contract_Signed_Date__c), 'display:none','')}">
+                                <div style=" (ISBLANK(opportunityDetails.Contract_Signed_Date__c),display: none;,height: 100px;width: 100px;display: flex;gap: 20px;)" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}">
+                                    <div style=" object-fit: contain;">
+                                        <apex:image url="/servlet/servlet.FileDownload?file={!fileId}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="{!if(ISBLANK(opportunityDetails.Contract_Signed_Date__c), '','display:none')}">
+                            <td ></td>
+                            <td>
+                                <canvas id="sig-canvas" width="200" height="33" style="border:0px solid black"/>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td ><b>Authorized Signer Name: </b></td>
+                            <td>
+                                <apex:inputField required="true" value="{!opportunityDetails.Contract_Signer__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                            
+                        </tr>
+                        <tr >
+                            <td ><b>Authorized Signer Email: </b></td>
+                            <td>
+                                <apex:inputField onchange="checkAuthEmail();" required="true" value="{!opportunityDetails.Contract_Signer_Email__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <div id="errAuthEmail" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer_Email__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td ><b>Authorized Signer Title: </b></td>
+                            <td>
+                                <apex:inputField id="authSign" required="true" value="{!opportunityDetails.Contract_Signer_Title__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer_Title__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td ><b>Authorized Signer Cell Phone: </b></td>
+                            <td>
+                                <apex:inputField onchange="checkAuthPhone();" id="authPhone" required="true" value="{!opportunityDetails.Contract_Signer_Phone__c}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+                                <div id="errAuthPhone" style=" width:280px; visibility: hidden;background-color: blanchedalmond;color: red;text-align: center;border-radius: 6px;padding: 5px 0;margin-top: 10px;position: relative;z-index: 1;top: 100%;"></div>
+                                <apex:outputText value="{!opportunityDetails.Contract_Signer_Phone__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr style="{!if( AND ($CurrentPage.parameters.isPdf  == null ,(ISBLANK(opportunityDetails.Contract_Signed_Date__c)) ),'display:none' ,'')}">
+                            <td style="width: 35%;"><b> Contract Signed Date: </b></td>
+                            <td>
+                                <apex:outputText value="{!contractDisplayDate}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                <br/>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <!--<p style=" {!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , 'display:block' , 'display:none')}">
+Please <b>Save Detail</b> before signing.Once you click <b>Accept Signature,</b> additional edits to the agreement cannot be made. A PDF copy of the agreement will be sent to you via email.
+</p>-->
+                    <p style=" {!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , 'display:block;margin-left: 7PX;' , 'display:none')}">
+                        Please Sign and Accept Terms &amp; Conditions. Once you Accept Terms &amp; Conditions, additional edits to the agreement cannot be made. A copy of the agreement will be sent to you via email.
+                        <!-->Please <b>Save Detail, Sign and Accept Signature.</b> Once you <b>Accept Signature,</b> additional edits to the agreement cannot be made. A copy of the agreement will be sent to you via email.<!-->
+                    </p> 
+                    <!--<apex:actionFunction name="callMethod" action="{!callMethod}" >
+<apex:param name="resultOfApex" value="" id="resultOfApexID"/>
+</apex:actionFunction>-->
+                    
+                    <!---->
+                    
+                    <apex:outputPanel id="renderTarget">
+                        <script>
+                        debugger;
+                        
+                        if ('{!returnValue}' != 'null') {
+                            if ('{!returnValue}' == 'Success') 
+                            {
+                                //showToast('Opportunity record is updated.',"success",10000);
+                                afterComplete();                                
+                            }
+                            else if('{!returnValue}' != ''){
+                                showToast('{!returnValue}',"danger",10000);
+                            }
+                            
+                        }
+                        </script>
+                        <!-- <apex:actionFunction name="updateRecord" action="{!updateRecord}" >
+<apex:param name="resultOfApex" value="" assignTo="{!returnValue}" />  
+</apex:actionFunction>
+<apex:commandButton onclick="(myFunction())" rerender="renderTarget"
+value="Accept Terms & Conditions" status="loadStatus"
+rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+-->
+                        <div class="savebtn">
+                            <center >
+                                
+                                <apex:commandButton onclick="checkForError();"  value="Accept Terms & Conditions" status="loadStatus"
+                                                    rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"
+                                                    rerender="renderTarget"  />  
+                                <apex:actionFunction rerender="renderTarget" action="{!updateRecord}" name="myFunction" />
+                                <span style="display:none;">
+                                    <button id="sig-submitBtn" >
+                                        Accept Signature
+                                    </button>
+                                </span>
+                            </center>
+                        </div>
+                        
+                    </apex:outputPanel>
+                    
+                    <!-- <div style=" margin-left: 10px;">
+<b>Authorized Signature: </b>
+</div>
+<table style="width:100%" >
+<tr>
+
+<td > 
+<c:SignatureComponent parentId="{!opportunityDetails.ID}" parentFlag="{!opportunityDetails.SaveSignaturebutton__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , true , false)}"/>
+
+<div style=" (ISBLANK(opportunityDetails.Contract_Signed_Date__c),display: none;,height: 100px;width: 100px;display: flex;gap: 20px;)" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}">
+<div style=" object-fit: contain;">
+<apex:image url="/servlet/servlet.FileDownload?file={!fileId}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+</div>
+</div>
+
+</td>
+</tr>
+
+</table>-->
+                </div>
+            </div>
+            
+            <div class="myDiv" style=" {!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , 'width: 100%;display:none' , 'width: 100%;display:block')}">
+                
+                <table style="{!if($CurrentPage.parameters.isPdf == null, '','margin-bottom: -60px;margin-top: -20px;')}">
+                    <tr>
+                        <td style="{!if($CurrentPage.parameters.isPdf == null,'width: 80%;' ,'width: 80%;')}"> 
+                            <img src="{!$Resource.Foundation_Logo}" style="{!if($CurrentPage.parameters.isPdf == null, 'margin-left: -45px;width: 35%;MARGIN-BOTTOM: -35px;'   ,    'margin-left: -45px;MARGIN-BOTTOM: -35px;'      )}" class="mbFlogo"/> 
+                        </td>
+                        
+                    </tr>
+                </table>
+                <h2 style="font-size: x-large;
+                           font-weight: 500;">
+                    INVENTORY APPROVAL
+                </h2>
+                <h4 class="{!if($CurrentPage.parameters.isPdf == null, 'blackHeading mbHead','blackHeadingpdf')}"
+                    style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 20px')}">
+                    OFFICIAL DEALERSHIP APPROVAL TO SHARE INVENTORY PRICING
+                </h4>
+                <p>I, {!opportunityDetails.Name} (Client Name) from {!accountDetails.Name} (Dealership) APPROVES the
+                    request, on behalf of Foundation Data, for the following inventory partners to provide
+                    inventory feed access to HomeNet inclusive of Invoice Price, MSRP and Selling Price for the dealerships
+                    listed in Exhibit A</p>
+                
+                <table class="myTable2" style="{!if($CurrentPage.parameters.isPdf == null, '','margin-top: 20px;margin-bottom: 20px;')}">
+                    <tr>
+                        <td> <b>New Car Inventory Provider:</b> </td>
+                        <td>
+                            <apex:outputText value="{!opportunityDetails.Inventory_Feed_Provider_New_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/> </td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicles in New Car Inventory Feed:</b> </td>
+                        <td>
+                            <apex:outputText value="{!opportunityDetails.InventoryFeed_Expected_of_New_car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Used Car Inventory Provider:</b> </td>
+                        <td>
+                            <apex:outputText value="{!opportunityDetails.Inventory_Feed_Provider_Used_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicles in Used Car Inventory Feed:</b> </td>
+                        <td>
+                            <apex:outputText value="{!opportunityDetails.InventoryFeed_Expected_of_Used_Car__c}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                        </td>
+                    </tr>
+                    
+                </table>
+                <table >
+                    <tr >
+                        <td ><b> Client Signature: </b></td>
+                        <td style="{!if(ISBLANK(opportunityDetails.Contract_Signed_Date__c), 'display:none','')}">
+                            <div style=" (ISBLANK(opportunityDetails.Contract_Signed_Date__c),display: none;,height: 50px;width: 100px;display: flex;gap: 20px;)" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}">
+                                <div style=" object-fit: contain;">
+                                    <apex:image url="/servlet/servlet.FileDownload?file={!fileId}" rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="width: 35%;"><b> Date: </b></td>
+                        <td>
+                            <apex:outputText value="{!contractDisplayDate}"  rendered="{!IF(ISBLANK(opportunityDetails.Contract_Signed_Date__c) , false , true)}"/>
+                            <br/>
+                        </td>
+                    </tr>
+                </table>
+                
+            </div >
+        </span>
+    </apex:form>
+    
+</apex:page>

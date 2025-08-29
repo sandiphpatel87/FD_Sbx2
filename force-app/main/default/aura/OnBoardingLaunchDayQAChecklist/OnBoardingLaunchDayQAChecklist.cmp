@@ -1,0 +1,158 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    
+    <aura:attribute name="isMazda" type="Boolean" default="false"/>
+    <aura:attribute name="isSubaru" type="Boolean" default="false"/>
+    <aura:attribute name="isAcuraOrHonda" type="Boolean" default="false"/>
+    
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div>
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        
+        <!-- COMMENTED OUT OLD FIELDS - START -->
+        <!--
+        <h3 class="slds-section-title__divider">Client Communication </h3>
+        <span> <lightning:input aura:id="checkboxField" label="Send Your Ads Are Live! Email to Dealer"  checked="{!v.onboardRecord.Send_Your_Ads_Are_Live_Email_to_Dealer__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title__divider"> Client Intel </h3>
+        <span><lightning:input aura:id="checkboxField" label="Review Salesforce Onboarding Object (Dealer Approved, Notes in Activity)"  checked="{!v.onboardRecord.Review_Salesforce_Onboarding_Object__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Review Kick Off Call Recap Email from RPM" checked="{!v.onboardRecord.Review_Kick_Off_Call_Recap_Email_from_RP__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Review Salesforce Account for Special Campaign and Nonstandard Setup Details"  checked="{!v.onboardRecord.Review_Salesforce_Account__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        -->
+        
+        <!-- NEW FIELD STRUCTURE - START -->
+         
+        <h3 class="slds-section-title--divider">Steps Prior To Launching</h3>
+        <span><lightning:input aura:id="checkboxField" label="Ensure we have dealer approval and have the good to go from Onboarding" checked="{!v.onboardRecord.Ensure_we_have_dealer_approval_and_have__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Review Kick off call deck for budgets/any special setup instructions" checked="{!v.onboardRecord.Review_Kick_off_call_deck_for_budgets__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check Salesforce for existing cases to launch other platforms in case they were ready early" checked="{!v.onboardRecord.Check_Salesforce_for_existing_cases_to__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        <h3 class="slds-section-title--divider">Apollo QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Ensure budgets match the KO call deck. Prorate if requested, but make sure next month's budget has the full amounts" checked="{!v.onboardRecord.Ensure_budgets_match_the_KO_call_deck__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="IF LAUNCHING IN EXISTING CID: Categorize Previous Provider's campaigns in Apollo, pause campaigns in Google Ads" checked="{!v.onboardRecord.IF_LAUNCHING_IN_EXISTING_CID_Categorize__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="IF LAUNCHING IN EXISTING CID: Allocate Budget in Placeholder Budget Group Based On MTD Spend Across Previous Provider Campaigns" checked="{!v.onboardRecord.IF_LAUNCHING_IN_EXISTING_CID_Allocate__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="IF LAUNCHING IN EXISTING CID: Inflate budgets in based on MTD spend across profit centers. Ensure next month's budget DOES NOT include inflation" checked="{!v.onboardRecord.IF_LAUNCHING_IN_EXISTING_CID_Inflate__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="From KO call deck, add any inventory filters/exclusions if necessary" checked="{!v.onboardRecord.From_KO_call_deck_add_any_inventory__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="In Dealer Setup, confirm &quot;3rd Party Landing Page&quot; is toggled on. Check that correct website provider and domain are loaded in the same section" checked="{!v.onboardRecord.In_Dealer_Setup_confirm_3rd_Party__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm correct URLs in landing pages section for all campaigns and sitelink extensions" checked="{!v.onboardRecord.Confirm_correct_URLs_in_landing_pages__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm geo towns are local to dealership" checked="{!v.onboardRecord.Confirm_geo_towns_are_local_to__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Ensure 5 dealer differentiators are loaded with correct capitalization" checked="{!v.onboardRecord.Ensure_5_dealer_differentiators_are__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Ensure Brand Difference Headline is loaded with correct capitalization" checked="{!v.onboardRecord.Ensure_Brand_Difference_Headline_is__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm Service Coupons are loaded and marked &quot;Include in Digital&quot;" checked="{!v.onboardRecord.Confirm_Service_Coupons_are_loaded_and__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Ensure Accessories coupon and Recall coupons are NOT marked &quot;include in Digital&quot;" checked="{!v.onboardRecord.Ensure_Accessories_coupon_and_Recall__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Google QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Set correct campaigns live based on budgets allocated" checked="{!v.onboardRecord.Set_correct_campaigns_live_based_on__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check for wrong brand in Make Near Me campaign." checked="{!v.onboardRecord.Check_for_wrong_brand_Make_Near_Me_campa__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check for wrong brand in Make Geo ad groups" checked="{!v.onboardRecord.Check_for_wrong_brand_in_Make_Geo_ad__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check geo targeting for every campaign. VAs geos do NOT push from Apollo. Will have to manually add these in Google Ads if missing/wrong." checked="{!v.onboardRecord.Check_geo_targeting_for_every_campaign__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check that Keywords are present for each search campaign" checked="{!v.onboardRecord.Check_that_Keywords_are_present_for__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check that correct Negative Keywords lists are present for each search campaign" checked="{!v.onboardRecord.Check_that_correct_Negative_Keywords__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Add geo towns to Make Near Me as negative keywords" checked="{!v.onboardRecord.Add_geo_towns_to_Make_Near_Me_as__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Add the dealership name to Make Near Me and Make Geo as negative keywords" checked="{!v.onboardRecord.Add_the_dealership_name_to_Make_Near__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm that sitelinks are present" checked="{!v.onboardRecord.Confirm_that_sitelinks_are_present__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm that the call extension phone number is present and matches the number in KO deck." checked="{!v.onboardRecord.Confirm_that_the_call_extension_phone__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Dial the call extension number to ensure proper functioning" checked="{!v.onboardRecord.Dial_the_call_extension_number_to__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm a location extension is present. Create one if not." checked="{!v.onboardRecord.Confirm_a_location_extension_is_present__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check bid strategy for all search campaigns. Set max bid to $7" checked="{!v.onboardRecord.Check_bid_strategy_for_all_search__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm auto apply recommendations are not enabled" checked="{!v.onboardRecord.Confirm_auto_apply_recommendations_are__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm app exclusions are in place" checked="{!v.onboardRecord.Confirm_app_exclusions_are_in_place__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm client notifications are disabled" checked="{!v.onboardRecord.Confirm_client_notifications_are__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Customize AT automated Google Alerts to include new account" checked="{!v.onboardRecord.Customize_AT_automated_Google_Alerts__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Import conversions and add values if possible" checked="{!v.onboardRecord.Import_conversions_and_add_values_if__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        <h3 class="slds-section-title--divider">Video QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Watch a video to ensure correct dealership name pronunciation, expiration dates in the disclaimer are correct, and that we have an image of a vehicle" checked="{!v.onboardRecord.Watch_a_video_to_ensure_correct__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check daily budgets. Sync from Apollo and confirm correct" checked="{!v.onboardRecord.Check_daily_budgets_Sync_from_Apollo__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Ensure we have location targeting, syncs from Apollo" checked="{!v.onboardRecord.Ensure_we_have_location_targeting_syncs__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm correct audiences are loaded for both campaigns. Elevate to Pod Leader if audiences are not there." checked="{!v.onboardRecord.Confirm_correct_audiences_are_loaded__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check to see if &quot;Optimized Targeting&quot; is turned on at the ad group level . If not, enable this setting." checked="{!v.onboardRecord.Check_to_see_if_Optimized_Targeting_is__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Once goals have been imported, check campaign goals. If only one type is selected and unable to select more, see next step." checked="{!v.onboardRecord.Once_goals_have_been_imported_check__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Change campaign goal to clicks, save. Switch back to conversions, then check if more goals are now selected. Save if so" checked="{!v.onboardRecord.Change_campaign_goal_to_clicks_save__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check end dates for both campaigns. Should be last day of the month" checked="{!v.onboardRecord.Check_end_dates_for_both_campaigns__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">VA QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="If ready to launch, go to VA QA tab in Salesforce for full QA" checked="{!v.onboardRecord.If_ready_to_launch_go_to_VA_QA_tab__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Facebook QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="If ready to launch, go to Facebook QA tab in Salesforce for full QA" checked="{!v.onboardRecord.If_ready_to_launch_go_to_Facebook_QA__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">PMAX QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="If ready to launch, go to PMAX QA tab in Salesforce for full QA" checked="{!v.onboardRecord.If_ready_to_launch_go_to_PMAX_QA__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Bing QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="If a profit center's search budget is less than $1000 total, request a 0% Bing allocation for that profit center." checked="{!v.onboardRecord.If_a_profit_center_s_search_budget_is__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Ensure correct campaigns are live based on budgets" checked="{!v.onboardRecord.Ensure_correct_campaigns_are_live_based__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check Geo targeting" checked="{!v.onboardRecord.Check_Geo_targeting__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check for ad disapprovals and correct if needed" checked="{!v.onboardRecord.Check_for_ad_disapprovals_and_correct__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Final Launch Steps</h3>
+        <span><lightning:input aura:id="checkboxField" label="Send Your Ads Are Live Email" checked="{!v.onboardRecord.Send_Your_Ads_Are_Live_Email__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Input &quot;Actual Launch Date&quot; for Google in Onboarding Objective" checked="{!v.onboardRecord.Input_Actual_Launch_Date_for_Google__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Input &quot;Actual Launch Date&quot; for Facebook in Onboarding Objective" checked="{!v.onboardRecord.Input_Actual_Launch_Date_for_Facebook__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Input &quot;Actual Launch Date&quot; for VAs (Vehicle Ads) in Onboarding Objective" checked="{!v.onboardRecord.Input_Actual_Launch_Date_for_VAs__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+    
+        <!-- COMMENTED OUT OLD SECTIONS -->
+        
+        <!-- NEW FIELD STRUCTURE - END -->
+        
+        <aura:if isTrue="{!v.isSubaru==TRUE}">
+        <h3 class="slds-section-title--divider">Subaru Specific</h3>
+        <span><lightning:input aura:id="checkboxField" label="When launching PMAX add the Subaru Negative KW list" checked="{!v.onboardRecord.When_launching_PMAX_add_the_Subaru__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check account for UTMs (will be added to the URL)" checked="{!v.onboardRecord.Check_account_for_UTMs_will_be_added__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        </aura:if>
+        
+        <h3 class="slds-section-title--divider">PMAX Specific</h3>
+        <span><lightning:input aura:id="checkboxField" label="Add PMAX negative KW list" checked="{!v.onboardRecord.Add_PMAX_negative_KW_list__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <aura:if isTrue="{!v.isAcuraOrHonda==TRUE}">
+        <h3 class="slds-section-title--divider">Honda/Acura Specific</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check if account is in program if it is a Honda account" checked="{!v.onboardRecord.Check_if_account_is_in_program_if_it__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check account for UTMs. Will be added to the URL. This is required for all Acura accounts. Only required for in-program Honda accounts." checked="{!v.onboardRecord.Check_account_for_UTMs_Will_be_added__c}" type="checkbox" onchange='{!c.change}'/></span>
+		<br/>
+        </aura:if>
+        
+        <br/>
+        <div>
+            <br/>
+            <br/>
+            
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+        <!--<aura:set attribute="else">
+                <b> Record is not available</b>
+            </aura:set>-->
+        
+        <br/><br/>
+    </div>
+    
+</aura:component>

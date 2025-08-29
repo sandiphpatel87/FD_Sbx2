@@ -1,0 +1,41 @@
+<messaging:emailTemplate subject="Foundation Direct: {!relatedTo.Next_Month__c} Budget Confirmation for {!relatedTo.Name}" recipientType="Contact" relatedToType="Account">
+
+<messaging:htmlEmailBody >
+    <html>
+      <body>
+        Hi {!recipient.firstName},<br/><br/>
+        Thank you for participating in this year’s Hyundai Boost Fund Program. <br/><br/>
+        
+        <b>This is a friendly reminder that the additional $1,000 in Hyundai Boost funds will conclude at the end of this month. </b><br/><br/>
+        
+        We’re excited to let you know that Hyundai is planning to continue providing additional market and model support in 2024! Stay tuned for more details coming in the new year.<br/><br/>
+        
+        Your budget for {!relatedTo.Next_Month__c} has been allocated as follows:
+        <br/><br/>        
+        <c:newMonthBudgetUpdated accountIdValue="{!relatedTo.Id}" />
+     
+         <br/><br/>Please reach out to your Regional Performance Manager below if you would like to make any changes to your budget:<br/><br/>
+        {!relatedTo.Regional_Performance_Manager__r.Name}<br/>
+        {!relatedTo.Regional_Performance_Manager__r.Email}<br/>
+        {!relatedTo.Regional_Performance_Manager__r.Phone}<br/>
+   <br/><br/>
+   Thank you for your continued partnership!
+   <br/><br/>
+   Your Support Team at Foundation Direct<br/>  
+   support@foundationdirect.com<br/> 
+   571-370-3030
+</body>
+    </html>
+  </messaging:htmlEmailBody> 
+<messaging:plainTextEmailBody >
+       
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>
+
+<!--<messaging:emailTemplate subject="New month media budget" recipientType="User" relatedToType="Media_Budget__c">
+<messaging:htmlEmailBody >
+        <c:MediaBudgetAmount mediaIdValue="{!relatedTo.Id}" />
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>
+-->

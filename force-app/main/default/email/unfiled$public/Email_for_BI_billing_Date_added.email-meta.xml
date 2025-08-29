@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Email for BI billing Date added</name>
+    <style>none</style>
+    <subject>{!Onboarding__c.Name} BI billing date updated</subject>
+    <textOnly>Hi Ashlyn , 
+
+ {!Onboarding__c.Name} BI billing date updated {!Onboarding__c.BI_Launch_Date__c}
+
+{!Onboarding__c.Link}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

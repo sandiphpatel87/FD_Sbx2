@@ -1,0 +1,8 @@
+Hello, <br/><br/>
+
+The document has been signed by {!Opportunity.Contract_Signer__c} for opportunity - {!Opportunity.Name} on {!Opportunity.Contract_Signed_Date__c}. <br/><br/>
+
+
+Opportunity record link - {!Opportunity.Link} <br/><br/>
+
+Thanks<br/>

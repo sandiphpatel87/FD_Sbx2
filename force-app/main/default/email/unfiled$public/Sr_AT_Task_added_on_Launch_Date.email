@@ -1,0 +1,5 @@
+Hi {!Task.AssignTo_Name__c}, 
+
+Launch date has been added and a task has been created to complete for {!Account.Name}
+
+Thank you

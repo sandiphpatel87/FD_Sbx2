@@ -1,0 +1,326 @@
+<apex:page showHeader="false" controller="SiteLoginController"
+           standardStylesheets="false" sidebar="false">
+    
+    <head>
+        <title>Customized Customer Login</title>
+        
+        <script type='text/javascript'>
+        function noenter(ev)  {
+            if (window.event && window.event.keyCode == 13 || ev.which == 13) {
+                javascriptLogin();
+                return false;
+            } else {
+                return true;
+            }
+        }
+        </script>
+        <style type="text/css">
+            fieldset.login {
+            background: none repeat scroll 0 0 white;
+            
+            font-family: "Century Gothic","Lucida Grande",Arial,sans-serif;
+            margin: 25px 0 25px;
+            padding: 10px;
+            }
+            
+            fieldset.login label {
+            clear: both;
+            color: #333333;
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            padding-top: 10px;
+            }
+            
+            fieldset.login input.text {
+            border: 1px solid #AAAAAA;
+            color: #5E5E5E;
+            padding: 5px;
+            width: 90%;
+            }
+            p{font-family: oswald, HelveticaNeue, Helvetica Neue, Helvetica-Neue, Helvetica, Arial, sans-serif;}
+            .clear {
+            clear: both;
+            }
+            
+            .content {
+            margin: 0 auto;
+            width: 419px;
+            }
+            @page {
+            @top-center {
+            content: element(header);
+            }
+            @bottom-left {
+            content: element(footer);
+            }
+            }
+            div.header {
+            padding: 10px;
+            position: running(header);
+            }
+            div.footer {
+            display: block;
+            padding: 5px;
+            position: running(footer);
+            }
+            .pagenumber:before {
+            content: counter(page);
+            }
+            .pagecount:before {
+            content: counter(pages);
+            }
+          table.mobileFriendly td.flogomb{width: 15%;}
+            table.mobileFriendly td.ncmlogomb{width: 15%;}
+            table.mobileFriendly td.ncmTxtmb{width: 30%;}
+             @media
+    only screen and (max-width: 200px),
+    (min-device-width: 200px) and (max-device-width: 1024px)  {
+table.mobileFriendly td.flogomb{width: unset;        margin-top: -110px;}
+            table.mobileFriendly td.ncmlogomb{width: unset;}
+            table.mobileFriendly td.ncmTxtmb{width: unset;margin-top: 50px;}
+            img.ncmImgmb{width: 60%;
+    padding-left: 15%;    margin-top: -110Px;}
+        /* force table and its elements to behave as individual blocks one per line */
+        table.mobileFriendly,
+        table.mobileFriendly thead,
+        table.mobileFriendly tbody,
+        table.mobileFriendly th,
+        table.mobileFriendly td,
+        table.mobileFriendly tr {
+            display: block;
+        }
+        /* hide headers outside the screen */
+        table.mobileFriendly thead tr,
+        table.mobileFriendly thead th {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        /* add border to make rows distinct */
+        table.mobileFriendly tr { border: 1px solid gray; }
+
+        /* show each column value in the middle */
+        table.mobileFriendly td {
+            border: none!important;
+            border-bottom: 1px solid whitesmoke;
+            position: relative!important;
+            
+           
+            padding-bottom: 10px;
+        }
+        /* show header as a fake label on the left side */
+        /* using top/left to emulate padding */
+        table.mobileFriendly td:before {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 45%;
+            padding-right: 10px;
+            white-space: nowrap;
+            content: attr(data-header);
+            font-weight: bold;
+        }
+    }
+
+    @media
+    only screen and (max-width: 450px),
+    (min-device-width: 450px) and (max-device-width: 767px)  {
+table.mobileFriendly td.flogomb{width: unset;        margin-top: -110px;}
+            table.mobileFriendly td.ncmlogomb{width: unset;}
+             table.mobileFriendly td.ncmTxtmb{width: unset;margin-top: 50px;}
+                        img.ncmImgmb{width: 60%;
+    padding-left: 15%;    margin-top: -110Px;}
+        /* force table and its elements to behave as individual blocks one per line */
+    /* increase font size */
+        table.mobileFriendly,
+        table.mobileFriendly thead,
+        table.mobileFriendly tbody,
+        table.mobileFriendly th,
+        table.mobileFriendly td,
+        table.mobileFriendly tr {
+            font-size: 120%;
+            display: block;
+        }
+        /* hide headers outside the screen */
+        table.mobileFriendly thead tr,
+        table.mobileFriendly thead th {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        /* add border to make rows distinct */
+        table.mobileFriendly tr { border: 1px solid gray; }
+
+        /* show each column value in its own line */
+        table.mobileFriendly td {
+            border: none!important;
+            border-bottom: 1px solid whitesmoke;
+            position: relative!important;
+            padding-left: 0!important;
+        }
+        /* show header as a fake label on the left side */
+        /* using top/left to emulate padding */
+        table.mobileFriendly td:before {
+            content: attr(data-header) " ";
+            top: 0.25rem;
+            left: 0.25rem;
+            display: contents;
+            font-weight: bold;
+        }
+        /* make column value appear in its own line */
+        table.mobileFriendly td span {
+            padding-left: 1rem;
+            display: block;
+        }
+        /* make column value appear below the fake label */
+        table.mobileFriendly td span:before {
+            content: ' ';
+            display: block;
+            padding-top: 2.5rem;
+        }
+    }
+            
+            .tooltip {
+  position: relative;
+  display: inline-block;
+ 
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 250px;
+  background-color: #002C73;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext, .tooltip:active .tooltiptext {
+  visibility: visible;
+}svg.myIcon {
+    padding-left: 10px;
+}
+        </style>
+    </head>
+    <body>
+        
+         <table style="width: 100%;background-color: #002C73;
+                  margin-right: 10px;" class="mobileFriendly">
+        <tr>
+            <td  class='flogomb'> 
+                <img src="{!$Resource.Contract_foundation_logo}" style='width: 100%;' />
+            </td>
+            <td class='ncmlogomb'> 
+                <img class='ncmImgmb' src="{!$Resource.Contract_NCM_logo}" /> 
+            </td>
+            <td class='ncmTxtmb'>
+                <center>
+                    <span style='font-weight: 300;color: white;font-size: 25px;line-height: 1.1em;
+                                            font-family: oswald, HelveticaNeue, Helvetica Neue, Helvetica-Neue, Helvetica, Arial, sans-serif;'>
+                        NCM DIGITAL PERFORMANCE COMPOSITE
+                    </span>
+                </center>
+            </td >
+            <td style='width: 50%;'>
+            </td>
+        </tr>
+    </table>
+        
+     
+       <!-- <div class="header">
+            
+            <div style="width: 100%;background-color: #002C73;
+                        margin-right: 10px;" class="logoCmp">
+                <img src="{!$Resource.Contract_foundation_logo}" style='width: 15%;' />
+                <img src="{!$Resource.Contract_NCM_logo}"  style='padding-left: 20px;padding-right: 20px;' />
+                <span class="ncmTxt" style='font-weight: 300;color: white;font-size: 25px;line-height: 1.1em;
+                                            font-family: oswald, HelveticaNeue, Helvetica Neue, Helvetica-Neue, Helvetica, Arial, sans-serif;'>
+                    
+                    NCM DIGITAL PERFORMANCE COMPOSITE
+                    
+                </span>
+            </div>
+        </div>-->
+        
+         
+        
+        <center>
+            <img src="{!$Resource.FD_logo_loginPage}"  style='width: 210px;height: 90px;margin-top: 5%;' /> 
+            <p>
+                Welcome to the NCM Digital Performance Composite Portal!
+            </p>
+            <!--<p>
+                To get started, input your email address and the password that we sent to you via email and click "Get Started".
+            </p>-->
+        </center>
+        <div class="content">
+            <div class="login">
+                <apex:form id="loginForm" forceSSL="true">
+                    <apex:actionFunction name="javascriptLogin" action="{!login}" />
+                    <fieldset class="login">
+                        <center>
+                            <!-- <p>Check your Enrollment Email for login credentials</p> -->
+                            <apex:pageMessages id="error" />
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td > 
+                                        <p  class="tooltip">
+                                            Login
+                                            <!--<svg class='myIcon' xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> -->
+                                         <!-- <span class="tooltiptext">Usually the email address on file with your NCM Membership</span>-->
+                                        </p>
+                                        
+                                            
+                                           
+                                    </td>
+                                    <td> 
+                                        <apex:inputText styleClass="text" id="username"
+                                                        value="{!username}" /> 
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td > 
+                                        <p>
+                                            Password
+                                        </p>  
+                                    </td>
+                                    <td > 
+                                        <apex:inputSecret styleClass="text" id="password"
+                                                          value="{!password}" onkeypress="return noenter(event);" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td> 
+                                    <td>
+                                        <div class="clear"></div>
+                                        <span class="form-link"> </span>
+                                        <div class="clear"></div>
+                                        <p >
+                                            <apex:commandButton value="Get Started" styleClass="button"
+                                                                action="{!login}" id="submitbutton"
+                                                                style="box-shadow: none;background-color: #1a73e8;color: #fff;width: 95%; 
+                                                                       padding-bottom: 10px;padding-top: 10px;border-color: #1a73e8;"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </center>
+                    </fieldset>
+                </apex:form>
+            </div>
+        </div>
+        <center><p>
+            If you are having trouble logging in, please reach out to <a href="mailto:ncmsupport@foundationdirect.com">ncmsupport@foundationdirect.com</a>
+            </p></center>
+    </body>
+</apex:page>

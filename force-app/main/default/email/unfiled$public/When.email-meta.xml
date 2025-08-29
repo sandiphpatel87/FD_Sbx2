@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>When Franchise Type is Hyundai or Acura &amp; Type is Digital Advertisin &amp; ACTIVE &amp; OEM Dealer code is blank</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Send Email to Ashlyn, RPM and Dino from account</name>
+    <style>none</style>
+    <subject>{!Account.Name} Dealer Code is blank</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

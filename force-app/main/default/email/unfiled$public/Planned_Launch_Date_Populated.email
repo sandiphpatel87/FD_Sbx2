@@ -1,0 +1,6 @@
+Hi Onboarding team, 
+
+{!Account.Name} is scheduled to launch on {!Account.Planned_Launch_Date__c}. Please send a handoff email to the following team members:
+
+{!Account.Account_Technician__c}
+{!Account.Regional_performance_manager__c}

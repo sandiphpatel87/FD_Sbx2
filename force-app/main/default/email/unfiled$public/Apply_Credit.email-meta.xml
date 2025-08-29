@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Apply Credit</name>
+    <style>none</style>
+    <subject>Please apply {!Credit_Request__c.Credit_Request_Amount__c} to {!Credit_Request__c.Account_name__c}</subject>
+    <textOnly>Please apply a credit in the amount of {!Credit_Request__c.Credit_Request_Amount__c} to {!Credit_Request__c.Account_name__c}’s latest open invoice. 
+
+Credit Request Number: {!Credit_Request__c.Name}
+Requested Date: {!Credit_Request__c.Requested_Date__c}
+Credit Amount: {!Credit_Request__c.Credit_Request_Amount__c}
+Submitted By: {!Credit_Request__c.Submitter__c}
+Credit Request Notes: {!Credit_Request__c.Credit_Request_Notes__c}
+
+This credit request was approved by {!User.Name}.  
+
+Thank you, 
+support@foundationdirect.com</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_the_value_of_coop_record_for_creation</name>
+        <label>Assign the value of coop record for creation</label>
+        <locationX>50</locationX>
+        <locationY>360</locationY>
+        <assignmentItems>
+            <assignToReference>objCoop.Account__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>objCoop.Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>previousMonthDate</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>objCoop.Month__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>valMonth</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>objCoop.Year__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>valYear</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Coop_Record</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_for_account_type</name>
+        <label>Check for account type</label>
+        <locationX>182</locationX>
+        <locationY>252</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_for_record_account_type_and_account_active</name>
+            <conditionLogic>((1 AND 2) OR (1 AND 3) OR 4) AND 5 AND 6</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Digital Advertising</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>NCM_Check</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Business Intelligence</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Digital Advertising</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Active__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>valTodayDay</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_the_value_of_coop_record_for_creation</targetReference>
+            </connector>
+            <label>Check for record account type and account active</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>NCM_Check</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(INCLUDES({!$Record.Type__c}, &apos;NCM&apos;), NOT(INCLUDES({!$Record.Type__c}, &apos;NCM 20 Group&apos;)) )</expression>
+    </formulas>
+    <formulas>
+        <name>previousMonthDate</name>
+        <dataType>Date</dataType>
+        <expression>DATE(
+YEAR(TODAY()), 
+MONTH(TODAY()), 
+1
+)</expression>
+    </formulas>
+    <formulas>
+        <name>valDay</name>
+        <dataType>Number</dataType>
+        <expression>DAY({!previousMonthDate})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>valMonth</name>
+        <dataType>String</dataType>
+        <expression>CASE(MONTH({!previousMonthDate}),
+    1, &apos;Jan&apos;,
+    2, &apos;Feb&apos;,
+    3, &apos;Mar&apos;,
+    4, &apos;Apr&apos;,
+    5, &apos;May&apos;,
+    6, &apos;Jun&apos;,
+    7, &apos;Jul&apos;,
+    8, &apos;Aug&apos;,
+    9, &apos;Sep&apos;,
+    10, &apos;Oct&apos;,
+    11, &apos;Nov&apos;,
+    12, &apos;Dec&apos;,
+    &apos;&apos;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>valTodayDay</name>
+        <dataType>Number</dataType>
+        <expression>DAY(TODAY())</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>valYear</name>
+        <dataType>String</dataType>
+        <expression>TEXT(YEAR({!previousMonthDate}))</expression>
+    </formulas>
+    <interviewLabel>Create Coop Record For Active Account {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create Coop Record For Active Account</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Coop_Record</name>
+        <label>Create Coop Record</label>
+        <locationX>50</locationX>
+        <locationY>468</locationY>
+        <inputReference>objCoop</inputReference>
+    </recordCreates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_account_type</targetReference>
+        </connector>
+        <object>Account</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2023-11-09</startDate>
+            <startTime>01:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>objCoop</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Coop__c</objectType>
+    </variables>
+</Flow>

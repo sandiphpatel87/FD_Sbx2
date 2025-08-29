@@ -1,0 +1,11 @@
+Hi {!Contact.FirstName}
+
+Please find the performance recap for {!Contact.This_Month__c} attached for your review.
+
+Immediate Action Item Requested: Per our discussion, we will plan to implement the account settings below for the month of {!Contact.Next_Month__c}. Kindly please reply back with your approval so we can process this information with Google.
+
+
+
+Please don't hesitate to reach out with any questions.
+
+Thank you for your continued partnership!

@@ -1,0 +1,17 @@
+.THIS .slds-modal__container{
+	width: 80% !important;
+	max-width: 80% !important;
+}
+.THIS .dualbox{
+    padding-left: 14%;
+}
+.THIS .second-div{
+    width:50%;
+margin : 0;
+float : left ;
+}
+.THIS .first-div{
+    width:50%;
+margin : 0;
+float : left ;
+}

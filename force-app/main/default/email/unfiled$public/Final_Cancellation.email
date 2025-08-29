@@ -1,0 +1,15 @@
+Hello {!Opportunity.Account_Technician__c} and assigned Sr. Account Technician
+
+Please complete the following cancellation steps for {!Opportunity.Account}
+
+{!Opportunity.Account_Technician__c}:
+Setup automated rules to pause by end of day {!Opportunity.Last_Day_of_Service__c}
+Remove future Apollo budgets 
+
+Sr. Account Technicians:
+Run final payment across ad platforms 
+
+Please reach out to {!Opportunity.Regional_performance_manager__c} with any additional questions.
+
+Thank you!
+Support@foundationdirect.com

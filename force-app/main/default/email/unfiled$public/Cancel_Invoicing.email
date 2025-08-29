@@ -1,0 +1,10 @@
+Hello Accounting
+
+Please stop invoicing for {!Opportunity.Account}, effective {!Opportunity.Day_after_last_day_of_service__c} for the following product:
+
+Product Name: {!Opportunity.Product_Status__c}
+MRR: {!Opportunity.Total_MRR__c}
+Cancellation Details: {!Opportunity.Foundation_Employee_Assessment_of_Cancel__c}
+
+Thank you!
+Support@foundationdirect.com

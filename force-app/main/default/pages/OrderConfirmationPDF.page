@@ -1,0 +1,166 @@
+<apex:page controller="OrderConfirmationController"  renderAs="{!isPDF}">
+    <apex:stylesheet value="{!$Resource.Order_Confirm_CSS}" />
+    
+    
+    <div class="container">
+        
+        
+        <table >
+            <tr >
+                <td class="myLogo">  <img src="{!$Resource.FD_logo_loginPage}" alt="Company Logo" /></td>
+                <td class="myHead"> ORDER CONFIRMATION</td>    
+            </tr>
+        </table>
+        
+        
+        <h1>ORDER DETAILS</h1>
+        <div class="section">
+            
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Dealership Name:</span></td>
+                    <td class="myTd"><span>{!dealershipName}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Street Address:</span></td>
+                    <td class="myTd"><span>{!streetAddress}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">City:</span></td>
+                    <td class="myTd"><span>{!city}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">State:</span></td>
+                    <td class="myTd">  
+                        <span >{!state} </span> 
+                        <!--<div class="myTd">{!ZipCode}</div>-->
+                    </td>
+                    
+                    <!--  <td class="myTdHalf" style="{!isPDF} == 'html' ? 'margin-left: 35%;' : ''">
+<span>{!state} </span> 
+</td>
+<td class="myTdHalf">
+<span>{!ZipCode}</span>
+</td>-->
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Zip Code:</span></td>
+                    <td class="myTd">  
+                        <span >{!ZipCode} </span> 
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Authorized Contact Name:</span></td>
+                    <td class="myTd"><span>{!contactName}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Authorized Contact Email:</span></td>
+                    <td class="myTd"><span>{!contactEmail}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Target Launch Month:</span></td>
+                    <td class="myTd"><span>{!targetLaunchMonth}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Regional Performance Manager:</span></td>
+                    <td class="myTd"><span>{!regionalManager}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Account Technician:</span></td>
+                    <td class="myTd"><span>{!accountTechnician}</span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Franchise Type:</span></td>
+                    <td class="myTd"><span>{!franchiseType}</span></td>
+                </tr>
+            </table>
+        </div>
+        <!--<div class="section">
+<div class="info"><span class="highlight">Dealership Name:</span><span class="outputTxt">{!dealershipName}</span></div>
+<div class="info"><span class="highlight">Street Address:</span><span class="outputTxt">{!streetAddress}</span></div>
+<div class="info"><span class="highlight">City:</span><span class="outputTxt">{!city}</span></div>
+<div class="info"><span class="highlight">State / Zip Code:</span><span class="outputTxt">{!state} {!ZipCode}</span></div>
+<div class="info"><span class="highlight">Authorized Contact Name:</span><span class="outputTxt">{!contactName}</span></div>
+<div class="info"><span class="highlight">Authorized Contact Email:</span><span class="outputTxt">{!contactEmail}</span></div>
+<div class="info"><span class="highlight">Target Launch Month:</span><span class="outputTxt">{!targetLaunchMonth}</span></div>
+<div class="info"><span class="highlight">Regional Performance Manager:</span><span class="outputTxt">{!regionalManager}</span></div>
+<div class="info"><span class="highlight">Account Technician:</span><span class="outputTxt">{!accountTechnician}</span></div>
+<div class="info"><span class="highlight">Franchise Type:</span><span class="outputTxt">{!franchiseType}</span></div>
+</div>-->
+        
+        <h2>PRODUCT DETAILS</h2>
+        <div class="section" style="margin-bottom: 0px;">
+            <table>
+                <tr class="info" style="margin-top: 0px;">
+                    <th>Product Name</th>
+                    <th>Tech Fee</th>
+                </tr>
+                <apex:repeat var="a" value="{!lineItems}">
+                    <tr class="info">
+                        <td><apex:outputText value="{!a.Product2.Name}"/></td>
+                        <td><apex:outputText value="${!a.MRR__c}"/></td>
+                    </tr>
+                </apex:repeat>  
+            </table>
+        </div>
+        <div class="sectionDiv"> 
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Order Date:</span></td>
+                    <td class="myTd"><span>
+                        <apex:outputText value="{0, date, M/d/yyyy}">
+                            <apex:param value="{!NOW()}" />
+                        </apex:outputText>
+                        </span></td>
+                </tr>
+            </table>
+            <table>
+                <tr class="info">
+                    <td><span class="highlight">Total:</span></td>
+                    <td class="myTd"><span>${!total}</span></td>
+                </tr>
+            </table>
+            
+        </div>
+        
+        <h2>ADDENDUM</h2>
+        <div class="section">
+            <p class="info">
+                <apex:repeat var="a" value="{!lineItems}">
+                    <span class="highlight" style="display: contents;">{!a.Product2.Name} - Service Term: </span>{!a.Product2.Addendum_Language__c}
+                    <br/><br/>
+                </apex:repeat>                
+            </p>            
+            <apex:outputpanel rendered="{!specialNotes != ''}">
+                <p class="info">
+                    <span class="highlight" style="display: contents;">Additional Terms: </span>{!specialNotes}<br/>
+                </p>
+            </apex:outputpanel>
+        </div>
+        
+        <div class="footer">
+            &copy;{!YEAR(TODAY())} Foundation Direct. All rights reserved.
+        </div>
+    </div>
+    
+</apex:page>

@@ -1,0 +1,2 @@
+Hi {!Account.Account_Technician_Name__c}
+This is your friendly reminder that {!Account.Name} has budget loaded for Facebook, but no Actual Facebook Launch Date has been inputted. Please follow up to launch accounts or remove budget if client doesn't intent to launch Facebook.

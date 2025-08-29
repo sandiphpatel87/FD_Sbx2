@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_if_Monday</name>
+        <label>Check if Monday</label>
+        <locationX>182</locationX>
+        <locationY>252</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Monday</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsMonday</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_a_case</targetReference>
+            </connector>
+            <label>Is Monday</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>AccountTechnicianRoleId</name>
+        <dataType>String</dataType>
+        <expression>&quot;2F00E4W000001dM1Z&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>datechecking</name>
+        <dataType>Boolean</dataType>
+        <expression>DAY(TODAY()) = 22</expression>
+    </formulas>
+    <formulas>
+        <name>Description</name>
+        <dataType>String</dataType>
+        <expression>&quot;1. Pull the Report from Salesforce: https://foundationdirect.lightning.force.com/lightning/r/Report/00ONx000000fmrtMAA/view&quot; &amp;
+&quot;\n\n2. Audit OEM Program Type:&quot; &amp;
+&quot;\n- Ensure ALL Hyundai Dealers are marked with &apos;Hyundai Alliance Program&apos;.&quot; &amp;
+&quot;\n- For Boost dealers, verify using the spreadsheet: https://docs.google.com/spreadsheets/d/1869qLtH5XfT39IAX8_etB0NbirJ4w5Ft0T_yv643VIs/edit?usp=sharing&quot; &amp;
+&quot;\n- Mark Boost dealers with &apos;2024 Boost Program&apos;.&quot; &amp;
+&quot;\n\n3. Additional Information: Refer to https://docs.google.com/spreadsheets/u/0/d/1aQX65zAp3i6GOKxXoCoPrRyW1FTEQ5A34JpepX94BEU/edit&quot; &amp;
+&quot;\n\n4. Training Video: Watch https://drive.google.com/file/d/1ROzSWww_JZ9HBHc7DbLkAH5BQGCr1Ngq/view&quot;</expression>
+    </formulas>
+    <formulas>
+        <description>Every monday</description>
+        <name>IsMonday</name>
+        <dataType>Boolean</dataType>
+        <expression>MOD(TODAY() - DATE(1900, 1, 1), 7) == 1</expression>
+    </formulas>
+    <formulas>
+        <name>OEMProgramManagerRoleId</name>
+        <dataType>String</dataType>
+        <expression>&quot;2F00E4W000001F9mg&quot;</expression>
+    </formulas>
+    <interviewLabel>Create a case for Weekly {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create a case for Weekly Enrollment Audit request type: Hyundai</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_a_case</name>
+        <label>Create a case</label>
+        <locationX>50</locationX>
+        <locationY>360</locationY>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Assign_To__c</field>
+            <value>
+                <elementReference>$Record.Account_Technician__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value>
+                <stringValue>Salesforce</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Regional_performance_manager__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Medium</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <stringValue>012Nx000002AO7xIAG</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Request_Type__c</field>
+            <value>
+                <stringValue>Weekly Enrollment Audit</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Weekly Program Enrollment Tracking &amp; SF Audits</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_if_Monday</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Hyundai Alliance Program (Corporate)</stringValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2024-07-08</startDate>
+            <startTime>03:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

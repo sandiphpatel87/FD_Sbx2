@@ -1,0 +1,9 @@
+Hello Onboarding Team, <br><br>
+
+A new onboarding record has been created for the account -  {!Onboarding__c.Account__c}. <br>
+
+Please click the below link to access the record in Salesforce - <br>
+{!Onboarding__c.Link}<br><br>
+
+Thanks, <br>
+Foundation Direct Support

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Email_when_opportunity_stage_is_stuck</name>
+        <label>Email when opportunity stage is stuck</label>
+        <locationX>50</locationX>
+        <locationY>276</locationY>
+        <actionName>Opportunity.Email_when_opportunity_stage_is_stuck</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Update_date_when_opp_stage_is_stuck</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Opportunity.Email_when_opportunity_stage_is_stuck</nameSegment>
+    </actionCalls>
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_if_still_opportunity_stage_is_stuck</name>
+        <label>Check if still opportunity stage is stuck</label>
+        <locationX>446</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>check_for_stage_is_stuck</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Stuck</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_stage_as_never_launched</targetReference>
+            </connector>
+            <label>check for stage is stuck</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>When opp stage is stuck send email after 30 days stage {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>When opp stage is stuck send email after 30 days change stage to never launched</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_date_when_opp_stage_is_stuck</name>
+        <label>Update date when opp stage is stuck</label>
+        <locationX>50</locationX>
+        <locationY>384</locationY>
+        <inputAssignments>
+            <field>Date_when_stage_is_stuck__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_stage_as_never_launched</name>
+        <label>Update stage as never launched</label>
+        <locationX>314</locationX>
+        <locationY>384</locationY>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Never Launched</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>122</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Email_when_opportunity_stage_is_stuck</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Stuck</stringValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Check_for_30_days_after_stage_changed_to_stuck</name>
+            <connector>
+                <targetReference>Check_if_still_opportunity_stage_is_stuck</targetReference>
+            </connector>
+            <label>Check for 30 days after stage changed to stuck</label>
+            <offsetNumber>30</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>Date_when_stage_is_stuck__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

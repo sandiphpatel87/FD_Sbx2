@@ -1,0 +1,5 @@
+Account Name : {!Credit_Request__c.Account_name__c}
+Credit Amount : {!Credit_Request__c.Credit_Request_Amount__c}
+
+@{!User.Name} has requested credit.
+Notes : {!Credit_Request__c.Credit_Request_Notes__c}

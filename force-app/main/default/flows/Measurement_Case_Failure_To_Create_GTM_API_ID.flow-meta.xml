@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_GTM_API_ID</name>
+        <label>Check GTM API ID</label>
+        <locationX>374</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_blank</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.GTM_API_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Measurement_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Standard</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_a_case</targetReference>
+            </connector>
+            <label>If blank</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>checkifwebsiteverifiedand8hourspass</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+    TEXT({!$Record.Website_Verified__c}) = &quot;Verified&quot;,
+    ISBLANK({!$Record.GTM_API_ID__c}),
+    NOW() - {!$Record.LastModifiedDate} &gt;= (8 / 24)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>gtmapiidisblank</name>
+        <dataType>Boolean</dataType>
+        <expression>ISBLANK({!$Record.GTM_API_ID__c})</expression>
+    </formulas>
+    <formulas>
+        <description>URL not empty</description>
+        <name>URLisnotempty</name>
+        <dataType>String</dataType>
+        <expression>&quot;ISBLANK($Record.Account_Website_URL__c)&quot;</expression>
+    </formulas>
+    <interviewLabel>Measurement Case - Failure To Create GTM API ID {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Measurement Case - Failure To GTM API ID (Measurement)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_a_case</name>
+        <label>Create a case</label>
+        <locationX>242</locationX>
+        <locationY>384</locationY>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>$Record.Account__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Assign_To__c</field>
+            <value>
+                <stringValue>005Nx000000YScz</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>GTM API has been blank longer than 8 business hours after website has been verified</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value>
+                <stringValue>Salesforce</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Opportunity__r.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <stringValue>012Nx000002AKAoIAO</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Request_Type__c</field>
+            <value>
+                <stringValue>Failure To Create GTM API ID</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Action Required: GTM API ID Failed to Create</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Website_Verified__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Verified</stringValue>
+            </value>
+        </filters>
+        <object>Measurement__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <name>X8_hours</name>
+            <connector>
+                <targetReference>Check_GTM_API_ID</targetReference>
+            </connector>
+            <label>check after  8 hours</label>
+            <offsetNumber>8</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <timeSource>RecordTriggerEvent</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <textTemplates>
+        <name>descriptionforcase</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;span style=&quot;font-family: Arial; font-size: 9pt; color: rgb(0, 0, 0);&quot;&gt;GTM API has been blank longer than 8 business hours after website has been verified&lt;/span&gt;&lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

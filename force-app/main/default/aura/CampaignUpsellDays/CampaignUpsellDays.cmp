@@ -1,0 +1,53 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="CampaignsTabDaysController">
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="campaignRecord" type="Campaign_List_Item__c[]" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div >
+        
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        
+        <h3 class="slds-section-title--divider"> New </h3><br/>
+        <span class="slds-form_horizontal slds-form slds-grid slds-wrap" style='text-align: center;font-weight: 700;'> 
+            <span class="slds-col slds-size_2-of-12">Name</span>
+            <span class="slds-col slds-size_2-of-12">Date Discussed</span>
+            <span class="slds-col slds-size_3-of-12" Style='width: 22%;!important'>Date Requested</span>
+            <span class="slds-col slds-size_2-of-12">Date Implemented</span>
+            <span class="slds-col slds-size_2-of-12">Date Cancelled</span>
+            <span class="slds-col slds-size_1-of-12">SLA</span>
+        </span><br/>
+        <aura:iteration items="{!v.campaignRecord}" var="campItem">
+            <aura:if isTrue="{!and(campItem.Type__c == 'Upsell',campItem.Stage__c =='New') }">
+                <span class="slds-form_horizontal slds-form slds-grid slds-wrap">  <span class="slds-col slds-size_2-of-12">{!campItem.Name__c}</span>
+                    <lightning:input class="slds-col slds-size_2-of-12" type="date" variant="label-hidden" name="input1" value="{!campItem.Date_1__c}" />
+                    <lightning:input class="slds-col slds-size_3-of-12" type="datetime" variant="label-hidden"  name="input1" label="" value="{!campItem.Date_3__c}"/>
+                    <lightning:input class="slds-col slds-size_3-of-12" type="datetime"  variant="label-hidden" name="input1" label="" value="{!campItem.Date_4__c}" />
+                    <lightning:input class="slds-col slds-size_2-of-12" type="date" variant="label-hidden" name="input1" value="{!campItem.Date_2__c}" />
+                    <lightning:input class="slds-col slds-size_1-of-12" disabled= 'true' aura:id='numberField14' variant="label-hidden" label="" value="{!campItem.SLA__c}" type="number" />
+                    
+                </span>
+            </aura:if>
+        </aura:iteration>
+        
+        <div>
+            <br/>
+            <br/>
+            
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+        <br/><br/>
+    </div>
+</aura:component>

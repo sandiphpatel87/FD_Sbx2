@@ -1,0 +1,18 @@
+<messaging:emailTemplate subject="Launch Handoff for {!relatedTo.Account__r.Name}" recipientType="Contact" relatedToType="Onboarding__c">
+<messaging:plaintextEmailBody >
+Hi Team,
+
+Account Launching: {!relatedTo.Account__r.Name}
+Planned Launch Date: {!relatedTo.Planned_Launch_Date__c}
+Assigned Account Technician: {!relatedTo.Account_Technician__r.Name}
+Regional Performance Manager: {!relatedTo.Regional_performance_manager__r.Name}
+Dealer Approved: {!relatedTo.Dealer_Approved_Automated_Rules_Set__c}
+
+Outstanding Details: 
+<c:OnboardingCheckListComponent onboardingId="{!relatedTo.Id}"> </c:OnboardingCheckListComponent>
+ 
+Thanks 
+Jackie Pulliam
+Onboarding Specialist
+</messaging:plaintextEmailBody>
+</messaging:emailTemplate>

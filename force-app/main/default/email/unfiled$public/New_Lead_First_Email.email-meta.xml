@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Send when a new lead comes in (Tim or Andrew only)</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>New Lead First Email Founder</name>
+    <style>none</style>
+    <subject>{!Lead.OwnerFirstName} from Foundation Direct</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

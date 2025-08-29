@@ -1,0 +1,8 @@
+Hello
+
+{!Onboarding__c.Account__c}’s FD Analytic view has been built. Goals were imported into their Ads account on {!Onboarding__c.Import_Goals_from_FD_View_to_Google_Ads__c}. 
+
+{!Onboarding__c.Regional_performance_manager__c}, please verify goals at launch and update the Goals Object in Salesforce.
+
+Thank you,
+support@foundationdirect.com

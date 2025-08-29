@@ -1,0 +1,26 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" Controller="AccNoteUpdateController" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isEdit" type="Boolean" default="false" />
+    <aura:attribute name="textBoxValue" type="String"  />
+    <lightning:card>
+        <div class="slds-grid " style='padding-right: 5px;'>
+            <aura:if isTrue="{!v.isEdit}">
+                <div class="slds-col slds-size_2-of-3">                    
+                    <lightning:textarea name="input1" label="Special Campaigns and Nonstandard Setup" value='{!v.textBoxValue}' aura:id ='textAreaId' placeholder="type here..."/>                    
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning:button variant="brand" label="Save" title="Brand action" onclick="{! c.save }" />
+                    
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-col slds-size_2-of-3">                        
+                        <lightning:textarea name="input1" label="Special Campaigns and Nonstandard Setup" disabled="true" value='{!v.textBoxValue}' aura:id = 'textAreaId1' />
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning:icon iconName="custom:custom83" alternativeText="edit" title="edit"  onclick="{! c.handleEdit }" />
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+    </lightning:card>
+</aura:component>

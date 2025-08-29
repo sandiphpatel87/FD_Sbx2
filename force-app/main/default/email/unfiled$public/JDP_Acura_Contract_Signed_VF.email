@@ -1,0 +1,41 @@
+<messaging:emailTemplate subject="{!relatedTo.Account.Name} has signed a contract with Foundation Direct " recipientType="Contact" relatedToType="Opportunity">
+<messaging:htmlEmailBody >
+
+<apex:image id="email_template_1_header"
+
+value="https://foundationdirect.file.force.com/servlet/servlet.ImageServer?id=0154W00000DVNvM&oid=00DNq00000DEtLJ"
+
+height="50" width="400"/>
+
+<hr/>
+<html>
+<body>
+
+<p>Hi J.D. Power</p>
+
+<p>{!relatedTo.Account.Name} has signed an agreement with Foundation Direct on&nbsp;<apex:outputText value="{0, date,EEEE, M/d/yyyy}">
+<apex:param value="{!relatedTo.Contract_Signed_Date__c}" /> 
+        </apex:outputText>.
+        </p>
+
+<p><b>Package:</b> <apex:repeat value="{!relatedTo.OpportunityLineItems}" var="item" id="theRepeat">
+
+<apex:outputText value=" {!item.Product2.Name}" id="theValue"/><br/>
+
+</apex:repeat></p>
+
+<p><b>Primary Dealer Contact:</b><br/>
+{!relatedTo.Contract_Signer__c}<br/>
+{!relatedTo.Contract_Signer_Email__c}</p>
+
+<p>JD Power Team please ensure enrollment via the portal.</p>
+
+<p>If you have any questions, please contact us at Acura@foundationdirect.com.</p>
+
+<p>Thank you,<br/>
+The Foundation Direct Team<br/>
+Acura@foundationdirect.com</p>
+</body>
+</html>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

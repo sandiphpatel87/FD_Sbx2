@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <formulas>
+        <name>calculatesecondfriday</name>
+        <dataType>Date</dataType>
+        <expression>(CASE(CASE( MOD( {!$Record.Demo_Date__c} - DATE(1900, 1, 7), 7), 0, &quot;Sunday&quot;, 1, &quot;Monday&quot;, 2, &quot;Tuesday&quot;, 3,&quot;Wednesday&quot;, 4, &quot;Thursday&quot;, 5, &quot;Friday&quot;, 6, &quot;Saturday&quot;,&quot;ERROR&quot;),&quot;Sunday&quot;,{!$Record.Demo_Date__c} + 5,&quot;Monday&quot;, {!$Record.Demo_Date__c} + 4,&quot;Tuesday&quot;, {!$Record.Demo_Date__c} + 3,&quot;Wednesday&quot;,{!$Record.Demo_Date__c} + 2,&quot;Thursday&quot;, {!$Record.Demo_Date__c} + 1,&quot;Friday&quot;, {!$Record.Demo_Date__c} ,&quot;Saturday&quot;, {!$Record.Demo_Date__c} + 6,null)) + 7</expression>
+    </formulas>
+    <interviewLabel>Update enrollment deadline from demo date {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update enrollment deadline from demo date</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>as next friday</description>
+        <name>Update_enrollment_deadline</name>
+        <label>Update enrollment deadline</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <inputAssignments>
+            <field>Enrollment_Deadline__c</field>
+            <value>
+                <elementReference>calculatesecondfriday</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_enrollment_deadline</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Demo_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Demo_Date__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

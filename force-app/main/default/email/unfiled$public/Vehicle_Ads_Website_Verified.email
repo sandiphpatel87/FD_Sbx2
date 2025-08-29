@@ -1,0 +1,6 @@
+Hi Team Velocity, <br/><br/>
+
+{!Onboarding__c.Account__c} ({!Onboarding__c.Touchpoint_Master_ID__c}) website has been verified. Please begin the Vehicle Ads campaign build process.<br/><br/>
+
+Thank you,<br/>
+{!Onboarding__c.Account_Technician__c}

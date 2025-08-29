@@ -1,0 +1,16 @@
+Hi Team
+
+Account Launching: {!Onboarding__c.Account__c}
+Planned Launch Date: {!Onboarding__c.Planned_Launch_Date__c}
+Assigned Account Technician: {!Onboarding__c.Account_Technician__c}
+Regional Performance Manager: {!Onboarding__c.Regional_performance_manager__c}
+Opp Notes
+Setup{!Onboarding__c.Non_Standard_Setup_Notes__c}
+
+Dealer Approved: {!Onboarding__c.Dealer_Approved_Automated_Rules_Set__c}
+
+Outstanding Details: 
+
+Thanks 
+Jackie Pulliam
+Onboarding Specialist

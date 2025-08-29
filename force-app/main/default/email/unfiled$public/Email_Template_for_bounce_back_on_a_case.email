@@ -1,0 +1,21 @@
+Hi {!Case.Case_Assignment_User__c}
+
+Your closed case requires more attention. Please see the details below:
+
+Request Type: {!Case.Request_Type__c}
+
+Subject: {!Case.Subject}
+
+Description: {!Case.Description}
+
+Bounceback Reason: {!Case.Bounceback_Reason__c}
+
+Bounceback Details: {!Case.Bounceback_Note__c}
+
+Case: {!Case.Link}
+
+Please reach out to your pod leader with any questions.
+
+Thank you
+
+ATPodLeader@foundationdirect.com

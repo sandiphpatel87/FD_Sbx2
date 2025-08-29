@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Actual google Launch Date notification</name>
+    <style>none</style>
+    <subject>{!Onboarding__c.Account__c} is live with Foundation Direct Digital Adv effective {!Onboarding__c.Actual_Google_Launch_Date__c}</subject>
+    <textOnly>Hi Foundation Accounting,
+
+{!Onboarding__c.Account__c} is live with Foundation Direct Digital Adv product effective 
+{!Onboarding__c.Actual_Google_Launch_Date__c}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

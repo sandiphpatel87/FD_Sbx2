@@ -1,0 +1,1 @@
+Your credit request for {!Credit_Request__c.Account_name__c} in the amount of {!Credit_Request__c.Credit_Request_Amount__c} has been approved.

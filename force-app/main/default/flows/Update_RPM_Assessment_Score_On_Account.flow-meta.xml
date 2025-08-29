@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_value_to_Account_RPM_Assessment_Score</name>
+        <label>Assign value to Account RPM Assessment Score</label>
+        <locationX>50</locationX>
+        <locationY>647</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Account_record.RPM_Assessment_Score__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CalculateRPMScore</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Get_Account_record.Days_Since_Last_PR_Closed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CountDays</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Account</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_IF_this_is_latest_PR_or_not</name>
+        <label>Check IF this is latest PR or not</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_Latest_PR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Latest_Closed_PR_Case_on_Account.Id</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Account_record</targetReference>
+            </connector>
+            <label>If Latest PR</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>CalculateRPMScore</name>
+        <dataType>Number</dataType>
+        <expression>(CASE({!$Record.New_Stakeholder__c},&quot;Yes&quot; , 10 ,&quot;No&quot;, 20 ,0))+
+(CASE({!$Record.Is_the_Dealer_meeting_sales_objectives__c},&quot;Yes&quot; , 20 ,&quot;No&quot;, 10 ,0))+
+(CASE({!$Record.Dealer_is_Satisfied_with_the_partnership__c},&quot;Yes&quot; , 20 ,&quot;No&quot;, 10 ,0))+
+(CASE({!$Record.Decision_Maker_attended_Performance_call__c},&quot;Yes&quot; , 20 ,&quot;No&quot;, 10 ,0))+
+(CASE({!$Record.third_Party_vendor_consistent_involvemen__c},&quot;Yes&quot; , 20 ,&quot;No&quot;, 10 ,0))</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>CountDays</name>
+        <dataType>Number</dataType>
+        <expression>TODAY() - {!$Record.Close_Date__c}</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Update RPM Assessment Score On Account {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update RPM Assessment Score On Account</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Account_record</name>
+        <label>Get Account record</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_value_to_Account_RPM_Assessment_Score</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Account.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Latest_Closed_PR_Case_on_Account</name>
+        <label>Get Latest Closed PR Case on Account</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_IF_this_is_latest_PR_or_not</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Request_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Performance Review</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Close_Date__c</field>
+            <operator>NotEqualTo</operator>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <sortField>Close_Date__c</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Account</name>
+        <label>Update Account</label>
+        <locationX>50</locationX>
+        <locationY>755</locationY>
+        <inputReference>Get_Account_record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Latest_Closed_PR_Case_on_Account</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Request_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Performance Review</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

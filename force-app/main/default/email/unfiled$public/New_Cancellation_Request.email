@@ -1,0 +1,70 @@
+<messaging:emailTemplate subject=" Cancellation request: {!relatedTo.Account.name}" recipientType="User" relatedToType="Opportunity">
+<messaging:plainTextEmailBody >
+{!relatedTo.Contact__r.name} has requested to cancel {!relatedTo.Account.name}
+
+Cancellation Details:
+
+Regional Performance Manager: {!relatedTo.Regional_performance_manager__r.name}
+Account Technician: {!relatedTo.Account_Technician__r.name} 
+Executive Sponsor: {!relatedTo.Executive_Sponsor__r.name}
+Cancellation Received: <apex:outputText value="{0, date, MM/dd/yyyy}">
+    <apex:param value="{!relatedTo.Cancellation_Received__c}" /> 
+</apex:outputText>
+Last day of service: <apex:outputText value="{0, date, MM/dd/yyyy}">
+    <apex:param value="{!relatedTo.Last_Day_of_Service__c}" /> 
+</apex:outputText>
+Date to Pause Ads: <apex:outputText value="{0, date, MM/dd/yyyy}">
+    <apex:param value="{!relatedTo.Date_to_Pause_Ads__c}" /> 
+</apex:outputText>
+Probability to Save: {!relatedTo.Probability_to_save__c}
+Foundation Employee Assessment:{!relatedTo.Foundation_Employee_Assessment_of_Cancel__c}
+Contact Requesting to Cancel: {!relatedTo.Contact__c}
+Contact Title : {!relatedTo.Contact_Title__c}
+Contact Email : {!relatedTo.Contact_Email__c}
+Launch Date of Account: <apex:outputText value="{0, date, MM/dd/yyyy}">
+    <apex:param value="{!relatedTo.Launch_Date_of_Account__c}" /> 
+</apex:outputText>
+Cancellation Details Provided by Dealer: {!relatedTo.Final_Cancellation_Key_Learnings__c}
+Product Details: <apex:repeat var="cx" value="{!RelatedTo.OpportunityLineItems}">
+<apex:outputText value="{!cx.Product2.Name}" escape="false"/>, 
+</apex:repeat>
+Actual Google Launch Date: <apex:outputText value="{0, date, MM/dd/yyyy}">
+    <apex:param value="{!relatedTo.Actual_Google_Launch_Date__c}" /> 
+</apex:outputText>
+Monthly Recurring Revenue:<apex:outputText value="{0, number, currency}">
+    <apex:param value="{!relatedTo.Total_MRR__c}"/>
+</apex:outputText> 
+Last Month Media Budget: <apex:outputText value="{0, number, currency}">
+    <apex:param value="{!relatedTo.Last_Month_Budget__c}"/>
+</apex:outputText> 
+Current Month Media Budget:<apex:outputText value="{0, number, currency}">
+    <apex:param value="{!relatedTo.Current_Month_Budget__c}"/>
+</apex:outputText> 
+ 
+Client Paint Points:
+
+Concerns or objections shared by Dealer: {!relatedTo.Concerns_or_objections_shared_by_Dealer__c}
+How were the Dealer concerns addressed? {!relatedTo.How_were_concerns_addressed__c}
+Dealer's response to addressed concerns? {!relatedTo.Client_s_feedback_to__c}
+
+Account Performance:
+
+High-Level Positive Account Performance: {!relatedTo.From_your_POV_what_has_been_going_well__c}
+Areas for Improvement: {!relatedTo.Areas_for_Improvement__c}
+Actions Needed to Save Account: {!relatedTo.Actions_Needed_to_Save_Account__c}
+
+Next Steps: 
+
+Any insight to date to consider? {!relatedTo.Any_insight_to_date_to_consider__c}
+Save Call scheduled?  {!IF(relatedTo.Save_Call_Scheduled__c, 'Yes', 'No')}
+Date of Save Call:  <apex:outputText value="{0, date,MM/dd/yyyy, h:mm a}">
+                    <apex:param value="{!relatedTo.Date_of_Save_Call__c}" /> 
+                </apex:outputText>
+Beyond you and the AT, is there anyone else you’d like to include on the call? {!relatedTo.Anyone_else_you_d_like_to_include_on_Cal__c}  
+Have you reached out to the Data team? {!IF(relatedTo.Have_you_reached_out_to_the_Data_team__c, 'Yes', 'No')}
+Data’s deliverable date: <apex:outputText value="{0, date, MM/dd/yyyy}">
+    <apex:param value="{!relatedTo.Data_s_deliverable_date__c}" /> 
+</apex:outputText>
+Anything else you want us to know? {!relatedTo.Anything_else_you_want_us_to_know__c}
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

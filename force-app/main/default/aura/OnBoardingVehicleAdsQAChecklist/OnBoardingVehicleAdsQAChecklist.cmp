@@ -1,0 +1,43 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div>
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        
+        <h3 class="slds-section-title--divider">Vehicle Ads QA</h3>
+        
+        <span> <lightning:input aura:id="checkboxField" label="Confirm budgets in budget app" checked="{!v.onboardRecord.Confirm_budgets_in_budget_app__c }" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Update Products Tab allocations &amp; Sync to Platform" checked="{!v.onboardRecord.Update_Products_Tab_allocations_Sync_t__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Confirm Inventory Exclusions To VA Campaigns if requested" checked="{!v.onboardRecord.Inventory_Exclusions_To_VA_Campaigns__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField7' label="Confirm store code in Dealer Setup in Apollo matches the store code in Google Business Profiles" checked="{!v.onboardRecord.store_code_in_Dealer_Setup_in_Apollo__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Check geo targeting in all campaigns (does not push from Apollo, will have to update in ads)" checked="{!v.onboardRecord.Check_geo_targeting_in_all_campaigns__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Change goal settings to campaign-specific goals for all campaigns (add custom goals once you are able to set up AWCT)" checked="{!v.onboardRecord.Change_goal_settings_to_campaign_specifi__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Check landing pages Apollo and in ads" checked="{!v.onboardRecord.Check_landing_pages_Apollo_and_in_ads__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Check “listing groups” for each campaign to ensure the proper condition (new/used) for advertised products" checked="{!v.onboardRecord.listing_groups__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Confirm app categories are excluded under “content suitability”" checked="{!v.onboardRecord.Content_Suitability__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Update “Actual Vehicle Ads Launch Date” in Salesforce" checked="{!v.onboardRecord.Update_Actual_Vehicle_Ads_Launch_Date__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Put “Vehicle Ads Ready To Launch” case into “Ready For QA” status" checked="{!v.onboardRecord.Vehicle_Ads_Ready_To_Launch__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>    
+        <div>
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+    </div>   
+</aura:component>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Vehicle Ads - Request VA Campaign Build Date</name>
+    <style>none</style>
+    <subject>Foundation Direct: {!Onboarding__c.Account__c} has Requested Vehicle Ads</subject>
+    <textOnly>Hi Team Velocity, 
+
+{!Onboarding__c.Account__c} | ({!Onboarding__c.Touchpoint_Master_ID__c}) has requested Vehicle Ads. 
+
+Thank you,  
+{!Onboarding__c.Account_Technician__c}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

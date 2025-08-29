@@ -1,0 +1,11 @@
+Hi Onboarding Team,  
+
+{!Onboarding__c.Account__c} has requested to delay their launch. 
+
+Kindly reach out to the appropriate dealership point of contact to discuss the next steps. 
+
+Below are notes as to why the request to delay:
+{!Onboarding__c.RPM_Onboarding_Notes__c}
+
+Thank you,
+{!Onboarding__c.RPM_Name__c}

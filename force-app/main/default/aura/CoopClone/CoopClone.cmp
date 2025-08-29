@@ -1,0 +1,263 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:availableForFlowScreens,force:lightningQuickActionWithoutHeader" access="global" Controller="CoopCloneController">
+    <aura:attribute name="simpleRecord" type="Object"/>
+    
+    <aura:attribute name="coopRecord" type="sObject" default="{sobjectType: 'Coop__c',
+                                                              'Account__c':'',
+                                                              'Bing_Screenshot__c':'',
+                                                              'Bing_Invoices__c':'',
+                                                              'Bing_Final_URL_Report__c':'',
+                                                              'Contact__c':'',
+                                                              'Contact_2__c':'',
+                                                              'Contact3__c':'',
+                                                              'Contact_4__c':'',
+                                                              'Date__c':'',
+                                                              'Facebook_Ad_Screenshot__c':'',
+                                                              'Facebook_Invoices__c':'',
+                                                              'FB_Performance_Report_Screenshot__c':'',
+                                                              'FD_Tech_Invoice__c':'',
+                                                              'Final_Approval_FB_Received__c':'',
+                                                              'Final_Approval_FB_Sent__c':'',
+                                                              'Final_Approval_Search_Received__c':'',
+                                                              'Final_Approval_Search_Sent__c':'',
+                                                              'Final_Approval_YouTube_Received__c':'',
+                                                              'Final_Approval_YouTube_Sent__c':'',
+                                                              'Google_Search_Screenshot__c':'',
+                                                              'Google_Clicks_and_Impressions_Report__c':'',
+                                                              'Google_Invoices__c':'',
+                                                              'Google_Keyword_Report__c':'',
+                                                              'Month__c':'',
+                                                              'Notary_Required__c':'',
+                                                              'Notes__c':'',
+                                                              'Pre_Approval_FB_Received__c':'',
+                                                              'Pre_Approval_FB_Sent__c':'',
+                                                              'Pre_Approval_Required__c':'',
+                                                              'Pre_Approval_YouTube_Received__c':'',
+                                                              'Pre_Approval_YouTube_Sent__c':'',
+                                                              'Submit_on_behalf_of_the_client__c':'',
+                                                              'Video_Campaign_Screenshot__c':'',
+                                                              'Video_Ad_Screenshot__c':'',
+                                                              'Video__c':'',
+                                                              'Video_Model_Ad_Screenshot__c':'',
+                                                              'Video_Model_Script__c':'',
+                                                              'Year__c':'' }"/>
+    <aura:attribute name="oldCoopRecord" type="Object"/>
+    <aura:attribute name="isRecord" type="Boolean"/>
+    <aura:attribute name="year" type="String[]" default="2020,2021,2022,2023,2024,2025"/>
+    <aura:attribute name="month" type="String[]" default="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"/>
+    <aura:attribute name="GenreList" type="List" default="[]" description="Genre Picklist Values"/>
+    <aura:attribute name="selectedGenreList" type="List" default="[]" description="Selected Genre Picklist Values"/>
+    <aura:attribute name="selectedLookUpAccount" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact2" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact3" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact4" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpContact" type="sObject" default="{}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:html tag="style">
+        .slds-modal__container{
+        width: 85% !important;
+        max-width: 85% !important;
+        }
+        .slds-modal__container .cuf-content {
+        padding:0 !important;
+        }
+        .slds-modal__container .slds-p-around--medium {
+        padding: 0rem !important;
+        } 
+    </aura:html>
+    <div >	
+        <header class="slds-modal__header" >
+            
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Coop</h2>
+        </header>
+        <br/>
+        <form style="padding-left: 1.2rem;}">
+            <aura:if isTrue="{!v.isRecord}">
+                <ui:message title="Error" severity="error" closable="true">
+                    Record of previous month is not available.
+                </ui:message>
+            </aura:if>
+            
+            <div class="slds-form_horizontal slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-3"></div>
+                <div class="slds-col slds-size_1-of-3"> <span style="margin-left: 8rem;"><b>New Month</b></span></div>
+                <div class="slds-col slds-size_1-of-3"> <span style="margin-left: 8rem;"><b>Previous Month</b></span></div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span>  <c:customLookup objectAPIName="account" IconName="standard:account" label="Account"  value="{!v.coopRecord.Account__r.Name}"  selectedRecord="{!v.selectedLookUpAccount}"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Google Clicks and Impressions Report" value="" checked="{!v.coopRecord.Google_Clicks_and_Impressions_Report__c}" type="checkbox"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Google Clicks and Impressions Report" value="" checked="{!v.oldCoopRecord.Google_Clicks_and_Impressions_Report__c}" disabled= "true" type="checkbox"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Date" value="{!v.coopRecord.Date__c}" type="date"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Bing Invoices" checked="{!v.coopRecord.Bing_Invoices__c}" type="checkbox"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Bing Invoices" checked="{!v.oldCoopRecord.Bing_Invoices__c}" disabled= "true" type="checkbox"/></span>
+                </div>
+              <div class="slds-col slds-size_1-of-3">
+                    <span>  <lightning:select name="select1" label="Month" required="true" aura:id='monthId'>
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.month}" var="month">
+                            <option value="{!month}">{!month}</option>
+                        </aura:iteration>
+                        </lightning:select></span>
+                </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Facebook Invoices" value="" checked="{!v.coopRecord.Facebook_Invoices__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Facebook Invoices" checked="{!v.oldCoopRecord.Facebook_Invoices__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                   <div class="slds-col slds-size_1-of-3">
+                        <span>  <lightning:select name="select1" label="Year" required="true" aura:id='yearId'>
+                            <option value="">--None--</option>
+                            <aura:iteration items="{!v.year}" var="year">
+                                <option value="{!year}">{!year}</option>
+                            </aura:iteration>
+                            </lightning:select></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="FD Tech Invoice" value="" checked="{!v.coopRecord.FD_Tech_Invoice__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="FD Tech Invoice" value="" checked="{!v.oldCoopRecord.FD_Tech_Invoice__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span><c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact" value="{!v.coopRecord.Contact__r.Name}" selectedRecord="{!v.selectedLookUpContact}"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Google Invoices" value="" checked="{!v.coopRecord.Google_Invoices__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Google Invoices" value="" checked="{!v.oldCoopRecord.Google_Invoices__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>  <c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact 2" value="{!v.coopRecord.Contact_2__r.Name}" selectedRecord="{!v.selectedLookUpContact2}"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="Bing Ad Screenshot" label="Bing Ad Screenshot" checked="{!v.coopRecord.Bing_Screenshot__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Bing Ad Screenshot" checked="{!v.oldCoopRecord.Bing_Screenshot__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span><c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact 3" selectedRecord="{!v.selectedLookUpContact3}" value="{!v.coopRecord.Contact3__r.Name}" /></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Facebook Ad Screenshot" checked="{!v.coopRecord.Facebook_Ad_Screenshot__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Facebook Ad Screenshot" checked="{!v.oldCoopRecord.Facebook_Ad_Screenshot__c}" disabled= "true" type="checkbox"/></span>
+                    </div> 
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>  <c:customLookup objectAPIName="contact" IconName="standard:contact" label="Contact 4" value="{!v.coopRecord.Contact_4__r.Name}" selectedRecord="{!v.selectedLookUpContact4}"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Google Ad Screenshot" value="" checked="{!v.coopRecord.Google_Search_Screenshot__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Google Ad Screenshot" value="" checked="{!v.oldCoopRecord.Google_Search_Screenshot__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:textarea Name="" label="Notes" type="textarea" value="{!v.coopRecord.Notes__c}"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Make Ad Screenshot" value=""  checked="{!v.coopRecord.Video_Ad_Screenshot__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Make Ad Screenshot" value="" checked="{!v.oldCoopRecord.Video_Ad_Screenshot__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3" >
+                        <span><lightning:dualListbox aura:id="selectGenre" name="Notary Required" class="dualbox"
+                                                     label="Notary Required"
+                                                     sourceLabel="Available"
+                                                     selectedLabel="Chosen"
+                                                     options="{!v.GenreList }"
+                                                     value="{!v.selectedGenreList}"
+                                                        size="3" /></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Google Keyword and Final URL Report" checked="{!v.coopRecord.Google_Keyword_Report__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Google Keyword and Final URL Report" value="" checked="{!v.oldCoopRecord.Google_Keyword_Report__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                
+                <div class="slds-col slds-size_1-of-3"></div>
+                 <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Bing Keyword and Final URL Report" checked="{!v.coopRecord.Bing_Final_URL_Report__c}" type="checkbox"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3">
+                    <span> <lightning:input Name="" label="Bing Keyword and Final URL Report" checked="{!v.oldCoopRecord.Bing_Final_URL_Report__c}" disabled= "true" type="checkbox"/></span>
+                </div>
+                <div class="slds-col slds-size_1-of-3"></div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Make Script" value="" checked="{!v.coopRecord.Video__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Make Script" value="" checked="{!v.oldCoopRecord.Video__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                      <div class="slds-col slds-size_1-of-3"></div>
+                     <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Campaign Screenshot" checked="{!v.coopRecord.Video_Campaign_Screenshot__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Campaign Screenshot" value="" checked="{!v.oldCoopRecord.Video_Campaign_Screenshot__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                      <div class="slds-col slds-size_1-of-3"></div>
+                    
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Pre Approval Required?" checked="{!v.coopRecord.Pre_Approval_Required__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Pre Approval Required?" checked="{!v.oldCoopRecord.Pre_Approval_Required__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3"></div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Submit on behalf of the client?" checked="{!v.coopRecord.Submit_on_behalf_of_the_client__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Submit on behalf of the client?" checked="{!v.oldCoopRecord.Submit_on_behalf_of_the_client__c}" value="" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-3"></div>
+                    
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Model Script" value="" checked="{!v.coopRecord.Video_Model_Script__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="Video Model Script" value="" checked="{!v.oldCoopRecord.Video_Model_Script__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                   <div class="slds-col slds-size_1-of-3"></div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>  <lightning:input Name="" label="Video Model Ad Screenshot" value="" checked="{!v.coopRecord.Video_Model_Ad_Screenshot__c}"  type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>  <lightning:input Name="" label="Video Model Ad Screenshot" value="" checked="{!v.oldCoopRecord.Video_Model_Ad_Screenshot__c}" disabled= "true" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3"></div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="FB Performance Report Screenshot" checked="{!v.coopRecord.FB_Performance_Report_Screenshot__c}" type="checkbox"/></span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span> <lightning:input Name="" label="FB Performance Report Screenshot" checked="{!v.oldCoopRecord.FB_Performance_Report_Screenshot__c}" value="" disabled= "true" type="checkbox"/></span>
+                    </div>
+                </div>
+            </form>
+            <footer class="slds-modal__footer">
+                <lightning:button variant="neutral" 
+                                  label="Cancel"
+                                  title="Cancel"
+                                  onclick="{! c.closeModel }"/>
+                <lightning:button variant="brand" 
+                                  label="Save"
+                                  title="Save"
+                                  onclick="{!c.save}"/>
+            </footer>
+        </div>
+    </aura:component>

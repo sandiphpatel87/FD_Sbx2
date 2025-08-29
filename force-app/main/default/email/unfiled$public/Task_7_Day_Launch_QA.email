@@ -1,0 +1,5 @@
+Hi {!Account.Account_Technician__c}
+
+A task has been added to complete a 7 Day Launch QA for {!Account.Name} on {!Account.Actual_Google_Launch_Date__c+7}.
+
+Thank you

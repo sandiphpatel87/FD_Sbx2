@@ -1,0 +1,85 @@
+			body {
+			font-family: Arial, sans-serif;
+		  
+			background-color: #fff;
+			}
+			html body.sfdcBody{
+				padding: 0px 0px 0px 0px !important;
+			}
+			.container {
+			   max-width: 50rem !important;
+				width: 100% !important;
+				margin: auto;
+				background: white;
+			
+			border-radius: 8px;
+			box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+			}
+			h1, h2 {
+			background-color: black;
+			color: white;
+			padding: 10px;
+			display: block;
+			margin-bottom: 10px;
+			font-size: medium;
+			}
+			.section {
+			margin-bottom: 15px;
+			padding: 10px;
+			border: 1px solid #ddd;
+			
+			}
+			.info {
+			display: flex;
+			justify-content: space-between;			
+			font-size: 14px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			}
+			.highlight {
+			font-weight: bold;
+			 width: 50% !important;
+			}
+			table{
+			border: 1px;
+			width: 100%;
+			}
+			.outputTxt{
+				max-width: 70rem !important;
+					 width: 50% !important; 
+			border: 1px solid #ddd;
+			padding: 5px 1px 5px 5px;
+			}
+			.sectionDiv{
+			margin-bottom: 18px;
+			padding-left: 70%;
+			}
+			.header {
+			text-align: center;
+			margin-bottom: 20px;
+			}
+			.header img {
+			width: 150px; /* Adjust the size of the logo */
+			}
+			.myTd{
+			width: 50% !important;
+			border: 1px solid #ddd;
+			padding: 5px 1px 5px 5px;
+			}
+			.myTdHalf{
+			width: 25% !important;
+			border: 1px solid #ddd;
+			padding: 5px 1px 5px 5px;
+			}
+			.myLogo
+			{
+				float: inline-start;
+			}
+			.myHead
+			{
+				float: inline-end !important;
+				margin-top: 10%;
+				font-size: large;
+				font-weight: lighter;
+			}
+

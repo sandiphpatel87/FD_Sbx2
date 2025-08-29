@@ -1,0 +1,23 @@
+<messaging:emailTemplate subject="Event Creation" recipientType="User" relatedToType="Event" renderUsingSystemContextWithoutSharing="True">
+<messaging:htmlEmailBody >
+        <html>
+            <body>
+                <div style="padding:20px 0;margin:0 auto;max-width:600px">
+                    <table style="width:80%;margin:20px auto 0;margin:30px auto 0;font-size:16px">
+                        <tbody>
+                            <tr>
+                                <td style="line-height:22px">
+                                    <p style="margin-bottom:12px">Hi {!recipient.Name},</p>
+                                    <p style="margin-bottom:12px">
+                                        A new event has been scheduled.
+                                    </p>
+                                    <c:eventInfo EventIdentifier="{!relatedTo.Id}"/>
+                                </td>
+                            </tr>
+                          </tbody>
+                    </table>
+                </div>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>

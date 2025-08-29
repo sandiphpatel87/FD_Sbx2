@@ -1,0 +1,25 @@
+<messaging:emailTemplate subject="Please confirm {!relatedTo.Current_Month__c} budgets for {!relatedTo.Name}" recipientType="Contact" relatedToType="Account">
+
+<messaging:htmlEmailBody >
+    <html>
+      <body>
+        Hi {!recipient.firstName},<br/><br/>
+        As we approach the end of&nbsp;<apex:outputText value="{0,date,MMMM}"><apex:param value="{!TODAY()}" /></apex:outputText>  
+        and gear up for a new month, we wanted to touch base regarding your&nbsp;<apex:outputText value="{0,date,MMMM}"><apex:param value="{!IF(MONTH(TODAY())!= 12,DATE(YEAR(TODAY()),MONTH(TODAY()),1),DATE(YEAR(TODAY())+1,1,1))}" /></apex:outputText> budget.
+        Please confirm if you would like to make any changes to the below allocations or keep these numbers as is. <br/><br/>
+        
+        <c:currentMonthBudget accountIdValue="{!relatedTo.Id}" />
+        <br/> 
+        Looking forward to hearing from you! 
+        <br/><br/>
+        {!relatedTo.Account_Technician__r.Name}<br/>
+        {!relatedTo.Account_Technician__r.Email}<br/>
+        {!relatedTo.Account_Technician__r.Phone}<br/>
+    
+</body>
+    </html>
+  </messaging:htmlEmailBody> 
+<messaging:plainTextEmailBody >
+       
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

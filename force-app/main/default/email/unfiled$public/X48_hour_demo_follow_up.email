@@ -1,0 +1,8 @@
+Good Morning {!Lead.FirstName},
+
+I wanted to follow up with you to see if you had enough time to digest the info I gave you when we last spoke and to see if you had any additional questions or concerns about moving forward with Foundation Direct.  I know Foundation would be a great fit for your dealership, so please let us know what we can do to earn your business. 
+
+Thanks!
+{!Lead.OwnerFirstName} {!Lead.OwnerLastName}
+{!Lead.OwnerEmail}
+{!Lead.OwnerPhone}

@@ -1,0 +1,175 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="NCMCommunityUsersReportController">
+    <aura:attribute type="User[]" name="onList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="paginationList" type="User[]"/>
+    <aura:attribute name="Completed" type="String" default='background-color:red'/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="pageSize" type="Integer" default="20"/>
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer"/>
+    <aura:attribute name="count" type="Integer"/>
+    <aura:attribute name="url" type="string" default="https://foundationdirect.lightning.force.com/lightning/r/User/" />
+    <aura:attribute name="sortField" type="String" default='CreatedDate'/>
+    <aura:attribute name="sortLField" type="String" default='LastModifiedDate'/>
+    <aura:attribute name="sortAsc" type="Boolean" default="true"/>
+   
+    <aura:attribute name="searchNCM20Group" type="String"  />
+    
+    <aura:attribute name="fieldMap" type="Map"/>
+     <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+     
+    <lightning:card>
+        <div class="slds-page-header report-header ">
+            &nbsp;&nbsp; <lightning:icon iconName="standard:report" alternativeText="Report" title="Report" />
+            &nbsp;&nbsp;&nbsp; <span class="slds-media__body"><div class="slds-page-header__name"><div class="slds-page-header__name-title"><h1><span>Report: Users</span><span class="slds-page-header__title slds-truncate" title="NCM Community Users Report">NCM Community Users Report</span></h1></div></div></span> 
+        </div> <br/> 
+        <div style= 'margin-left: 15px;'> 
+            <div >Total Records</div>
+            <div>{!v.count}</div><br/>
+        </div>
+        <div class='slds-form__row slds-form-element_horizontal ' style= 'margin-left: 15px;'>
+           
+            <div class="divItem" role="listitem">
+                <lightning:input name="NCM 20 group" type="text" label="NCM 20 group" value="{!v.searchNCM20Group}" />
+            </div>
+            
+            <div class="divItem" role="listitem">
+                <lightning:button variant="brand" label="Search" onclick="{!c.doInit}" /> 
+            </div>
+        </div>
+        
+        
+        <div class="slds-s-around--xx-large">
+            <aura:if isTrue="{!v.toggleSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--small slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>  
+            <div class="view">
+                <div class="wrapper">
+                    <!--<div class="container-fluid slds-scrollable "> -->       
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-border_left slds-border_right  slds-table_col-bordered table"> 
+                        <thead>
+                            <tr class="" style='height: 40px;'>
+                                <th scope="col" class="sticky-col first-col">
+                                    <div class="slds-truncate ">No.</div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate ">NCM 20 Group</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Account Name">Account Name</div>
+                                </th>
+                                <th scope="col" class="sticky-col second-col">
+                                    <div class="slds-truncate">Username</div>
+                                </th>
+                                
+                                <th scope="col">
+                                    <div class="slds-truncate">First Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Last Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Profile</div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate "  id="CreatedDate" onclick="{!c.sortByDate}">Created Date
+                                        <aura:if isTrue="{!v.sortField=='CreatedDate'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>
+                                </th>
+                                  <th scope="col">
+                                    <div class="slds-truncate">Last Modified Date</div>
+                                </th>
+                                <!--<th scope="col" >
+                                    <div class="slds-truncate " id="LastModifiedDate" onclick="{!c.sortByDate}">Last Modified Date
+                                        <aura:if isTrue="{!v.sortField=='LastModifiedDate'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>
+                                </th>-->
+                                 <th scope="col">
+                                    <div class="slds-truncate">Email</div>
+                                </th>                             
+                            </tr>
+                        </thead>   
+                        <tbody>      
+                           <aura:iteration items="{!v.paginationList}" var="currentUser" indexVar="index">
+                                <tr class="slds-hint-parent">
+                                    <td class="sticky-col first-col">{!index+1}</td>
+                                    <td>
+                                        <span class="slds-truncate">{!currentUser.Contact.Account.Sub_Parent__r.Name}</span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate"><a href="{!'/'+currentUser.Contact.Account.Id }"> {!currentUser.Contact.Account.Name}</a></span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate">{!currentUser.Username}</span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate"><a href="{!'/'+currentUser.Id }">{!currentUser.FirstName}</a></span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate"><a href="{!'/'+currentUser.Id }">{!currentUser.LastName}</a></span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate">{!currentUser.Profile.Name}</span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate">{!currentUser.CreatedDate}</span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate">{!currentUser.LastModifiedDate}</span>
+                                    </td>
+                                    <td>
+                                        <span class="slds-truncate">{!currentUser.Email}</span>
+                                    </td>
+                                    
+                                    <!--<th > 
+                                        <span class="slds-truncate "><a href="{!'/'+currentUser.Id}"> {!currentUser.Name}</a></span>
+                                    </th>-->
+                                    
+                                    
+                                    
+                                                                  
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div></div>
+            <br/>
+            <div style= 'margin-left: 15px;'>
+                <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />
+                <lightning:button label="Previous" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                <lightning:button label="Next" disabled="{!v.end >= v.totalSize}" onclick="{!c.next}" />
+                <!-- <lightning:button label="Last" disabled="{!v.end >= v.totalSize}" onclick="{!c.last}" />-->
+            </div>
+            <br/>
+            
+            <!-- </div>-->
+        </div>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,12 @@
+Hi Onboarding Team,  
+
+{!Onboarding__c.Account__c} has approved their media budgets. 
+
+Refer to the Kick Off Call Deck for the approved budgets and whether or not to prorate them.
+
+{!Onboarding__c.Kickoff_Call_Deck__c}
+
+Please review what is still needed to launch this account and change status to Dealer Approved if applicable.
+
+Thank you,
+{!Onboarding__c.RPM_Name__c}

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>evaluate_conditions</name>
+        <label>evaluate conditions</label>
+        <locationX>374</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>create_case_new</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>gtmonsiteisblank</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>case_follow_up_required</targetReference>
+            </connector>
+            <label>create a case</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>checkifwebsiteverifiedand8hourspass</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+    TEXT({!$Record.Website_Verified__c}) = &quot;Verified&quot;,
+    ISBLANK({!$Record.GTM_API_ID__c}),
+    NOW() - {!$Record.LastModifiedDate} &gt;= (8 / 24)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>gtmapiidisblank</name>
+        <dataType>Boolean</dataType>
+        <expression>ISBLANK({!$Record.GTM_API_ID__c})</expression>
+    </formulas>
+    <formulas>
+        <name>gtmonsiteisblank</name>
+        <dataType>Boolean</dataType>
+        <expression>ISBLANK({!$Record.GTM_on_Site__c})</expression>
+    </formulas>
+    <formulas>
+        <description>URL not empty</description>
+        <name>URLisnotempty</name>
+        <dataType>String</dataType>
+        <expression>&quot;ISBLANK($Record.Account_Website_URL__c)&quot;</expression>
+    </formulas>
+    <interviewLabel>Create a case - QA Ready (Measurement) {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create a case - QA Ready (Measurement)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>case_follow_up_required</name>
+        <label>case follow up required</label>
+        <locationX>242</locationX>
+        <locationY>384</locationY>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>$Record.Account__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Assign_To__c</field>
+            <value>
+                <stringValue>005Nx000000YScz</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>descriptionforcase</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value>
+                <stringValue>Salesforce</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <stringValue>005Nx000000YScz</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Medium</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Request_Type__c</field>
+            <value>
+                <stringValue>GA4 Build Is Not Complete</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Action Required: Ready for QA</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>GTM_on_Site__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>GA4_Build_Complete__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Measurement__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Check_after_80</name>
+            <connector>
+                <targetReference>evaluate_conditions</targetReference>
+            </connector>
+            <label>check after 80</label>
+            <offsetNumber>80</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <recordField>GA4_Build_Complete__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>descriptionforcase</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;QA Steps &lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

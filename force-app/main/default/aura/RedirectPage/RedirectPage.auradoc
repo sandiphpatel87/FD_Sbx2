@@ -1,0 +1,6 @@
+<aura:documentation>
+	<aura:description>Redirect Subflow</aura:description>
+	<aura:example name="RedirectSubflow" ref="RedirectSubflow" label="Label">
+		Redirect Subflow
+	</aura:example>
+</aura:documentation>

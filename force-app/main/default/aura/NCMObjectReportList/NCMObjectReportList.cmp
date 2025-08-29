@@ -1,0 +1,233 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" controller="NCMObjectReportListController" access="global"  >
+    
+    <aura:handler name="init" action="{!c.getOnboardList}" value="{!this}"/>
+    
+    <!--aura handler with waiting and donewaiting events-->
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:attribute name="mouseStart" type="string" />
+    <aura:attribute name="oldWidth" type="string" />
+    
+    <!--component attributs -->
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    
+    <aura:attribute name="pMasterWrapperlist" type="List"/>
+    <aura:attribute name="pWrapperlist" type="List"/>
+    <aura:attribute name="pageSize" type="Integer" default="100"/>
+    <aura:attribute name="masterlistSize" type="Integer"/>
+    <aura:attribute name="startPosn" type="Integer" default="0"/>
+    <aura:attribute name="endPosn" type="Integer"/>
+    <aura:attribute type="String" name="sortField"/>
+    <aura:attribute name="isAsc" type="boolean" default="true" description="boolean flag for pass sorting condition to apex class"/> 
+    <aura:attribute name="sortAsc" type="boolean"  />
+    <aura:attribute name="Name" type="boolean" default="true"/>
+    <aura:attribute name="Date" type="boolean" default="true"/>
+    <aura:attribute name="Stage" type="boolean" default="true"/>
+    <aura:attribute name="isShowViewAll" type="boolean" default="false"/>
+    
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->   
+    
+    <lightning:card  title="NCM Onboarding Status">
+        <p class="slds-p-horizontal_small">
+            <div class="slds-scrollable--x" tabindex="0">
+                <table class="slds-table slds-table--bordered slds-table--fixed-layout slds-box slds-max-medium-table--stacked-horizontal" role="grid">
+                    <thead>
+                        <tr class="slds-line-height--reset">
+                            <th class="slds-is-resizable " scope="col" onclick="{!c.sortByName}" style="Width:10rem !important">
+                                <span class="slds-truncate" title="Onboarding No" style="font-size: smaller;">Onboarding No</span>
+                                <span>  
+                                    <aura:if isTrue="{!v.Name}">
+                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:arrowdown"  size="xx-small"/>
+                                        </aura:set>
+                                    </aura:if>
+                                </span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-602" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" style="Width:10rem !important">
+                                <span class="slds-truncate" title="Opportunity: Account Name" style="font-size: smaller;">Account Name</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-604" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable" scope="col" style="Width:10rem !important">
+                                <span class="slds-truncate" title="Type" style="font-size: smaller;">Type</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-605" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable" scope="col" style="Width:50rem !important">
+                                <span class="slds-truncate" title="Website URL" style="font-size: smaller;">Website URL</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-605" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" onclick="{!c.sortByDate}" style="Width:10rem !important">
+                                <span class="slds-truncate" title="Contract Signed" style="font-size: smaller;">Contract Signed</span>
+                                <span> 
+                                    <aura:if isTrue="{!v.Date}">
+                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:arrowdown"  size="xx-small"/>
+                                        </aura:set>
+                                    </aura:if>
+                                </span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" onclick="{!c.sortByStage}" style="Width:10rem !important">
+                                <span class="slds-truncate" title="Opportunity: Stage" style="font-size: smaller;">Opportunity Stage</span>
+                                <span> 
+                                    <aura:if isTrue="{!v.Stage}">
+                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:arrowdown"  size="xx-small"/>
+                                        </aura:set>
+                                    </aura:if>
+                                </span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" style="Width:10rem !important">
+                                <span class="slds-truncate" title="GTM Sent to Provider" style="font-size: smaller;">GTM Sent to Provider</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" style="Width:10rem !important">
+                                <span class="slds-truncate" title="GTM on Site" style="font-size: smaller;">GTM on Site</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" style="Width:10rem !important">
+                                <span class="slds-truncate" title="GA4 Build Complete" style="font-size: smaller;">GA4 Build Complete</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" style="Width:10rem !important">
+                                <span class="slds-truncate" title="Inventory Received Automation" style="font-size: smaller;">Inventory Received Automation</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="slds-is-sortable slds-is-resizable " scope="col" style="Width:14rem !important">
+                                <span class="slds-truncate" title="Link Google Ads CID to GA4 Property" style="font-size: smaller;">Link Google Ads CID to GA4 Property</span>
+                                <div class="slds-resizable">
+                                    <input type="range" min="20" max="1000" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-606" tabindex="0" />
+                                    <span class="slds-resizable__handle" onmousedown="{!c.calculateWidth}" ondrag="{!c.setNewWidth}">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.pMasterWrapperlist}" var="onboard">
+                            <tr class="slds-hint-parent">
+                                <th scope="row">
+                                    <div class="slds-truncate" title="{!onboard.Name}">
+                                        <lightning:formattedUrl value="{!'/' + onboard.Id}" tooltip="{!onboard.Name}" label="{!onboard.Name}" target="_blank" >{!onboard.Name}</lightning:formattedUrl>
+                                    </div>
+                                </th>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Opportunity__r.Account.Name}">
+                                        <lightning:formattedUrl value="{!'/' + onboard.Opportunity__r.Account.Id}" tooltip="{!onboard.Opportunity__r.Account.Name}" label="{!onboard.Opportunity__r.Account.Name}" target="_blank" >{!onboard.Opportunity__r.Account.Name}</lightning:formattedUrl>
+                                    </div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Opportunity__r.Account.Type__c}">{!onboard.Opportunity__r.Account.Type__c}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Website_URL__c}">{!onboard.Website_URL__c}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Contract_Signed__c}"> 
+                                        <ui:outputDate value="{!onboard.Contract_Signed__c}" format="MM/dd/yyyy"/>
+                                    </div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Opportunity__r.StageName}">{!onboard.Opportunity__r.StageName}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.GTM_Sent__c}">{!onboard.GTM_Sent__c}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.GTM_on_Site__c}">{!onboard.GTM_on_Site__c}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.GTM_Container_Updated_for_GA4__c}">{!onboard.GTM_Container_Updated_for_GA4__c}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Inventory_Received_Automation__c}">{!onboard.Inventory_Received_Automation__c}</div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!onboard.Secure_Google_Ads_Data_In_GA__c}"> {!onboard.Secure_Google_Ads_Data_In_GA__c}</div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>      
+            </div>
+            
+            <aura:if isTrue="{!v.isShowViewAll}">
+                <center>
+                    <a onclick="{!c.handleViewAll}">View All</a>
+                </center>
+            </aura:if>
+            
+        </p>
+    </lightning:card>
+    
+    
+    
+    
+</aura:component>

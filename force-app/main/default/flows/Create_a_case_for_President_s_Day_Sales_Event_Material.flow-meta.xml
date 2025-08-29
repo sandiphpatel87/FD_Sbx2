@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_for_account_type</name>
+        <label>Check for account type</label>
+        <locationX>380</locationX>
+        <locationY>252</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_for_record_account_type</name>
+            <conditionLogic>(1 AND 2) OR (1 AND 3) OR 4</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Digital Advertising</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>NCMcheck</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Business Intelligence</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Digital Advertising</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_for_case_assign_to_and_case_owner</targetReference>
+            </connector>
+            <label>Check for record account type</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_case_assign_to_and_case_owner</name>
+        <label>Check for case assign to and case owner</label>
+        <locationX>182</locationX>
+        <locationY>360</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>check_for_not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Regional_performance_manager__r.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Regional_performance_manager__r.Manager.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_case_for_Task_President_s_Day_Sales_Event_Material</targetReference>
+            </connector>
+            <label>check for not null</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Description</name>
+        <dataType>String</dataType>
+        <expression>&quot; Please share the 2024 President&apos;s Day Sales Event Deck with your client using this email template (https://docs.google.com/document/d/1C1vnJmCOHTc7Yw7xbvHXoxR0kvuaOe-gpWr528ihFmM/edit) and discuss the insights during any upcoming Performance Reviews. Be sure to include the Sales Event as an attachment in your email! The President&apos;s Day Sales event deck can be found here (https://docs.google.com/presentation/u/0/d/1tWcXbjXjH02ZflHGeoFYL6PhN_LkOx3WdsW6ORDAdF0/edit) or linked within the Performance section of the internal FD Website (but please remember to remove the Internal Only slides)! Once you have shared the President&apos;s Day Sales Event content with all dealers, please fill out the following Google Form (https://docs.google.com/forms/d/e/1FAIpQLScBSNS7bXR5PnYU_LuJ3ZUj2EEWCE9u9L96y231Wcz7NG5LrA/viewform)  so we can collect some feedback and continue to improve on this part of our business! &quot;</expression>
+    </formulas>
+    <formulas>
+        <name>NCMcheck</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(INCLUDES({!$Record.Type__c}, &apos;NCM&apos;), NOT(INCLUDES({!$Record.Type__c}, &apos;NCM 20 Group&apos;)) )</expression>
+    </formulas>
+    <interviewLabel>Create a case for {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create a case for President&apos;s Day Sales Event Material</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_case_for_Task_President_s_Day_Sales_Event_Material</name>
+        <label>Create case for Task - President&apos;s Day Sales Event Material</label>
+        <locationX>50</locationX>
+        <locationY>468</locationY>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Assign_To__c</field>
+            <value>
+                <elementReference>$Record.Regional_performance_manager__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Due_Date__c</field>
+            <value>
+                <dateValue>2024-02-09</dateValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value>
+                <stringValue>Sprint - RPM</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Regional_performance_manager__r.Manager.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Medium</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Request_Type__c</field>
+            <value>
+                <stringValue>President&apos;s Day Sales Event Material</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Share 2024 President&apos;s Day Sales Event Deck With Client</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_account_type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <schedule>
+            <frequency>Once</frequency>
+            <startDate>2024-01-11</startDate>
+            <startTime>11:13:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

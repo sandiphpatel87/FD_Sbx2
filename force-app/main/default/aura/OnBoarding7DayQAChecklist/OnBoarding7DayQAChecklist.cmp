@@ -1,0 +1,174 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+     <aura:attribute name="isMazda" type="Boolean" default="false"/>
+    <aura:attribute name="isSubaru" type="Boolean" default="false"/>
+    <aura:attribute name="isAcuraOrHonda" type="Boolean" default="false"/>
+    
+    <div >
+        
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <!-- COMMENTED OUT OLD FIELDS - START -->
+        <!--
+        <h3 class="slds-section-title__divider"> Apollo QAs </h3>
+        <span> <lightning:input aura:id='checkboxField7' label="Review Pacing Reports"  checked="{!v.onboardRecord.Review_Pacing_Reports_7Day__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        <h3 class="slds-section-title__divider">Google QAs </h3>
+        <span><lightning:input aura:id='checkboxField7' label="Negative Keyword Audit"  checked="{!v.onboardRecord.Negative_Keyword_A__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <div> <b>Check Impression Share / Auction Insights (Rank, Budget)</b></div>
+        <span><lightning:input aura:id='checkboxField7' label="Add obviously necessary negatives"  checked="{!v.onboardRecord.Add_obviously_necessary_negative__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id='checkboxField7' label="Add obvious additional KW variations"  checked="{!v.onboardRecord.Add_obvious_additional_KW_variations__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField7' label="Confirm Conversions Are Importing" checked="{!v.onboardRecord.Confirm_Conversions_Are_Importing__c}" type="checkbox" onchange='{!c.change}'/></span>
+        
+        <span><lightning:input aura:id='checkboxField7' label="Confirm Auto Tagging Enabled"  checked="{!v.onboardRecord.Confirm_Auto_Tagging_Enabled__c }" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id='checkboxField7' label="Add obvious additional KW variations"  checked="{!v.onboardRecord.Add_obvious_additional_KW_variations__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField7' label="Import Site Metrics from Preferred View" checked="{!v.onboardRecord.Import_Site_Metrics_from_Preferred_View__c }" type="checkbox" onchange='{!c.change}'/></span>
+ 
+        <span><lightning:input aura:id='checkboxField7' label="Confirm Pixel Firing"  checked="{!v.onboardRecord.Confirm_Pixel_Firing__c }" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id='checkboxField7' label="Create AWCT Conversions for New/used SRP and VDP Views"  checked="{!v.onboardRecord.Create_AWCT_Conversions_for_SRP_and_VDP__c }" type="checkbox" onchange='{!c.change}'/></span>
+
+        <span> <lightning:input aura:id='checkboxField7' label="Confirm delivery of all video campaigns" checked="{!v.onboardRecord.Confirm_delivery_of_all_video_campaigns__c}" type="checkbox" onchange='{!c.change}'/></span>
+        
+        <br/>
+        
+        <h3 class="slds-section-title__divider"> Vehicle Ads</h3> 
+        <span><lightning:input aura:id="checkboxField" label="Confirm No VA Product Disapprovals"  checked="{!v.onboardRecord.Confirm_No_VA_Product_Disapprovals__c  }" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Confirm Delivery of Vehicle Ads" checked="{!v.onboardRecord.Confirm_Delivery_of_Vehicle_Ad__c  }" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <div> <b>If Pre Analysis exists</b></div>
+        <span> <lightning:input aura:id='checkboxField7' label="Review CPC, CTR against previous" checked="{!v.onboardRecord.Review_CPC_CTR_against_previous__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField7' label="Review Top KWs against previous" checked="{!v.onboardRecord.Review_Top_KWs_against_previous__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField7' label="Check Conv Metrics against previous account" checked="{!v.onboardRecord.Conv_Metrics_against_previous_account__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField7' label="Confirm > 0 Clicks in every campaign (Model Geo and Service commonly take longer to ramp)" checked="{!v.onboardRecord.Confirm_0_Clicks_in_every_campaign__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title__divider"> Bing QAs  </h3>
+         <span> <lightning:input aura:id='checkboxField7' label="Check Account for delivery" checked="{!v.onboardRecord.Check_Account_for_delivery__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        -->
+        <!-- COMMENTED OUT OLD FIELDS - END -->
+        
+        <!-- NEW FIELD STRUCTURE - START -->
+        <h3 class="slds-section-title--divider">Apollo QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check to ensure campaigns are spending based on budget allocated" checked="{!v.onboardRecord.Check_to_ensure_campaigns_are_spending_b__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check to see if there are any products (VAs/FB/YT/PMAX/etc) not yet live that have budget" checked="{!v.onboardRecord.Check_to_see_if_there_are_any_products__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Google QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check Search Impression Share and CPCs" checked="{!v.onboardRecord.Check_Search_Impression_Share_and_CPCs__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Search Term Audit - add obvious negative keywords//bring any potential new Geo Towns to RPM" checked="{!v.onboardRecord.Search_Term_Audit_add_obvious_negative__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm Conversions are imported and add values" checked="{!v.onboardRecord.Confirm_Conversions_are_imported_and_add__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm Google Tag is firing. If not firing, email Lisa Cascone with tag code" checked="{!v.onboardRecord.Confirm_Google_Tag_is_firing_If_not_fir__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Confirm Auto Tagging is enabled" checked="{!v.onboardRecord.Confirm_Auto_Tagging_Enabled__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Set up AWCT if Google Tag is firing and add to necessary campaigns (VAs, PMAX Custom Goal, etc)" checked="{!v.onboardRecord.Set_up_AWCT_if_Google_Tag_is_firing_and__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="If VAs or video were not set live at launch, see if you can figure out if they are ready (Ads account, SF, PMAX, etc)" checked="{!v.onboardRecord.If_VAs_or_video_were_not_set_live_at_lau__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Video QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check daily budgets.  Make sure the campaign's daily budgets are fairly even." checked="{!v.onboardRecord.Check_daily_budgets_Make_sure_the_camp__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="If video was set live after launch, go through launch day steps to ensure proper setup" checked="{!v.onboardRecord.If_video_was_set_live_after_launch_go_t__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">VA QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Ensure campaign is serving" checked="{!v.onboardRecord.Ensure_campaign_is_serving__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check products to see if there are any disapprovals that need correcting" checked="{!v.onboardRecord.Check_products_to_see_if_there_are_any_d__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check Auction Insights to make sure nothing looks off with our ranking/impression share" checked="{!v.onboardRecord.Check_Auction_Insights_to_make_sure_noth__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Bing QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Check the account to ensure campaigns are live." checked="{!v.onboardRecord.Check_the_account_to_ensure_campaigns__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span><lightning:input aura:id="checkboxField" label="Check for any ad disapprovals." checked="{!v.onboardRecord.Check_for_any_ad_disapprovals__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">PMAX QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Make sure campaign is serving as intended" checked="{!v.onboardRecord.Make_sure_campaign_is_serving_as_intende__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        
+        <h3 class="slds-section-title--divider">Facebook QAs</h3>
+        <span><lightning:input aura:id="checkboxField" label="Make sure campaigns are serving, may need to shift budget percentages in Apollo" checked="{!v.onboardRecord.Make_sure_campaigns_are_serving_may_nee__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <br/>
+        <!-- NEW FIELD STRUCTURE - END -->
+        
+         <aura:if isTrue="{!v.isAcuraOrHonda==TRUE}">
+        <h3 class="slds-section-title--divider"> Honda/Acura Digital Advertising Program  </h3>
+        
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Confirm any static or manually created campaigns have Honda/Acura campaign naming conventions" 
+                                checked="{!v.onboardRecord.Confirm_any_static_or_manually_created_c__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Confirm Honda/Acura UTM parameters are applied to any static or manually created campaigns" 
+                                checked="{!v.onboardRecord.Confirm_Honda_Acura_UTM_parameters_are_a__c}" type="checkbox" onchange='{!c.change}'/></span>
+             <span> <lightning:input aura:id="checkboxField" 
+                                label="Ensure Google and Facebook accounts have the “*OEM Dealer code*” - Foundation Direct -” in front of the account name." 
+                                checked="{!v.onboardRecord.Ensure_Google_and_Facebook_accounts_have__c}" type="checkbox" onchange='{!c.change}'/></span>
+        
+		<br/>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.isMazda==TRUE}">
+        <h3 class="slds-section-title--divider"> Mazda  </h3>
+        
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Audit Make Geo performance and adjust Geo Towns as needed" 
+                                checked="{!v.onboardRecord.Audit_Make_Geo_performance_and_adjust_Ge__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Remove geo towns that are not delivering because of Negative Keywords" 
+                                checked="{!v.onboardRecord.Remove_geo_towns_that_are_not_delivering__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Add additional Geo Towns as needed to ensure delivery in the Make Geo campaign" 
+                                checked="{!v.onboardRecord.Add_additional_Geo_Towns_as_needed_to_en__c}" type="checkbox" onchange='{!c.change}'/></span>
+        
+		<br/>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.isSubaru==TRUE}">
+        <h3 class="slds-section-title--divider"> Subaru Digital Advertising Program  </h3>
+        
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Ensure UTM Parameters have “digadprov=foundationdirect” " 
+                                checked="{!v.onboardRecord.Ensure_UTM_Parameters_have_digadprov_fo__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Confirm any static or manually created campaigns have Subaru campaign &amp; ad group naming conventions" 
+                                checked="{!v.onboardRecord.Confirm_any_static_or_manually_Subaru__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" 
+                                label="Confirm Subaru UTM parameters are applied to any static or manually created campaigns" 
+                                checked="{!v.onboardRecord.Confirm_Subaru_UTM_parameters_pushed_thr__c}" type="checkbox" onchange='{!c.change}'/></span>
+		<span> <lightning:input aura:id="checkboxField" 
+                                label="Ensure the FD - “Dealership Name” AOR negative keyword list applied is not causing any delivery issues in the Dealership Name campaign" 
+                                checked="{!v.onboardRecord.Ensure_the_FD_Dealership_Name_AOR_ne__c}" type="checkbox" onchange='{!c.change}'/></span>
+       
+		<br/>
+        </aura:if>
+        
+        <div>
+            <br/>
+            <br/>
+            
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+        <!--<aura:set attribute="else">
+                <b> Record is not available</b>
+            </aura:set>-->
+        
+        <br/><br/>
+    </div>
+</aura:component>

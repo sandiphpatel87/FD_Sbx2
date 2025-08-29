@@ -1,0 +1,13 @@
+Please apply a credit in the amount of {!Credit_Request__c.Credit_Request_Amount__c} to {!Credit_Request__c.Account_name__c}’s latest open invoice.
+<br/>
+<br/>
+Credit Request Number: {!Credit_Request__c.Name}<br/>
+Requested Date: {!Credit_Request__c.Requested_Date__c}<br/>
+Credit Amount: {!Credit_Request__c.Credit_Request_Amount__c}<br/>
+Submitted By: {!Credit_Request__c.Submitter__c}<br/>
+Credit Request Notes: {!Credit_Request__c.Credit_Request_Notes__c}<br/>
+<br/>
+This credit request was approved by {!User.Name}.
+<br/>
+<br/>Thank you,
+<br/>support@foundationdirect.com

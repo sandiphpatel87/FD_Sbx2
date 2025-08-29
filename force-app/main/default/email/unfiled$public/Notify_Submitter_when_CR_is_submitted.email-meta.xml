@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Notify Submitter when CR is submitted</name>
+    <style>none</style>
+    <subject>Credit request has been submitted</subject>
+    <textOnly>Hi,
+
+Your credit request has been submitted.
+
+Thanks,
+Foundation Direct Support Team</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

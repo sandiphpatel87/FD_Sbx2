@@ -1,0 +1,4 @@
+Hi Team Velocity, </br></br>
+{!Onboarding__c.Account__c} | ({!Onboarding__c.Touchpoint_Master_ID__c}) has requested Vehicle Ads.</br></br>
+Thank you, </br>
+{!Onboarding__c.Account_Technician__c}

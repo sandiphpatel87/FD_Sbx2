@@ -1,0 +1,52 @@
+<apex:component access="global" controller="budgetsOfAccount">
+
+    <apex:attribute name="accountIdValue" type="String" description="This is the Id of the account" assignTo="{!accountId}" access="global" />
+    <html>
+    <head>
+    <style type="text/css" media="print">
+          table th{
+            font-size: 11px;
+            font-face: arial;
+            background: #CCCCCC;
+            border-width: 1;
+            text-align: center 
+            } 
+          table td{
+            font-size: 11px;
+            font-face: verdana 
+            } 
+          table {
+            border: solid #CCCCCC;
+            border-width: 1
+            }
+          table tr{
+            border: solid #CCCCCC;
+            border-width: 1
+            }
+    </style> 
+    </head>
+    </html>
+        <table>
+        <!--thead>    
+            <tr>
+                <th>New: </th> 
+                <th>Used: </th>
+                <th>Service: </th>
+                <th>YouTube: </th>
+                <th>Facebook: </th>
+            </tr>
+        </thead-->        
+        <tbody>
+        <apex:repeat value="{!Opps}" var="pos">
+                <td>
+                    <tr width= "100px" height= "5px"><td><b>New:</b></td><td>${!pos.New_Search__c}</td></tr>
+                    <tr width= "100px" height= "5px"><td><b>Used:</b></td><td>${!pos.Used_Search__c}</td></tr>
+                    <tr width= "100px" height= "5px"><td><b>Service:</b></td><td>${!pos.Service_Search__c}</td></tr>
+                    <tr width= "100px" height= "5px"><td><b>YouTube:</b></td><td>${!pos.Video__c}</td></tr>  
+                    <tr width= "100px" height= "5px"><td><b>Facebook:</b></td><td>${!pos.FB__c}</td></tr>  
+                </td>
+        </apex:repeat>
+        </tbody>   
+    </table>
+
+</apex:component>

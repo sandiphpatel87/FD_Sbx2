@@ -1,0 +1,7 @@
+Hi Accounting 
+
+A one hour-long paid consultation for TP ID {!Case.Touchpoint_ID__c}: {!Case.Account}: was just completed.
+
+Please include an additional $195 in their next invoice.
+
+Thank you

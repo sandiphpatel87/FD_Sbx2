@@ -1,0 +1,8 @@
+Hi {!Onboarding__c.RPM_Name__c},  
+
+{!Onboarding__c.Account__c} has approved their geotargets. 
+
+Please ensure geotarget maps are loaded and synched to platforms in DigAd.
+
+Thank you,
+Onboarding Team

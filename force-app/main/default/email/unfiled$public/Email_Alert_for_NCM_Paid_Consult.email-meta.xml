@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Emails accounting once case is closed to notify them to bill for a paid consultation</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Email Alert for NCM Paid Consult</name>
+    <style>none</style>
+    <subject>Paid Data Deep Dive Consult - {!Case.Account}</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

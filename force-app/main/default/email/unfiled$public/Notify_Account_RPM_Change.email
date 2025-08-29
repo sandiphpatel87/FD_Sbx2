@@ -1,0 +1,5 @@
+Hi {!Account.Regional_Performance_Manager_Name__c},
+
+You’ve been assigned as the RPM for {!Account.Name}.
+
+The Primary AT is {!Account.Account_Technician_Name__c}

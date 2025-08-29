@@ -1,0 +1,25 @@
+.THIS .slds-form-element__control.slds-grow.textarea-container{
+    /*width:32rem;*/
+    padding-right: 1rem;
+}
+.THIS .slds-card__body {
+    padding-left: 17px;
+}
+.THIS lightning-icon.slds-icon-custom-custom83.slds-icon_container{
+    height: 33px;
+    margin-top: 1.9rem;
+}
+.THIS label.slds-form-element__label{
+    font-size:16px; 
+}
+.THIS button.slds-button.slds-button_brand{
+    height: 32px;
+    margin-top: 2rem;
+}
+.THIS .slds-size_2-of-3 {
+    width: 80%;
+}
+.THIS .slds-size_1-of-3{
+    width: 20%;
+    padding-left: 1rem;
+}

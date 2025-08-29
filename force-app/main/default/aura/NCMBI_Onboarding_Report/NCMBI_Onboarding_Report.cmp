@@ -1,0 +1,329 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="NCMBI_Onboarding_Report_Controller">
+    <aura:attribute type="Onboarding__c[]" name="onList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="paginationList" type="Onboarding__c[]"/>
+    <aura:attribute name="Completed" type="String" default='background-color:red'/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="pageSize" type="Integer" default="20"/>
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer"/>
+    <aura:attribute name="count" type="Integer"/>
+    <aura:attribute name="url" type="string" default="https://foundationdirect.lightning.force.com/lightning/r/Onboarding__c/" />
+    <aura:attribute name="sortField" type="String" default="Name"/>
+    <aura:attribute name="sortAsc" type="Boolean" default="true"/>
+    <aura:attribute name="Month" type="String" />
+    <aura:attribute name="Year" type="String"  />
+    <aura:attribute name="Date" type="String"  />
+    <aura:attribute name="groupCode" type="String"  />
+    <aura:attribute name="groupName" type="String"  />
+    <aura:attribute name="fieldMap" type="Map"/>
+    <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+    
+    <lightning:card>
+        
+        <div class="slds-page-header report-header ">
+            &nbsp;&nbsp; <lightning:icon iconName="standard:report" alternativeText="Report" title="Report" />
+            &nbsp;&nbsp;&nbsp; <span class="slds-media__body"><div class="slds-page-header__name"><div class="slds-page-header__name-title"><h1><span>Report: Onboarding</span><span class="slds-page-header__title slds-truncate" title="NCMBI Onboarding Report">NCMBI Onboarding Report</span></h1></div></div></span> 
+        </div>
+        
+        <br/>
+        
+        <div style= 'margin-left: 15px;'> 
+            <div >Total Records</div>
+            <div>{!v.count}</div><br/>
+        </div>
+        
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+            <div class="slds-size_1-of-3">
+                <div class="slds-m-around_x-small">
+                    <lightning:select aura:id="industryPicklist" value="{!v.Month}" onchange="{!c.handleOnChange}" name="industryPicklist" label="Month" >
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.fieldMap}" var="i" indexVar="key">
+                            <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.Month}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-m-around_x-small">
+                    <lightning:input name="Year" type="text" label="Year" value="{!v.Year}" />
+                </div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-m-around_x-small">
+                    <lightning:input type="date" name="input1" label="Date" value="{!v.Date}"/>
+                </div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-m-around_x-small">
+                    <lightning:input name="NCM 20 Group Code" type="text" label="NCM 20 Group Code" value="{!v.groupCode}" />
+                </div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-m-around_x-small">
+                    <lightning:input name="20 Group Name" type="text" label="20 Group Name" value="{!v.groupName}" />
+                </div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-m-around_x-small">
+                    <lightning:button variant="brand" class="slds-m-top_large" label="Search" onclick="{!c.doInit}" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="slds-s-around--xx-large">
+            
+            <aura:if isTrue="{!v.toggleSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--small slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if> 
+            
+            <div class="view">
+                
+                <div class="wrapper">
+                    
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-border_left slds-border_right  slds-table_col-bordered table"> 
+                        <thead>
+                            <tr class="" style='height: 40px;'>
+                                <th scope="col" class="sticky-col first-col">
+                                    <div class="slds-truncate ">No.</div>
+                                </th>
+                                <th scope="col" >
+                                    <!--<div class="slds-truncate ">Onboarding No.</div>-->
+                                    <div class="slds-truncate " onclick="{!c.sortByName}" id="Name" style="padding-right: 30px;">Onboarding No.
+                                        <aura:if isTrue="{!v.sortField=='Name'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate" title="Opportunity" >Opportunity</div>
+                                    <!--<div class="slds-truncate " onclick="{!c.sortByName}" id="Opportunity__r.Name">Opportunity
+                                        <aura:if isTrue="{!v.sortField=='Opportunity__r.Name'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>-->
+                                </th>
+                                <th scope="col" class="sticky-col second-col">
+                                    <div class="slds-truncate">Account Name</div>
+                                    <!--<div class="slds-truncate " onclick="{!c.sortByName}" id="Account__r.Name">Account Name
+                                        <aura:if isTrue="{!v.sortField=='Account__r.Name'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>-->
+                                </th>
+                                
+                                <th scope="col">
+                                    <div class="slds-truncate">Touchpoint Master Id</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">NCM 20 Group Name</div>
+                                </th>
+                                
+                                <th scope="col">
+                                    <div class="slds-truncate">NCM 20 Group Code</div>
+                                </th>
+                                
+                                <th scope="col" >
+                                    <div class="slds-truncate">Contract Signed Date</div>
+                                    <!--<div class="slds-truncate " onclick="{!c.sortByName}" id="Contract_Signed_Date__c">Contract Signed Date
+                                        <aura:if isTrue="{!v.sortField=='Contract_Signed_Date__c'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>-->
+                                </th>
+                                <!-- ONBOARDING CHECKLIST --> 
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Enrollment Deadline">Enrollment Deadline</div>
+                                </th>
+                                
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Planned Completion Date">Planned Completion Date</div>
+                                </th>  
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Website URL">Website URL</div>
+                                </th>  
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Kick off email sent">Kick off email sent</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="GTM Sent to Provider">GTM Sent to Provider</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="GTM On Site">GTM On Site</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="GA4 Property ID">GA4 Property ID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="GA4 Measurement ID">GA4 Measurement ID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="GA4 Build Complete">GA4 Build Complete</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Inventory Ordered">Inventory Ordered</div>
+                                </th>
+                                <!--<th scope="col">
+                                    <div class="slds-truncate" title="Inventory Received">Inventory Received</div>
+                                </th>-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Inventory Received Automation">Inventory Received Automation</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Send CC Auth">Send CC Auth</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Secure CC Auth">Secure CC Auth</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Link Google Ads CID to GA4 Property">Link Google Ads CID to GA4 Property</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Group Kick off Email Sent">Group Kick off Email Sent</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Group Enrollment Update Sent">Group Enrollment Update Sent</div>
+                                </th>                           
+                            </tr>
+                        </thead>   
+                        <tbody>      
+                            <aura:iteration items="{!v.paginationList}" var="onboard" indexVar="index">
+                                <tr class="slds-hint-parent">
+                                    <td class="sticky-col first-col">{!index+1}</td>
+                                    <th > 
+                                        <span class="slds-truncate "><a href="{!'/'+onboard.Id}"> {!onboard.Name}</a></span>
+                                    </th>
+                                    
+                                    <th >
+                                        <span class="slds-truncate"><a href="{!'/lightning/r/Opportunity/'+onboard.Opportunity__c+'/view'}">{!onboard.Opportunity__r.Name}</a></span>
+                                    </th>
+                                    <th class="sticky-col second-col"> 
+                                        <span class="slds-truncate"><a href="{!'/lightning/r/Account/'+onboard.Account__c+'/view'}" tabindex="{!index}"> {!onboard.Account__r.Name}</a>
+                                        </span>
+                                    </th>
+                                    <th class="{!onboard.Touchpoint_Master_ID__c != null ? 'hasValue' : 'hasNoValue'}"> 
+                                        <span class="slds-truncate">{!onboard.Touchpoint_Master_ID__c}</span>
+                                    </th>
+                                    <th class="{!onboard.NCM_Group__c != null ? 'hasValue' : 'hasNoValue'}"> 
+                                        <span class="slds-truncate">{!onboard.NCM_Group__c}</span>
+                                    </th>
+                                    <td class="{!onboard.NCM_20_Group_Code__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.NCM_20_Group_Code__c}</span>
+                                    </td>
+                                    
+                                    <!-- ONBOARDING CHECKLIST --> 
+                                    <td class="{!onboard.Opportunity__r.Contract_Signed_Date__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.Opportunity__r.Contract_Signed_Date__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Opportunity__r.Enrollment_Deadline__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.Opportunity__r.Enrollment_Deadline__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Planned_Completion_Date__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.Planned_Completion_Date__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Website_URL__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.Website_URL__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Kick_Off_Email_Sent__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.Kick_Off_Email_Sent__c}</span>
+                                    </td>
+                                    <td class="{!onboard.GTM_Sent__c != null ? 'hasValue' : 'hasNoValue'}">                                  
+                                        <span class="slds-truncate ">{!onboard.GTM_Sent__c}</span>
+                                    </td>
+                                    <td class="{!onboard.GTM_on_Site__c != null ? 'hasValue' : 'hasNoValue'}">                                  
+                                        <span class="slds-truncate ">{!onboard.GTM_on_Site__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Foundation_GA4_View__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate ">{!onboard.Foundation_GA4_View__c}</span>
+                                    </td>                                    
+                                    <td class="{!onboard.GA4_Measurement_ID__c != null ? 'hasValue' : 'hasNoValue'}">                                      
+                                        <span class="slds-truncate}">{!onboard.GA4_Measurement_ID__c}</span>
+                                    </td>
+                                    <td class="{!onboard.GTM_Container_Updated_for_GA4__c != null ? 'hasValue' : 'hasNoValue'}">                                                                          
+                                        <span class="slds-truncate ">{!onboard.GTM_Container_Updated_for_GA4__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Inventory_Ordered__c != null ? 'hasValue' : 'hasNoValue'}">                                                                              
+                                        <span class="slds-truncate ">{!onboard.Inventory_Ordered__c}</span>
+                                    </td>
+                                    <!--<td class="{!onboard.Inventory_Is_In__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate ">{!onboard.Inventory_Is_In__c}</span>
+                                    </td>-->
+                                    <td class="{!onboard.Inventory_Received_Automation__c}">
+                                        <span class="slds-truncate ">{!onboard.Inventory_Received_Automation__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Send_CC_Auth__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate ">{!onboard.Send_CC_Auth__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Secure_completed_CC_Auth__c ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate ">{!onboard.Secure_completed_CC_Auth__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Secure_Google_Ads_Data_In_GA__c}">
+                                        <span class="slds-truncate ">{!onboard.Secure_Google_Ads_Data_In_GA__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Group_Kick_Off_Email_Sent__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate " >{!onboard.Group_Kick_Off_Email_Sent__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Group_Enrollment_Update_Sent__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate " >{!onboard.Group_Enrollment_Update_Sent__c}</span>
+                                    </td>                                
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    
+                </div>
+                
+            </div>
+            
+            <br/>
+            
+            <div style= 'margin-left: 15px;'>
+                <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />
+                <lightning:button label="Previous" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                <lightning:button label="Next" disabled="{!v.end >= v.totalSize}" onclick="{!c.next}" />
+            </div>
+            
+            <br/>
+            
+        </div>
+    </lightning:card>
+</aura:component>

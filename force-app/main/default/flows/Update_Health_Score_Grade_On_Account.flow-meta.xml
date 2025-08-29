@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_Account_Type</name>
+        <label>Check Account Type</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Health_grade</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Dig_Ad_Acc</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Digital Advertising</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_value_if_0</targetReference>
+            </connector>
+            <label>Dig Ad Acc</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_value_if_0</name>
+        <label>check value if 0</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>update_tech_fee</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_0_OR_Null</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_Month_Budget_Total__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Current_Month_Budget_Total__c</leftValueReference>
+                <operator>EqualTo</operator>
+            </conditions>
+            <connector>
+                <targetReference>update_tech_fee_0</targetReference>
+            </connector>
+            <label>If 0 OR Null</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>CalculateHealthScore</name>
+        <dataType>String</dataType>
+        <expression>IF({!$Record.Health_Score_Grade_Total_Points__c}&lt;30, &quot;F&quot;, 
+IF(AND({!$Record.Health_Score_Grade_Total_Points__c} &gt;= 30, {!$Record.Health_Score_Grade_Total_Points__c} &lt; 50), &quot;D&quot;, 
+IF(AND({!$Record.Health_Score_Grade_Total_Points__c} &gt;= 50, {!$Record.Health_Score_Grade_Total_Points__c} &lt; 70), &quot;C&quot;, 
+IF(AND({!$Record.Health_Score_Grade_Total_Points__c} &gt;= 70, {!$Record.Health_Score_Grade_Total_Points__c} &lt; 85), &quot;B&quot;,
+ IF(AND({!$Record.Health_Score_Grade_Total_Points__c} &gt;= 85, {!$Record.Health_Score_Grade_Total_Points__c} &lt;= 100), &quot;A&quot;, &quot;&quot;)))))</expression>
+    </formulas>
+    <formulas>
+        <name>CalculateTechFee</name>
+        <dataType>Number</dataType>
+        <expression>( {!$Record.Total_MRR__c}/{!$Record.Current_Month_Budget_Total__c} ) *100</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Update Health {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Health Score Grade On Account</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Assign_Health_grade</name>
+        <label>Assign Health grade</label>
+        <locationX>380</locationX>
+        <locationY>815</locationY>
+        <inputAssignments>
+            <field>Health_Score_Grade__c</field>
+            <value>
+                <elementReference>CalculateHealthScore</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>update_tech_fee</name>
+        <label>update tech fee</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>Assign_Health_grade</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Tech_Fee_To_Budget_Ratio__c</field>
+            <value>
+                <elementReference>CalculateTechFee</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>update_tech_fee_0</name>
+        <label>update tech fee 0</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>Assign_Health_grade</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Tech_Fee_To_Budget_Ratio__c</field>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Account_Type</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>OEM__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Product_Type__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>RPM_Assessment_Score__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_Month_Budget_Total__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Days_Since_Last_PR_Closed__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Average_Days_Between_PRs__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

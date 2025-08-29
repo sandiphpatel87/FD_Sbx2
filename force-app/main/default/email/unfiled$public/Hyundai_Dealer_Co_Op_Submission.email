@@ -1,0 +1,9 @@
+<table border="0" cellpadding="5" width="550" cellspacing="5" height="400" >
+<tr valign="top" height="400" >
+<td tEditID="c1r1" style=" background-color:#FFFFFF; bEditID:r3st1; color:#000000; bLabel:main; font-size:12pt; font-family:arial;" aEditID="c1r1" locked="0" >
+<![CDATA[<div style="font-size: 12pt;"><font face="arial">{!Account.Name}</font><span style="font-family: arial; font-size: 12pt;">,</span></div><div style="font-size: 12pt;"><span style="font-family: arial; font-size: 12pt;">&nbsp;</span></div><div style="color: rgb(0, 0, 0); font-family: arial;"><span style="font-size: 12pt;">This email acknowledges that your Digital Marketing Co-Op Claim submission for</span>&nbsp;{!Account.Previous_month__c}&nbsp;{!Account.previous_year__c} &nbsp;<span style="font-size: 12pt;">has been submitted via Foundation Direct, is approved, and will be reimbursed with
+available funds.
+If you have any questions concerning this communication or Hyundai Co-op &amp; Ad Standards,
+please feel free to contact:</span></div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;"><br></div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;">Hyundai Co-op &amp; Ad Standards Headquarters</div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;">(877) 920-4288&nbsp;</div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;">HMASupport@ansira.com&nbsp;</div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;">Hours: Monday-Friday&nbsp;</div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;">8:30 am - 6:00 pm CT&nbsp;</div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;"><br></div><div style="font-size: 12pt; color: rgb(0, 0, 0); font-family: arial;">Thank you for your support of the Hyundai brand.&nbsp;</div>]]></td>
+</tr>
+</table>

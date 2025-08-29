@@ -1,0 +1,5 @@
+Opportutnity Id: {!Opportunity.Id}
+
+Opportunity Account : {!Opportunity.Account}
+
+Exception Reason : {!exception}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>As soon as the dealer&apos;s inventory is in</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Schedule Payment Call Template</name>
+    <style>none</style>
+    <subject>ACTION REQUIRED: Schedule Payment Call for {!Account.Name}</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

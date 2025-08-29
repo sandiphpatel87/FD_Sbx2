@@ -1,0 +1,8 @@
+Hello Onboarding
+
+Please cancel the HomeNet Inventory feed for {!Opportunity.Account} effective {!Opportunity.Day_after_last_day_of_service__c}.
+
+Please reach out to {!Opportunity.Regional_performance_manager__c} with any additional questions.
+
+Thank you!
+Support@foundationdirect.com

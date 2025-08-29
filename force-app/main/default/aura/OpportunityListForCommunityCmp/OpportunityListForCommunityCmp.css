@@ -1,0 +1,157 @@
+table.mobileFriendly.cOpportunityListForCommunityCmp td.flogomb{width: 15%;}
+ table.mobileFriendly.cOpportunityListForCommunityCmp td.ncmlogomb{width: 15%;}
+ table.mobileFriendly.cOpportunityListForCommunityCmp td.ncmTxtmb{width: 30%;}
+             
+
+@media only screen and (max-width: 200px),
+    (min-device-width: 200px) and (max-device-width: 1024px)  
+    {
+table.mobileFriendly.cOpportunityListForCommunityCmp td.flogomb{width: unset;margin-top: -30px;}
+table.mobileFriendly.cOpportunityListForCommunityCmp td.ncmlogomb{width: unset;}
+table.mobileFriendly.cOpportunityListForCommunityCmp td.ncmTxtmb{width: unset;margin-top: 50px;}
+.THIS  img.ncmImgmb{width: 90%;padding-left: 15%;margin-top: -45Px;}
+        /* force table and its elements to behave as individual blocks one per line */
+table.mobileFriendly.cOpportunityListForCommunityCmp{
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp thead{
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp tbody{
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp th{
+            display: block;
+        }
+    table.mobileFriendly.cOpportunityListForCommunityCmp td{
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp tr {
+            display: block;
+        }
+        /* hide headers outside the screen */
+table.mobileFriendly.cOpportunityListForCommunityCmp thead tr{
+		    position: absolute;
+		    top: -9999px;
+		    left: -9999px;
+	    }
+table.mobileFriendly.cOpportunityListForCommunityCmp thead th {
+		    position: absolute;
+		    top: -9999px;
+		    left: -9999px;
+	    }
+
+        /* add border to make rows distinct */
+table.mobileFriendly.cOpportunityListForCommunityCmp tr { border: 1px solid gray; }
+
+        /* show each column value in the middle */
+table.mobileFriendly.cOpportunityListForCommunityCmp td {
+            border: none!important;
+            border-bottom: 1px solid whitesmoke;
+            position: relative!important;
+            
+           
+            padding-bottom: 10px;
+        }
+        /* show header as a fake label on the left side */
+        /* using top/left to emulate padding */
+table.mobileFriendly.cOpportunityListForCommunityCmp td:before {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 45%;
+            padding-right: 10px;
+            white-space: nowrap;
+            content: attr(data-header);
+            font-weight: bold;
+        }
+    }
+
+    @media only screen and (max-width: 450px),
+    (min-device-width: 450px) and (max-device-width: 767px)  {
+table.mobileFriendly.cOpportunityListForCommunityCmp td.flogomb{width: unset;margin-top: -30px;}
+table.mobileFriendly.cOpportunityListForCommunityCmp td.ncmlogomb{width: unset;}
+table.mobileFriendly.cOpportunityListForCommunityCmp td.ncmTxtmb{width: unset;margin-top: -10px;}
+.THIS  img.ncmImgmb{width: 90%;padding-left: 15%;margin-top: -45Px;}
+        /* force table and its elements to behave as individual blocks one per line */
+	/* increase font size */
+table.mobileFriendly.cOpportunityListForCommunityCmp {
+            font-size: 120%;
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp thead {
+            font-size: 120%;
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp tbody {
+            font-size: 120%;
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp th {
+            font-size: 120%;
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp td {
+            font-size: 120%;
+            display: block;
+        }
+table.mobileFriendly.cOpportunityListForCommunityCmp tr {
+            font-size: 120%;
+            display: block;
+        }
+        /* hide headers outside the screen */
+table.mobileFriendly.cOpportunityListForCommunityCmp thead tr{
+		    position: absolute;
+		    top: -9999px;
+		    left: -9999px;
+	    }
+table.mobileFriendly.cOpportunityListForCommunityCmp thead th {
+		    position: absolute;
+		    top: -9999px;
+		    left: -9999px;
+	    }
+
+        /* add border to make rows distinct */
+table.mobileFriendly.cOpportunityListForCommunityCmp tr { border: 1px solid gray; }
+
+        /* show each column value in its own line */
+table.mobileFriendly.cOpportunityListForCommunityCmp td {
+            border: none!important;
+            border-bottom: 1px solid whitesmoke;
+            position: relative!important;
+            padding-left: 0!important;
+        }
+        /* show header as a fake label on the left side */
+        /* using top/left to emulate padding */
+table.mobileFriendly.cOpportunityListForCommunityCmp td:before {
+            content: attr(data-header) " ";
+            top: 0.25rem;
+            left: 0.25rem;
+            display: contents;
+            font-weight: bold;
+        }
+        /* make column value appear in its own line */
+table.mobileFriendly.cOpportunityListForCommunityCmp td span {
+            padding-left: 1rem;
+            display: block;
+        }
+        /* make column value appear below the fake label */
+table.mobileFriendly.cOpportunityListForCommunityCmp td span:before {
+            content: ' ';
+            display: block;
+            padding-top: 2.5rem;
+        }
+    }
+/*table.mobilelogoCmp.cOpportunityListForCommunityCmp {
+    display: none;
+}
+
+@media all and (max-width: 600px) {
+   
+      table.logoCmp.cOpportunityListForCommunityCmp{
+        display: none !important;
+    }
+    table.mobilelogoCmp.cOpportunityListForCommunityCmp {
+    display: block;
+}
+}*/

@@ -1,0 +1,8 @@
+Hi Mike, 
+
+{!Task.Onboarding_Account__c} is Active, effective {!Task.ActivityDate}. Please QA their Looker Dashboard.
+https://foundationdirect.lightning.force.com/lightning/r/Task/{!Task.Id}/view
+
+TaskId- {!Task.Id}
+
+Thank you

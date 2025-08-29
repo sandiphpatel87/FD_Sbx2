@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_for_New_Search_changed</name>
+        <label>Check for New Search changed</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_used_search_changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_Yes</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.New_Search__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Isnew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.New_Car_Bing_Allocation__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_New_Search_Allocation_Bing</targetReference>
+            </connector>
+            <label>If Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_New_vehicle_ads_changed</name>
+        <label>Check for New vehicle ads changed</label>
+        <locationX>182</locationX>
+        <locationY>1523</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_Yes5</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.New_Vehicle_Ads__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Isnew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.New_Shopping_Ads_Bing_Allocation__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_New_Shopping_Ads_Allocation</targetReference>
+            </connector>
+            <label>If Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_Service_Search_changed</name>
+        <label>Check for Service Search changed</label>
+        <locationX>182</locationX>
+        <locationY>923</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Vehicle_car_used_budget_Changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_Yes2</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Service_Search__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Isnew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Service_Bing_Allocation__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Service_Search_Allocation_Bing</targetReference>
+            </connector>
+            <label>If Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_used_search_changed</name>
+        <label>Check for used search changed</label>
+        <locationX>182</locationX>
+        <locationY>623</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_Service_Search_changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_Yes1</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Used_Search__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Isnew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Used_Car_Bing_Allocation__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Used_Search_Allocation_Bing</targetReference>
+            </connector>
+            <label>If Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_for_Vehicle_car_used_budget_Changed</name>
+        <label>Check for Vehicle car used budget changed</label>
+        <locationX>182</locationX>
+        <locationY>1223</locationY>
+        <defaultConnector>
+            <targetReference>Check_for_New_vehicle_ads_changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_yes4</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Vehicle_Ads_Used_Car_Budget__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Isnew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Used_Shopping_Ads_Bing_Allocation__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Used_Shopping_Ads_Allocation_Bing</targetReference>
+            </connector>
+            <label>If Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Isnew</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>NewSearchAllocationBingupdate</name>
+        <dataType>Currency</dataType>
+        <expression>/*IF(ISBLANK({!$Record.New_Search__c}), 0, {!$Record.New_Search__c} * {!$Record.Account__r.New_Search_Bing_Allocation__c})*/
+IF(ISBLANK({!$Record.New_Search__c}), 0, {!$Record.New_Search__c} * {!$Record.New_Car_Bing_Allocation__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>NewShoppingAdsAllocationupdate</name>
+        <dataType>Currency</dataType>
+        <expression>/*IF(ISBLANK({!$Record.New_Vehicle_Ads__c}), 0, {!$Record.New_Vehicle_Ads__c} * {!$Record.Account__r.Bing_New_Shopping__c})*/
+IF(ISBLANK({!$Record.New_Vehicle_Ads__c}), 0, {!$Record.New_Vehicle_Ads__c} * {!$Record.New_Shopping_Ads_Bing_Allocation__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>ServiceSearchAllocationBingupdate</name>
+        <dataType>Currency</dataType>
+        <expression>/*IF(ISBLANK({!$Record.Service_Search__c}), 0, {!$Record.Service_Search__c} *{!$Record.Account__r.Service_Search_Bing_Allocation__c})*/
+IF(ISBLANK({!$Record.Service_Search__c}), 0, {!$Record.Service_Search__c} *{!$Record.Service_Bing_Allocation__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>UsedSearchAllocationBingupdate</name>
+        <dataType>Currency</dataType>
+        <expression>/*IF(ISBLANK({!$Record.Used_Search__c}), 0, {!$Record.Used_Search__c} * {!$Record.Account__r.Used_Search_Bing_Allocation__c})*/
+IF(ISBLANK({!$Record.Used_Search__c}), 0, {!$Record.Used_Search__c} * {!$Record.Used_Car_Bing_Allocation__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>UsedShoppingAdsAllocationBingupdate</name>
+        <dataType>Currency</dataType>
+        <expression>/*IF(ISBLANK({!$Record.Vehicle_Ads_Used_Car_Budget__c}), 0, {!$Record.Vehicle_Ads_Used_Car_Budget__c} * {!$Record.Account__r.Bing_Used_Shopping__c})*/
+IF(ISBLANK({!$Record.Vehicle_Ads_Used_Car_Budget__c}), 0, {!$Record.Vehicle_Ads_Used_Car_Budget__c} * {!$Record.Used_Shopping_Ads_Bing_Allocation__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Update Media Budget {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Media Budget Fields</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_New_Search_Allocation_Bing</name>
+        <label>Update New Search Allocation Bing</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>Check_for_used_search_changed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>New_Search_Allocation_Bing__c</field>
+            <value>
+                <elementReference>NewSearchAllocationBingupdate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_New_Shopping_Ads_Allocation</name>
+        <label>Update New Shopping Ads Allocation</label>
+        <locationX>50</locationX>
+        <locationY>1631</locationY>
+        <inputAssignments>
+            <field>New_Shopping_Ads_Allocation_Bing__c</field>
+            <value>
+                <elementReference>NewShoppingAdsAllocationupdate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Service_Search_Allocation_Bing</name>
+        <label>Update Service Search Allocation Bing</label>
+        <locationX>50</locationX>
+        <locationY>1031</locationY>
+        <connector>
+            <targetReference>Check_for_Vehicle_car_used_budget_Changed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Service_Search_Allocation_Bing__c</field>
+            <value>
+                <elementReference>ServiceSearchAllocationBingupdate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Used_Search_Allocation_Bing</name>
+        <label>Update Used Search Allocation Bing</label>
+        <locationX>50</locationX>
+        <locationY>731</locationY>
+        <connector>
+            <targetReference>Check_for_Service_Search_changed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Used_Search_Allocation_Bing__c</field>
+            <value>
+                <elementReference>UsedSearchAllocationBingupdate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Used_Shopping_Ads_Allocation_Bing</name>
+        <label>Update Used Shopping Ads Allocation Bing</label>
+        <locationX>50</locationX>
+        <locationY>1331</locationY>
+        <connector>
+            <targetReference>Check_for_New_vehicle_ads_changed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Used_Shopping_Ads_Allocation_Bing__c</field>
+            <value>
+                <elementReference>UsedShoppingAdsAllocationBingupdate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_New_Search_changed</targetReference>
+        </connector>
+        <object>Media_Budget__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

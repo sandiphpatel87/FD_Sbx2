@@ -1,0 +1,646 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="FetchOnboardingChecklist">
+    <aura:attribute type="Onboarding__c[]" name="onList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="paginationList" type="Onboarding__c[]"/>
+    <aura:attribute name="Completed" type="String" default='background-color:red'/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="pageSize" type="Integer" default="20"/>
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer"/>
+    <aura:attribute name="count" type="Integer"/>
+    <aura:attribute name="url" type="string" default="https://foundationdirect.lightning.force.com/lightning/r/Onboarding__c/" />
+    <aura:attribute name="sortField" type="String" default='Planned_Launch_Date__c'/>
+    <aura:attribute name="sortAsc" type="Boolean" default="true"/>
+    <aura:attribute name="Month" type="String" />
+    <aura:attribute name="Year" type="String"  />
+    <aura:attribute name="Date" type="String"  />
+    <aura:attribute name="fieldMap" type="Map"/>
+     <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+     
+    <lightning:card>
+        <div class="slds-page-header report-header ">
+            &nbsp;&nbsp; <lightning:icon iconName="standard:report" alternativeText="Report" title="Report" />
+            &nbsp;&nbsp;&nbsp; <span class="slds-media__body"><div class="slds-page-header__name"><div class="slds-page-header__name-title"><h1><span>Report: Onboarding</span><span class="slds-page-header__title slds-truncate" title="Onboarding Check List Report">Onboarding Check List Report</span></h1></div></div></span> 
+        </div> <br/> 
+        <div style= 'margin-left: 15px;'> 
+            <div >Total Records</div>
+            <div>{!v.count}</div><br/>
+        </div>
+        <div class='slds-form__row slds-form-element_horizontal ' style= 'margin-left: 15px;'>
+            <div class="divItem" role="listitem">
+                <lightning:select aura:id="industryPicklist" value="{!v.Month}" onchange="{!c.handleOnChange}" name="industryPicklist" label="Month" >
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.fieldMap}" var="i" indexVar="key">
+                        <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.Month}" />
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+            <div class="divItem" role="listitem">
+                <lightning:input name="Year" type="text" label="Year" value="{!v.Year}" />
+            </div>
+            <div class="divItemDate" role="listitem">
+            <lightning:input type="date" name="input1" label="Date" value="{!v.Date}"/>
+            </div>
+            <div class="divItem" role="listitem">
+                <lightning:button variant="brand" label="Search" onclick="{!c.doInit}" /> 
+            </div>
+        </div>
+        
+        
+        <div class="slds-s-around--xx-large">
+            <aura:if isTrue="{!v.toggleSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--small slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>  
+            <div class="view">
+                <div class="wrapper">
+                    <!--<div class="container-fluid slds-scrollable "> -->       
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-border_left slds-border_right  slds-table_col-bordered table"> 
+                        <thead>
+                            <tr class="" style='height: 40px;'>
+                                <th scope="col" class="sticky-col first-col">
+                                    <div class="slds-truncate ">No.</div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate ">Onboarding No.</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Opportunity">Opportunity</div>
+                                </th>
+                                <th scope="col" class="sticky-col second-col">
+                                    <div class="slds-truncate">Account</div>
+                                </th>
+                                
+                                <th scope="col">
+                                    <div class="slds-truncate">Regional Performance Manager</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate">Account Technician</div>
+                                </th>
+                                
+                                <th scope="col" >
+                                    <div class="slds-truncate " onclick="{!c.sortByDate}">Planned Launch Date
+                                        <aura:if isTrue="{!v.sortField=='Planned_Launch_Date__c'}">
+                                            <span>
+                                                <aura:if isTrue="{!v.sortAsc}">
+                                                    &#8593;
+                                                    <aura:set attribute="else">
+                                                        &#8595;
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                            
+                                        </aura:if>
+                                    </div>
+                                </th>
+                                <!-- ONBOARDING CHECKLIST --> 
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Contract Signed">Contract Signed</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Post Sale Launch Details">Post Sale Launch Details</div>
+                                </th>  
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Add to Monday board w/contract">Add to Monday board w/contract</div>
+                                </th>  -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Send internal Signed Contract and Build">Send internal Signed Contract and Build</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Send Welcome Email and OBP to client">Send Welcome Email and OBP to client</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Send CC Auth">Send CC Auth</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Create Offersite in Apollo">Create Offersite in Apollo</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Order Payment Code">Order Payment Code</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Input Payment Code">Input Payment Code</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Inventory Ordered">Inventory Ordered</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Secure completed CC Auth">Secure completed CC Auth</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Confirm inventory is in">Confirm inventory is in</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Dummy Payment Parameters and Mark Ready">Dummy Payment Parameters and Mark Ready</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Input Service Coupons">Input Service Coupons</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Send out Facebook request">Send out Facebook request</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Send out Google My Business request">Send out Google My Business request</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Secure completed OBP">Secure completed OBP</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Send OEM Trademark Email">Send OEM Trademark Email</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Update Phone Number In Apollo">Update Phone Number In Apollo</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Confirm Facebook request was accepted">Confirm Facebook request was accepted</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Confirm Google My Business request">Confirm Google My Business request</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Send Advertised Payment, Geos and Budget">Send Advertised Payment, Geos and Budget</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Logo Received and added to Monday board">Logo Received and added to Monday board</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Logo Approved by Compliance">Logo Approved by Compliance</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Add budget into Apollo">Add budget into Apollo</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Date of Kick Off Call">Date of Kick Off Call</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Dealer Approved - Automated Rules Set">Dealer Approved - Automated Rules Set</div>
+                                </th>
+                                
+                                <!--  DIGITAL BUILD CHECKLIST   --> 
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Google Ads Account">Google Ads Account</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Create Google CID OR Link Existing CID">Create Google CID OR Link Existing CID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Secure Google Ads Admin Access">Secure Google Ads Admin Access</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Secure Google Ads Payment User Access">Secure Google Ads Payment User Access</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Create Bing Account">Create Bing Account</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Create Facebook Account">Create Facebook Account</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Input CC into Google Ads">Input CC into Google Ads</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Input CC into Bing">Input CC into Bing</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Input CC into Facebook">Input CC into Facebook</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Link location extensions in Google Ads">Link location extensions in Google Ads</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Disable Google's Recommended Goals">Disable Google's Recommended Goals</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Customize Client Notifications in Ads">Customize Client Notifications in Ads</div>
+                                </th>
+                                
+                                <!--  FACEBOOK CHECKLIST   --> 
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Page Access Secured">Facebook Page Access Secured</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Domain Verification Complete">Facebook Domain Verification Complete</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Domain Permissions">Facebook Domain Permissions</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Pixel Shared w/AT">Facebook Pixel Shared w/AT</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Pixel and Event Setup Email">Facebook Pixel and Event Setup Email</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="VDP Event Verified">VDP Event Verified</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="SRP Event Verified">SRP Event Verified</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Lead Event Verified">Lead Event Verified</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Pixel Events Prioritized">Facebook Pixel Events Prioritized</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Catalog Connected">Facebook Catalog Connected</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Budget Loaded and Allocated">Facebook Budget Loaded and Allocated</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Calum Tagged To Build">Calum Tagged To Build</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Facebook Campaigns Live">Facebook Campaigns Live</div>
+                                </th> -->
+                                
+                                <!--  GOOGLE ANALYTICS  --> 
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Pre-Post View ID">Pre-Post View ID</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Current Measurement Strategy">Current Measurement Strategy</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Confirm GA Edit Access Granted">Confirm GA Edit Access Granted</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Linked to GA Accounts">Linked to GA Accounts</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Build Foundation View">Build Foundation View</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Add dealer to Measurement Trix">Add dealer to Measurement Trix</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Email Measurement Partner">Email Measurement Partner</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Email GTM to Website Provider">Email GTM to Website Provider</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Verify GTM is Installed Correctly">Verify GTM is Installed Correctly</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Email VistaDash GTM Installed">Email VistaDash GTM Installed</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Install AWCT in Tag Manager">Install AWCT in Tag Manager</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Import Goals from FD View to Google Ads">Import Goals from FD View to Google Ads</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Link GA to Google Ads">Link GA to Google Ads</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Enable Auto Tagging in Google Ads">Enable Auto Tagging in Google Ads</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Foundation View ID">Foundation View ID</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Dashboard View ID">Dashboard View ID</div>
+                                </th> -->
+                                
+                                <!--  VEHICLE ADS --> 
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Website Claimed and Verified by a MC?">Website Claimed and Verified by a MC?</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Request Edit Access to MC">Request Edit Access to MC</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Request VA Campaign Build">Request VA Campaign Build</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Merchant Center Code Created">Merchant Center Code Created</div>
+                                </th> -->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Merchant Code Sent to Website Provider">Merchant Code Sent to Website Provider</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Website Verified">Website Verified</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Website Claimed">Website Claimed</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Campaign Built">Campaign Built</div>
+                                </th>
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="VA Budgets Allocated">VA Budgets Allocated</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Confirm VA Geotargeting">Confirm VA Geotargeting</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Customize VA Landing Pages">Customize VA Landing Pages</div>
+                                </th> -->
+                                <!-- <th scope="col">
+                                    <div class="slds-truncate" title="Enable VA Campaign">Enable VA Campaign</div>
+                                </th> -->                                
+                            </tr>
+                        </thead>   
+                        <tbody>      
+                            <aura:iteration items="{!v.paginationList}" var="onboard" indexVar="index">
+                                <tr class="slds-hint-parent">
+                                    <td class="sticky-col first-col">{!index+1}</td>
+                                    <th > 
+                                        <span class="slds-truncate "><a href="{!'/'+onboard.Id}"> {!onboard.Name}</a></span>
+                                    </th>
+                                    
+                                    <th >
+                                        <span class="slds-truncate"><a href="{!'/'+onboard.Opportunity__c+'/view'}">{!onboard.Opportunity__r.Name}</a></span>
+                                    </th>
+                                    <th class="sticky-col second-col"> 
+                                        <span class="slds-truncate"><a href="{!'/lightning/r/Account/'+onboard.Account__c+'/view'}" tabindex="{!index}"> {!onboard.Account__r.Name}</a>
+                                        </span>
+                                    </th>
+                                    <th> 
+                                        <span class="slds-truncate"><a href="{!'/lightning/r/User/'+onboard.Account__r.Regional_performance_manager__c+'/view'}" tabindex="{!index}"> {!onboard.Account__r.Regional_Performance_Manager_Name__c}</a>
+                                        </span>
+                                    </th>
+                                    <th> 
+                                        <span class="slds-truncate"><a href="{!'/lightning/r/User/'+onboard.Account__r.Account_Technician__c+'/view'}" tabindex="{!index}"> {!onboard.Account__r.Account_Technician_Name__c}</a>
+                                        </span>
+                                    </th>
+                                    <td>
+                                        <span class="slds-truncate">{!onboard.Planned_Launch_Date__c}</span>
+                                    </td>
+                                    
+                                    <!-- ONBOARDING CHECKLIST --> 
+                                    <td class="{!onboard.Contract_Signed__c}">
+                                        <span class="slds-truncate">{!onboard.Contract_Signed__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Post_Sale_Launch_Details__c}">
+                                        <span class="slds-truncate">{!onboard.Post_Sale_Launch_Details__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Add_to_Monday_board_w_contract__c}">
+                                        <span class="slds-truncate">{!onboard.Add_to_Monday_board_w_contract__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Send_internal_Signed_Contract_Build__c}">
+                                        <span class="slds-truncate">{!onboard.Send_internal_Signed_Contract_Build__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Send_Welcome_Email_OBP_to_client__c != null ? 'hasValue' : 'hasNoValue'}">
+                                        <span class="slds-truncate">{!onboard.Send_Welcome_Email_OBP_to_client__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Send_CC_Auth__c != null ? 'hasValue' : 'hasNoValue'}">                                  
+                                        <span class="slds-truncate ">{!onboard.Send_CC_Auth__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Create_Offersite_in_Apollo__c}">
+                                        <span class="slds-truncate ">{!onboard.Create_Offersite_in_Apollo__c}</span>
+                                    </td>                                    
+                                    <!-- <td class="{!onboard.Order_Payment_Code__c != null ? 'hasValue' : 'hasNoValue'}">                                      
+                                        <span class="slds-truncate}">{!onboard.Order_Payment_Code__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Input_Payment_Code__c != null ? 'hasValue' : 'hasNoValue'}">                                                                          
+                                        <span class="slds-truncate ">{!onboard.Input_Payment_Code__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Order_Inventory__c != null ? 'hasValue' : 'hasNoValue'}">                                                                              
+                                        <span class="slds-truncate ">{!onboard.Order_Inventory__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Secure_completed_CC_Auth__c}">
+                                        <span class="slds-truncate ">{!onboard.Secure_completed_CC_Auth__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Confirm_inventory_is_in__c}">
+                                        <span class="slds-truncate ">{!onboard.Confirm_inventory_is_in__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Dummy_Payment_Parameters_Mark_Ready__c}" >
+                                        <span class="slds-truncate ">{!onboard.Dummy_Payment_Parameters_Mark_Ready__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Input_Service_Coupons1__c}">
+                                        <span class="slds-truncate ">{!onboard.Input_Service_Coupons1__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Send_out_Facebook_request__c}">
+                                        <span class="slds-truncate ">{!onboard.Send_out_Facebook_request__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Send_out_Google_My_Business_request__c}">
+                                        <span class="slds-truncate " >{!onboard.Send_out_Google_My_Business_request__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Secure_completed_OBP__c}">
+                                        <span class="slds-truncate " >{!onboard.Secure_completed_OBP__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Send_OEM_Trademark_Email__c}">
+                                        <span class="slds-truncate ">{!onboard.Send_OEM_Trademark_Email__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Update_Phone_Number_In_Apollo_Offer_Sit__c}">
+                                        <span class="slds-truncate ">{!onboard.Update_Phone_Number_In_Apollo_Offer_Sit__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Confirm_Facebook_request_was_accepted__c}">
+                                        <span class="slds-truncate">{!onboard.Confirm_Facebook_request_was_accepted__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Confirm_Google_My_Business_request_was__c}">
+                                        <span class="slds-truncate " >{!onboard.Confirm_Google_My_Business_request_was__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Send_Advertised_Payment_Geos_Budget__c}">
+                                        <span class="slds-truncate" >{!onboard.Send_Advertised_Payment_Geos_Budget__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Logo_Received_and_added_to_Monday_board__c}">
+                                        <span class="slds-truncate ">{!onboard.Logo_Received_and_added_to_Monday_board__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Logo_Approved_by_Compliance__c}">
+                                        <span class="slds-truncate ">{!onboard.Logo_Approved_by_Compliance__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Add_budget_into_Apollo__c}">
+                                        <span class="slds-truncate ">{!onboard.Add_budget_into_Apollo__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Schedule_Kickoff_Call_Date__c != null ? 'hasValue' : 'hasNoValue'}">    
+                                        <span class="slds-truncate ">{!onboard.Schedule_Kickoff_Call_Date__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Dealer_Approved_Automated_Rules_Set__c}">
+                                        <span class="slds-truncate ">{!onboard.Dealer_Approved_Automated_Rules_Set__c}</span>
+                                    </td>
+                                    
+                                    <!-- DIGITAL BUILD CHECKLIST              --> 
+                                    <td class="{!onboard.Google_Ads_Account__c != null ? 'hasValue' : 'hasNoValue'}">                                        
+                                        <span class="slds-truncate ">{!onboard.Google_Ads_Account__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Google_Ads_Account_Link_Existing_to_MCC__c}">
+                                        <span class="slds-truncate ">{!onboard.Google_Ads_Account_Link_Existing_to_MCC__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Secure_Google_Ads_Admin_Access__c}">
+                                        <span class="slds-truncate ">{!onboard.Secure_Google_Ads_Admin_Access__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Secure_Google_Ads_Payment_User_Access__c}">
+                                        <span class="slds-truncate ">{!onboard.Secure_Google_Ads_Payment_User_Access__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Create_Bing_Account1__c}">
+                                        <span class="slds-truncate ">{!onboard.Create_Bing_Account1__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Create_Facebook_Account1__c}">
+                                        <span class="slds-truncate ">{!onboard.Create_Facebook_Account1__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Input_CC_into_Google_Ads__c}">
+                                        <span class="slds-truncate ">{!onboard.Input_CC_into_Google_Ads__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Input_CC_into_Bing__c}">
+                                        <span class="slds-truncate ">{!onboard.Input_CC_into_Bing__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Input_CC_into_Facebook__c}">
+                                        <span class="slds-truncate ">{!onboard.Input_CC_into_Facebook__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Link_location_extensions_in_Google_Ads__c}">
+                                        <span class="slds-truncate ">{!onboard.Link_location_extensions_in_Google_Ads__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Disable_Google_s_Recommended_Goals__c}">
+                                        <span class="slds-truncate ">{!onboard.Disable_Google_s_Recommended_Goals__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Customize_Client_Notifications_in_Ads__c}">
+                                        <span class="slds-truncate ">{!onboard.Customize_Client_Notifications_in_Ads__c}</span>
+                                    </td>
+                                    
+                                    <!-- FACEBOOK CHECKLIST        --> 
+                                    <td class="{!onboard.Facebook_Page_Access_Secured__c != null ? 'hasValue' : 'hasNoValue'}">                                                                        
+                                        <span class="slds-truncate ">{!onboard.Facebook_Page_Access_Secured__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Facebook_Domain_Verification_Complete__c != null ? 'hasValue' : 'hasNoValue'}">                                    
+                                        <span class="slds-truncate ">{!onboard.Facebook_Domain_Verification_Complete__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Facebook_Domain_Permissions__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Domain_Permissions__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Facebook_Pixel_Shared_w_AT__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Pixel_Shared_w_AT__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Facebook_Pixel_Event_Setup_Email__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Pixel_Event_Setup_Email__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.VDP_Event_Verified__c}">
+                                        <span class="slds-truncate ">{!onboard.VDP_Event_Verified__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.SRP_Event_Verified__c}">
+                                        <span class="slds-truncate ">{!onboard.SRP_Event_Verified__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Lead_Event_Verified__c}">
+                                        <span class="slds-truncate ">{!onboard.Lead_Event_Verified__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Facebook_Pixel_Events_Prioritized__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Pixel_Events_Prioritized__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Facebook_Catalog_Connected__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Catalog_Connected__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Facebook_Budget_Loaded_Allocated__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Budget_Loaded_Allocated__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Calum_Tagged_To_Build__c}">
+                                        <span class="slds-truncate ">{!onboard.Calum_Tagged_To_Build__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Facebook_Campaigns_Live__c}">
+                                        <span class="slds-truncate ">{!onboard.Facebook_Campaigns_Live__c}</span>
+                                    </td> -->
+                                    
+                                    <!-- GOOGLE ANALYTICS      --> 
+                                    <!-- <td class="{!onboard.Previous_Provider_View_ID__c != null ? 'hasValue' : 'hasNoValue'}">                                                                      
+                                        <span class="slds-truncate ">{!onboard.Previous_Provider_View_ID__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Measurement_Strategy__c != null ? 'hasValue' : 'hasNoValue'}">                                       
+                                        <span class="slds-truncate ">{!onboard.Measurement_Strategy__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Confirm_GA_Edit_Access_Granted__c}">
+                                        <span class="slds-truncate ">{!onboard.Confirm_GA_Edit_Access_Granted__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Linked_to_GA_Accounts__c != null ? 'hasValue' : 'hasNoValue'}">                                                                           
+                                        <span class="slds-truncate ">{!onboard.Linked_to_GA_Accounts__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Build_Foundation_View__c != null ? 'hasValue' : 'hasNoValue'}">                                    
+                                        <span class="slds-truncate ">{!onboard.Build_Foundation_View__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Add_dealer_to_Measurement_Trix__c}">
+                                        <span class="slds-truncate ">{!onboard.Add_dealer_to_Measurement_Trix__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Email_Measurement_Partner_new_client__c}">
+                                        <span class="slds-truncate ">{!onboard.Email_Measurement_Partner_new_client__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Email_GTM_to_Website_Provider1__c}">
+                                        <span class="slds-truncate ">{!onboard.Email_GTM_to_Website_Provider1__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Verify_GTM_is_Installed_Correctly__c != null ? 'hasValue' : 'hasNoValue'}">                                    
+                                        <span class="slds-truncate ">{!onboard.Verify_GTM_is_Installed_Correctly__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Email_VistaDash_to_let_them_know_GTM_i__c}">
+                                        <span class="slds-truncate ">{!onboard.Email_VistaDash_to_let_them_know_GTM_i__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Email_Measurement_Partner_Google_Pixel__c}">
+                                        <span class="slds-truncate ">{!onboard.Email_Measurement_Partner_Google_Pixel__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Import_Goals_from_FD_View_to_Google_Ads__c != null ? 'hasValue' : 'hasNoValue'}">                                    
+                                        <span class="slds-truncate ">{!onboard.Import_Goals_from_FD_View_to_Google_Ads__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Link_GA_to_Google_Ads__c}">
+                                        <span class="slds-truncate ">{!onboard.Link_GA_to_Google_Ads__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Enable_Auto_Tagging_in_Google_Ads__c}">
+                                        <span class="slds-truncate ">{!onboard.Enable_Auto_Tagging_in_Google_Ads__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Foundation_View_ID__c != null ? 'hasValue' : 'hasNoValue'}">                                                                        
+                                        <span class="slds-truncate ">{!onboard.Foundation_View_ID__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Dashboard_View_ID__c != null ? 'hasValue' : 'hasNoValue'}">                                                                        
+                                        <span class="slds-truncate ">{!onboard.Dashboard_View_ID__c}</span>
+                                    </td> -->
+                                    
+                                    <!-- VEHICLE ADS     --> 
+                                    <td class="{!onboard.Website_Claimed_Verified_by_a_M__c != null ? 'hasValue' : 'hasNoValue'}">                                                                                                            
+                                        <span class="slds-truncate ">{!onboard.Website_Claimed_Verified_by_a_M__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Request_Edit_Access_to_MC__c}">
+                                        <span class="slds-truncate ">{!onboard.Request_Edit_Access_to_MC__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Request_VA_Campaign_Build__c != null ? 'hasValue' : 'hasNoValue'}">                                                                                                                                                
+                                        <span class="slds-truncate ">{!onboard.Request_VA_Campaign_Build__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.Merchant_Center_Code_Created__c}">
+                                        <span class="slds-truncate ">{!onboard.Merchant_Center_Code_Created__c}</span>
+                                    </td> -->
+                                    <td class="{!onboard.Merchant_Code_Sent_to_Website_Provider__c}">
+                                        <span class="slds-truncate ">{!onboard.Merchant_Code_Sent_to_Website_Provider__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Website_Verified__c}">
+                                        <span class="slds-truncate ">{!onboard.Website_Verified__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Website_Claimed__c != null ? 'hasValue' : 'hasNoValue'}">                                                                                                                                                
+                                        <span class="slds-truncate ">{!onboard.Website_Claimed__c}</span>
+                                    </td>
+                                    <td class="{!onboard.Campaign_Built__c}">
+                                        <span class="slds-truncate ">{!onboard.Campaign_Built__c}</span>
+                                    </td>
+                                    <!-- <td class="{!onboard.VA_Budgets_Allocated__c}">
+                                        <span class="slds-truncate ">{!onboard.VA_Budgets_Allocated__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Confirm_VA_Geotargeting__c}">
+                                        <span class="slds-truncate ">{!onboard.Confirm_VA_Geotargeting__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Customize_VA_Landing_Pages__c}">
+                                        <span class="slds-truncate ">{!onboard.Customize_VA_Landing_Pages__c}</span>
+                                    </td> -->
+                                    <!-- <td class="{!onboard.Enable_VA_Campaign__c != null ? 'hasValue' : 'hasNoValue'}">                                         
+                                        <span class="slds-truncate ">{!onboard.Enable_VA_Campaign__c}</span>
+                                    </td> -->                                    
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div></div>
+            <br/>
+            <div style= 'margin-left: 15px;'>
+                <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />
+                <lightning:button label="Previous" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                <lightning:button label="Next" disabled="{!v.end >= v.totalSize}" onclick="{!c.next}" />
+                <!-- <lightning:button label="Last" disabled="{!v.end >= v.totalSize}" onclick="{!c.last}" />-->
+            </div>
+            <br/>
+            
+            <!-- </div>-->
+        </div>
+    </lightning:card>
+</aura:component>

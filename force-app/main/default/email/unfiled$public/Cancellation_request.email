@@ -1,0 +1,44 @@
+{!Opportunity.Contact__c} has requested to cancel {!Opportunity.Account}
+
+Cancellation Details:
+
+Regional Performance Manager: {!Opportunity.Regional_performance_manager__c}
+Account Technician: {!Opportunity.Account_Technician__c} 
+Executive Sponsor: {!Opportunity.Executive_Sponsor__c}
+Cancellation Received: {!Opportunity.Cancellation_Received__c}
+Last day of service: {!Opportunity.Last_Day_of_Service__c}
+Date to Pause Ads: {!Opportunity.Date_to_Pause_Ads__c} 
+Probability to Save: {!Opportunity.Probability_to_save__c}
+Foundation Employee Assessment:{!Opportunity.Foundation_Employee_Assessment_of_Cancel__c}
+Contact Requesting to Cancel: {!Opportunity.Contact__c}
+Contact Title : {!Opportunity.Contact_Title__c}
+Contact Email : {!Opportunity.Contact_Email__c}
+Launch Date of Account: {!Opportunity.Launch_Date_of_Account__c}
+Cancellation Details Provided by Dealer: {!Opportunity.Final_Cancellation_Key_Learnings__c}
+Product Details: {!Opportunity.Product__c}
+Actual Google Launch Date: {!Opportunity.Actual_Google_Launch_Date__c}
+Monthly Recurring Revenue: {!Opportunity.Total_MRR__c}
+Last Month Media Budget: {!Opportunity.Last_Month_Budget__c}
+Current Month Media Budget: {!Opportunity.Current_Month_Budget__c}
+
+Client Paint Points:
+
+Concerns or objections shared by Dealer: {!Opportunity.Concerns_or_objections_shared_by_Dealer__c}
+How were the Dealer concerns addressed? {!Opportunity.How_were_concerns_addressed__c}
+Dealer's response to addressed concerns? {!Opportunity.Client_s_feedback_to__c}
+
+Account Performance:
+
+High-Level Positive Account Performance: {!Opportunity.From_your_POV_what_has_been_going_well__c}
+Areas for Improvement: {!Opportunity.Areas_for_Improvement__c}
+Actions Needed to Save Account: {!Opportunity.Actions_Needed_to_Save_Account__c}
+
+Next Steps: 
+
+Any insight to date to consider? {!Opportunity.Any_insight_to_date_to_consider__c}
+Save Call scheduled?  {!IF(Opportunity.Save_Call_Scheduled__c, 'Yes', 'No')}
+Date of Save Call: {!Opportunity.Date_of_Save_Call__c}
+Beyond you and the AT, is there anyone else you’d like to include on the call? {!Opportunity.Anyone_else_you_d_like_to_include_on_Cal__c}  
+Have you reached out to the Data team? {!IF(Opportunity.Have_you_reached_out_to_the_Data_team__c, 'Yes', 'No')}
+Data’s deliverable date: {!Opportunity.Data_s_deliverable_date__c}
+Anything else you want us to know? {!Opportunity.Anything_else_you_want_us_to_know__c}

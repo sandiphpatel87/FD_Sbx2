@@ -1,0 +1,194 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="NCM_Enrollment_Status_Report_Controller">
+    <aura:attribute type="Onboarding__c[]" name="onList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="paginationList" type="Onboarding__c[]"/>
+    <aura:attribute name="Completed" type="String" default='background-color:red'/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="pageSize" type="Integer" default="20"/>
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer"/>
+    <aura:attribute name="count" type="Integer"/>
+    <aura:attribute name="url" type="string" default="https://foundationdirect.lightning.force.com/lightning/r/Onboarding__c/" />
+    <aura:attribute name="sortField" type="String" default='Planned_Launch_Date__c'/>
+    <aura:attribute name="sortAsc" type="Boolean" default="true"/>
+    <aura:attribute name="groupCode" type="String"  />
+    <aura:attribute name="groupName" type="String"  />
+    <aura:attribute name="fieldMap" type="Map"/>
+    <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+    
+    <lightning:card>
+        
+        <div class="slds-page-header report-header ">
+            &nbsp;&nbsp; <lightning:icon iconName="standard:report" alternativeText="Report" title="Report" />
+            &nbsp;&nbsp;&nbsp; <span class="slds-media__body"><div class="slds-page-header__name"><div class="slds-page-header__name-title"><h1><span>Report: Onboarding</span><span class="slds-page-header__title slds-truncate" title="NCM Enrollment Status Report">NCM Enrollment Status Report</span></h1></div></div></span> 
+        </div>
+        
+        <br/>
+        
+        <div style= 'margin-left: 15px;'> 
+            <div >Total Records</div>
+            <div>{!v.count}</div><br/>
+        </div>
+        
+        <div class='slds-form__row slds-form-element_horizontal ' style= 'margin-left: 15px;'>
+            
+            <div class="divItem" role="listitem">
+                <lightning:input name="NCM 20 Group Code" type="text" label="NCM 20 Group Code" value="{!v.groupCode}" />
+            </div>
+            
+            <div class="divItem" role="listitem">
+                <lightning:input name="20 Group Name" type="text" label="20 Group Name" value="{!v.groupName}" />
+            </div>
+            <br/>
+            <div class="divItem" role="listitem">
+                <lightning:button variant="brand" label="Search" onclick="{!c.doInit}" /> 
+            </div>
+            
+        </div>
+        
+        
+        <div class="slds-s-around--xx-large">
+            
+            <aura:if isTrue="{!v.toggleSpinner}">
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--small slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if> 
+            
+            <div class="view">
+                
+                <div class="wrapper">
+                    
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-border_left slds-border_right  slds-table_col-bordered table"> 
+                        <thead>
+                            <tr class="" style='height: 40px;'>
+                                <th scope="col" class="sticky-col first-col">
+                                    <div class="slds-truncate ">No.</div>
+                                </th>
+                                <th scope="col" class="sticky-col second-col">
+                                    <div class="slds-truncate">Account Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Opportunities"><center>Opportunities</center></div><br/>
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                                                <thead>
+                                                    <tr class="slds-hint-parent">
+                                                        
+                                                        <th style="padding: 0 150px 0px 150px !important;" scope="col">
+                                                            <div class="slds-truncate" title="Name">Name</div>
+                                                        </th>
+                                                        <th style="padding: 0 70px 0px 70px !important;" scope="col">
+                                                            <div class="slds-truncate" title="Stage">Stage</div>
+                                                        </th>
+                                                        <th scope="col">
+                                                            <div class="slds-truncate" title="Contract Sent Date">Contract Sent Date</div>
+                                                        </th>
+                                                        <th scope="col">
+                                                            <div class="slds-truncate" title="Contract Signed Date">Contract Signed Date</div>
+                                                        </th>
+                                                        <th scope="col">
+                                                            <div class="slds-truncate" title="Enrollment Deadline">Enrollment Deadline</div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                    </table>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Contacts"><center>Contacts</center></div><br/>
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                                                <thead>
+                                                    <tr class="slds-hint-parent">
+                                                        
+                                                        <th style="padding: 0 20px 0px 50px !important;" scope="col">
+                                                            <div class="slds-truncate" title="Name">Name</div>
+                                                        </th>
+                                                        <th style="padding: 0 70px 0px 70px !important;" scope="col">
+                                                            <div class="slds-truncate" title="Email">Email</div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                    </table>
+                                </th>                           
+                            </tr>
+                        </thead>   
+                        <tbody>      
+                            <aura:iteration items="{!v.paginationList}" var="onboard" indexVar="index">
+                                <tr class="slds-hint-parent">
+                                    <td class="sticky-col first-col">{!index+1}</td>
+                                    <th > 
+                                        <span class="slds-truncate "><a href="{!'/'+onboard.objAccount.Id}"> {!onboard.objAccount.Name}</a></span>
+                                    </th>
+                                    <td>
+                                        <aura:if isTrue="{!onboard.isShowOpportunities}">
+                                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                                                
+                                                <tbody>
+                                                    <aura:iteration items="{!onboard.listOpportunity}" var="objOpportunity" indexVar="index">
+                                                        <tr  class="{!objOpportunity.StageName}" >
+                                                            <td class="slds-cell_action-mode" role="gridcell" style="width: 35%;background-color: white;">
+                                                                <span class="slds-truncate"><a href="{!'/'+objOpportunity.Id}">{!objOpportunity.Name}</a></span>
+                                                            </td>
+                                                            <td style="width: 19%;"> 
+                                                                <span class="slds-truncate">{!objOpportunity.StageName}</span>
+                                                            </td>
+                                                            <td style="width: 14%;"> 
+                                                                <span class="slds-truncate">{!objOpportunity.Contract_Sent_Date__c}</span>
+                                                            </td>
+                                                            <td style="width: 16%;">
+                                                                <span class="slds-truncate">{!objOpportunity.Contract_Signed_Date__c}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="slds-truncate">{!objOpportunity.Enrollment_Deadline__c}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+                                            </table>
+                                        </aura:if>
+                                    </td>
+                                    <td>
+                                        <aura:if isTrue="{!onboard.isShowContacts}">
+                                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                                                
+                                                <tbody>
+                                                    <aura:iteration items="{!onboard.listContacts}" var="objContact" indexVar="index">
+                                                        <tr class="slds-hint-parent">
+                                                            <td role="gridcell" style="width: 38%;">
+                                                                <span class="slds-truncate"><a href="{!'/'+objContact.Id}">{!objContact.Name}</a></span>
+                                                            </td>
+                                                            <td role="gridcell" class="{!objContact.Email != null ? 'hasValue' : 'hasNoValue'}" > 
+                                                                <span class="slds-truncate">{!objContact.Email}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+                                            </table>
+                                        </aura:if>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    
+                </div>
+                
+            </div>
+            
+            <br/>
+            
+            <div style= 'margin-left: 15px;'>
+                <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />
+                <lightning:button label="Previous" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                <lightning:button label="Next" disabled="{!v.end >= v.totalSize}" onclick="{!c.next}" />
+            </div>
+            
+            <br/>
+            
+        </div>
+    </lightning:card>
+</aura:component>

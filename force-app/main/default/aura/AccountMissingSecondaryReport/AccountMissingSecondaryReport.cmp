@@ -1,0 +1,62 @@
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="FetchMissingAccount" >
+	 <aura:attribute type="Account[]" name="onList"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="paginationList" type="Account[]"/>
+    <aura:attribute name="Completed" type="String" default='background-color:red'/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="pageSize" type="Integer" default="20"/>
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer"/>
+    <aura:attribute name="count" type="Integer"/>
+    <lightning:card>
+        <div class="slds-page-header report-header ">
+            &nbsp;&nbsp; <lightning:icon iconName="standard:report" alternativeText="Report" title="Report" />
+            &nbsp;&nbsp;&nbsp; <span class="slds-media__body"><div class="slds-page-header__name"><div class="slds-page-header__name-title"><h1><span>Report: Accounts </span><span class="slds-page-header__title slds-truncate" title="Onboarding Check List Report">Accounts without secondary contacts</span></h1></div></div></span> 
+        </div> <br/> 
+        <div style= 'margin-left: 15px;'> <div >Total Records</div>
+            <div>{!v.count}</div><br/></div>
+        <div class="slds-s-around--xx-large">
+           
+            <div class="container-fluid slds-scrollable">        
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-border_left slds-border_right  slds-table_col-bordered"> 
+                    <thead>
+                        <tr class="" style='height: 40px;'>
+                            <th scope="col"></th>
+                             <th scope="col">
+                                <div class="slds-truncate">Account</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Type</div>
+                            </th>
+                            
+                        </tr>
+                    </thead>   
+                    <tbody>      
+                        <aura:iteration items="{!v.paginationList}" var="acc" indexVar="index">
+                               <tr>
+                                    <td >{!index+1}</td>
+                                    <td > 
+                                        <span class="slds-truncate"><a href="{!'/'+acc.Id}"> {!acc.Name}</a></span>
+                                    </td>
+                                    <td > 
+                                        <span class="slds-truncate"> {!acc.Type__c}</span>
+                                    </td>
+                                </tr>
+                            
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                <br/>
+                <div style= 'margin-left: 15px;'>
+                    <lightning:button label="First" disabled="{!v.start == 0}"  onclick="{!c.first}" />
+                    <lightning:button label="Previous" disabled="{!v.start == 0}"  onclick="{!c.previous}" />
+                    <lightning:button label="Next" disabled="{!v.end >= v.totalSize}" onclick="{!c.next}" />
+                   <!-- <lightning:button label="Last" disabled="{!v.end >= v.totalSize}" onclick="{!c.last}" />-->
+                </div>
+                <br/>
+                
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>

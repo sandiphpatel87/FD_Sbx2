@@ -1,0 +1,38 @@
+<apex:component access="global" controller="BudgetsOfAmount">
+    <apex:attribute name="mediaIdValue" type="String" description="This is the Id of the account" assignTo="{!mediaId}" access="global" />
+    <html>
+        <head>
+        </head>
+    </html>
+    New Month Media Budget<br/>
+    <apex:outputPanel rendered="{!AND(MediaObj.New_Search__c != 0 , MediaObj.New_Search__c != null)}">
+        <span>New Search  : {!MediaObj.New_Search__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.Service_Search__c != 0 , MediaObj.Service_Search__c != null)}">
+        <span>Service Search  : {!MediaObj.Service_Search__c} </span><br/>
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!AND(MediaObj.Display__c != 0 , MediaObj.Display__c != null)}">
+        <span>New Display  : {!MediaObj.Display__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.Video__c != 0 , MediaObj.Video__c != null)}">
+        <span>New Video  : {!MediaObj.Video__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.Used_Video__c != 0 , MediaObj.Used_Video__c != null)}">
+        <span>Used Video : {!MediaObj.Used_Video__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.Used_Display__c != 0 , MediaObj.Used_Display__c != null)}">
+        <span>Used Display  : {!MediaObj.Used_Display__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.FB__c != 0 , MediaObj.FB__c != null)}">
+        <span>Facebook Sales  : {!MediaObj.FB__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.Facebook_Service__c != 0 , MediaObj.Facebook_Service__c != null)}">
+        <span>Facebook Service  : {!MediaObj.Facebook_Service__c} </span><br/>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(MediaObj.Used_Search__c != 0 , MediaObj.Used_Search__c != null)}">
+        <span>Used Search  : {!MediaObj.Used_Search__c} </span><br/>
+    </apex:outputPanel>
+    
+    
+</apex:component>

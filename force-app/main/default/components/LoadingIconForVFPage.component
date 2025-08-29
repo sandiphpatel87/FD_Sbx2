@@ -1,0 +1,19 @@
+<apex:component >
+    <apex:actionStatus onstart="startLoading();" onstop="stopLoading();" id="loadStatus" />
+     <apex:stylesheet value="{!$Resource.styleCSSLoadingIconForVFPage}" />
+
+    <div id="load_scrl" class="loadingBox loader" style="display:none"> </div>
+    <div class="loadingBox overlay"> </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+ 
+        function startLoading() {
+            $('#load_scrl').css('top', $(document).scrollTop() + 200);
+            $('.loadingBox').show();
+        }
+ 
+        function stopLoading() {
+            $('.loadingBox').hide();
+        }
+    </script>
+</apex:component>

@@ -1,0 +1,80 @@
+<apex:component access="global" controller="budgetsOfAccount">
+
+    <apex:attribute name="accountIdValue" type="String" description="This is the Id of the account" assignTo="{!accountId}" access="global" />
+    <html>
+    <head>
+    <style type="text/css" media="print">
+          table th{
+            font-size: 11px;
+            font-face: arial;
+            background: #CCCCCC;
+            border-width: 1;
+            text-align: center 
+            } 
+          table td{
+            font-size: 11px;
+            font-face: verdana 
+            } 
+          table {
+            border: solid #CCCCCC;
+            border-width: 1
+            }
+          table tr{
+            border: solid #CCCCCC;
+            border-width: 1
+            }
+    </style> 
+    </head>
+    </html>        
+        {!account.Name} Budget<br/>
+        <apex:repeat value="{!newOpps}" var="MediaObj">
+            <apex:outputPanel rendered="{!AND(MediaObj.New_Search__c > 1 , MediaObj.New_Search__c != null)}">
+                <span>New Search: ${!MediaObj.New_Search__c} </span><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(MediaObj.Service_Search__c > 1 , MediaObj.Service_Search__c != null)}">
+                <span>Service Search: ${!MediaObj.Service_Search__c} </span><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(MediaObj.Used_Search__c > 1 , MediaObj.Used_Search__c != null)}">
+                <span>Used Search: ${!MediaObj.Used_Search__c} </span><br/>
+            </apex:outputPanel>   
+            
+            <apex:outputPanel rendered="{!AND(MediaObj.Video__c > 1 , MediaObj.Video__c != null)}">
+                <span>New Video: ${!MediaObj.Video__c} </span><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(MediaObj.Used_Video__c > 1 , MediaObj.Used_Video__c != null)}">
+                <span>Used Video: ${!MediaObj.Used_Video__c} </span><br/>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!AND(MediaObj.Display__c > 1 , MediaObj.Display__c != null)}">
+                <span>New Display: ${!MediaObj.Display__c} </span><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(MediaObj.Used_Display__c > 1 , MediaObj.Used_Display__c != null)}">
+                <span>Used Display: ${!MediaObj.Used_Display__c} </span><br/>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!AND(MediaObj.FB__c > 1 , MediaObj.FB__c != null)}">
+                <span>New Facebook: ${!MediaObj.FB__c} </span><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(MediaObj.Facebook_Service__c > 1 , MediaObj.Facebook_Service__c != null)}">
+                <span>Service Facebook: ${!MediaObj.Facebook_Service__c} </span><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(MediaObj.Facebook_Used_Car_Budget__c > 1 , MediaObj.Facebook_Used_Car_Budget__c != null)}">
+                <span>Used Facebook: ${!MediaObj.Facebook_Used_Car_Budget__c} </span><br/>
+            </apex:outputPanel>     
+            <apex:outputPanel rendered="{!AND(MediaObj.New_Vehicle_Ads__c > 1 , MediaObj.New_Vehicle_Ads__c != null)}">
+                <span>New Vehicle Ads: ${!MediaObj.New_Vehicle_Ads__c} </span><br/>
+            </apex:outputPanel>   
+            <apex:outputPanel rendered="{!AND(MediaObj.Vehicle_Ads_Used_Car_Budget__c > 1 , MediaObj.Vehicle_Ads_Used_Car_Budget__c != null)}">
+                <span>Used Vehicle Ads: ${!MediaObj.Vehicle_Ads_Used_Car_Budget__c} </span><br/>
+            </apex:outputPanel>   
+            <apex:outputPanel rendered="{!AND(MediaObj.Streaming_TV_OTT_Advertising__c > 1 , MediaObj.Streaming_TV_OTT_Advertising__c != null)}">
+                <span>OTT Advertising: ${!MediaObj.Streaming_TV_OTT_Advertising__c} </span><br/>
+            </apex:outputPanel>       
+            <apex:outputPanel rendered="{!AND(MediaObj.New_Performance_Max__c > 1 , MediaObj.New_Performance_Max__c != null)}">
+                <span>New Performance Max: ${!MediaObj.New_Performance_Max__c} </span><br/>
+            </apex:outputPanel>   
+            <apex:outputPanel rendered="{!AND(MediaObj.Used_Performance_Max__c > 1 , MediaObj.Used_Performance_Max__c!= null)}">
+                <span>Used Performance Max: ${!MediaObj.Used_Performance_Max__c} </span><br/>
+            </apex:outputPanel>     
+        </apex:repeat>        
+</apex:component>

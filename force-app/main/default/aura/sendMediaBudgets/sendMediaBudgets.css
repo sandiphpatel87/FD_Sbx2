@@ -1,0 +1,31 @@
+.THIS.hideDiv {
+    display: none;
+}
+.THIS .Green { 
+   background-image: url("/img/samples/flag_green.gif");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: left;
+}
+.THIS .Red {
+   background-image: url("/img/samples/flag_red.gif");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: left;
+}
+.THIS .Yellow {
+   background-image: url("/img/samples/flag_yellow.gif");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: left;
+}
+
+.THIS .Blue {
+   background-image: url("/resource/1690388843000/BlueFlag?");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: left;
+}
+.THIS .iconWhite svg {
+    fill : white;
+}

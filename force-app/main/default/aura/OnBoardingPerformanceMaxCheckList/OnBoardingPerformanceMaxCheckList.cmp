@@ -1,0 +1,47 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" Controller="OnboardingQACheckList">
+    <aura:attribute name="oldonboardRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+    <aura:attribute name="onBoardCheckValue" type="List" default="[]"/>
+    <aura:attribute name="onboardRecord" type="Onboarding__c" default="[]"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div>
+     <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+    <h3 class="slds-section-title--divider">Performance Max </h3>
+    <span> <lightning:input aura:id="checkboxField" label="Confirm budget &amp; products tab allocation" checked="{!v.onboardRecord.Confirm_budget_products_tab_allocation__c }" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id="checkboxField" label="Confirm video budget is present OR If client is not running video confirm $1 video placeholder budget in Budget App" checked="{!v.onboardRecord.Confirm_video_budget_is_present_OR_If_cl__c}" type="checkbox" onchange='{!c.change}'/></span>
+    <span> <lightning:input aura:id="checkboxField" label="Confirm “Business Name” in Dealer Setup" checked="{!v.onboardRecord.Confirm_Business_Name_in_Dealer_Setup__c}" type="checkbox" onchange='{!c.change}'/></span>
+    <span> <lightning:input aura:id='checkboxField7' label="Confirm proper URLs present" checked="{!v.onboardRecord.Confirm_proper_URLs_present__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Run Performance Max Feed in Apollo" checked="{!v.onboardRecord.Run_Performance_Max_Feed_in_Apollo__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <lightning:input aura:id="checkboxField" 
+            label="QA geos in Google Ads &amp; sync from Apollo if needed" 
+            checked="{!v.onboardRecord.QA_geos_in_Google_Ads_sync_from_Apollo__c}" 
+            type="checkbox" 
+            onchange="{!c.change}" />
+        <span> <lightning:input aura:id='checkboxField' label="Exclude “automated assets” in Campaign Settings within Google Ads" checked="{!v.onboardRecord.Exclude_automated_assets_in_Campaign_S__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="QA asset groups for proper assets" checked="{!v.onboardRecord.QA_asset_groups_for_proper_assets__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Confirm correct audience signals present in asset groups" checked="{!v.onboardRecord.Confirm_correct_audience_signals_present__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Confirm daily budgets are correct in Google Ads" checked="{!v.onboardRecord.Confirm_daily_budgets_are_correct_in_Goo__c}" type="checkbox" onchange='{!c.change}'/></span>
+        <span> <lightning:input aura:id='checkboxField' label="Create Custom Goal per the pMax Launch Guide and apply to campaign" checked="{!v.onboardRecord.Create_Custom_Goal_per_the_pMax_Launch_G__c}" type="checkbox" onchange='{!c.change}'/></span>
+    <br/>    
+    <div>
+            
+            
+            <lightning:button variant="brand" 
+                              label="Save"
+                              title="Save"
+                              onclick="{!c.save}"/>
+            
+        </div>
+ </div>   
+</aura:component>

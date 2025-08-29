@@ -1,0 +1,10 @@
+Hello 
+
+{!Opportunity.Account} has enrolled in the Hyundai Alliance Program with Foundation Direct, effective {!Opportunity.Contract_Signed_Date__c} . Please ensure that the dealer is added to the Hyundai Coop file moving forward.
+
+Lead Source - {!Opportunity.LeadSource}
+Account Name - {!Opportunity.Account}
+Oppotunity Name - {!Opportunity.Name}
+
+Thank you,
+support@foundationdirect.com

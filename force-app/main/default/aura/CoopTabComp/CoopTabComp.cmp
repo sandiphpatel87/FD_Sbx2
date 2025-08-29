@@ -1,0 +1,43 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,lightning:availableForFlowScreens,force:lightningQuickActionWithoutHeader" access="global" Controller="CoopTabController">
+    <aura:attribute name="coopRecord" type="Working_Coop__c" default="[]"/>
+    <aura:attribute name="oldCoopRecord" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="mapApiName" type="List" default="[]"/>
+     <aura:attribute name="wCoopCheckValue" type="List" default="[]"/>
+    <aura:attribute name="truthy" type="Boolean" />
+    
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div >
+        <aura:if isTrue="{!v.truthy}">
+            <aura:if isTrue="{!v.spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading...</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:iteration items="{!v.oldCoopRecord}" var="item" indexVar="key">
+                <span> <lightning:input Name="" label="{!item.key}" value="{!item.value}" checked="{!item.checked}" type="checkbox" onchange='{!c.change}'/></span>
+                <br/>
+            </aura:iteration>
+            <div>
+                <br/>
+                <br/>
+                <br/>
+                <lightning:button variant="brand" 
+                                  label="Save"
+                                  title="Save"
+                                  onclick="{!c.save}"/>
+                
+            </div>
+            <aura:set attribute="else">
+                <b> Record is not available</b>
+            </aura:set>
+        </aura:if> 
+        <br/><br/>
+    </div>
+</aura:component>

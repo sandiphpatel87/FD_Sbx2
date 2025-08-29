@@ -1,0 +1,118 @@
+.THIS .Progress{
+    background-color:grey;
+    /*pointer-events: none;*/
+}
+.THIS .true{
+    background-color:#C7DDB5;
+    /*pointer-events: none;*/
+}
+.THIS .hasValue{
+    background-color:#C7DDB5;
+    /*pointer-events: none;*/
+}
+.THIS .hasNoValue{
+    /*background-color:orange;
+    /*pointer-events: none;*/
+}
+.THIS .false{
+    /*background-color:orange;
+    pointer-events: none;*/
+}
+.THIS .null{
+    background-color:orange;
+    /*pointer-events: none;*/
+}
+.THIS .Approved{
+    background-color:green;
+    /*pointer-events: none;*/
+}
+.THIS .Completed{
+    background-color:green;
+    /*pointer-events: none;*/
+}
+.THIS .Applicable{
+    background-color:green;
+    /*pointer-events: none;*/
+}
+.THIS .Followup{
+    background-color:orange;
+    /*pointer-events: none;*/
+}
+.THIS .Needs.AT.Follow.Up{
+    background-color:orange;
+    /*pointer-events: none;*/
+}
+.THIS .customers td .customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    /* pointer-events: none;*/
+}
+.THIS  td {
+    /*pointer-events: none;*/
+}
+
+.THIS .view {
+    margin: auto;
+    width: 100%;
+}
+
+.THIS .wrapper {
+    position: relative;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+.THIS .sticky-col {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: white;
+}
+
+.THIS .first-col {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    left: 0px;
+    background-color: var(--lwc-tableColorBackgroundHeader,rgb(250, 250, 249));
+            z-index: 9;
+        }
+        .THIS .second-col {
+            width: 200px;
+            min-width: 170px;
+            max-width: 220px;
+            left: 100px;
+            background-color: var(--lwc-tableColorBackgroundHeader,rgb(250, 250, 249));
+                    z-index: 9;        
+                }
+                .THIS .divItem{
+                    min-width: 349px;
+                    padding-left: var(--lwc-spacingSmall,0.75rem);
+                            padding-right: var(--lwc-spacingSmall,0.75rem);
+                            }
+                            
+                            .THIS .divItemDate{
+                                pointer-events: all;   
+                                min-width: 349px;
+                                padding-left: var(--lwc-spacingSmall,0.75rem);
+                                        padding-right: var(--lwc-spacingSmall,0.75rem);
+                                            
+                                        }
+                                        
+                                        .THIS .wrap-text {
+                                            white-space: normal; /* This property ensures text wrapping */
+                                        }
+                                        .THIS tr.Contract.Sent{
+                                            background-color:#F5F5DA;
+                                        }
+                                        .THIS tr.Onboarding{
+                                            background-color:#c7ddb5;
+                                        }
+                                        .THIS tr.Live{
+                                            background-color:#c7ddb5;
+                                        }
+                                        .THIS tr.Lost{
+                                            background-color:#EE4B2B;
+                                        }
+                                        .THIS tr.Cancellation{
+                                            background-color:#EE4B2B;
+                                        }

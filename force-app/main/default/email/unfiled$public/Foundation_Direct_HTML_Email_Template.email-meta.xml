@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <description>Template using HTML to add text around</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Foundation Direct HTML E-mail Template</name>
+    <style>none</style>
+    <subject>Foundation Direct</subject>
+    <textOnly>FOUNDATION DIRECT
+
+Lorem ipsum dolor sit amet, eam possim urbanitas ei. Mel saepe latine sapientem id, ei eum nonumes omittantur. Ne copiosae torquatos deterruisset pro, sint tation ad vel. Ad quot facete eam, veri rebum perfecto eu sea.
+
+His munere tamquam ad, vim cibo philosophia in. An everti tritani dolores nam, meis erroribus voluptaria cum at. Ut purto wisi ornatus mea. Erroribus ocurreret ex mel, in vidit commodo moderatius eum. Laboramus forensibus at qui, per reprehendunt delicatissimi ut. Eu his perfecto gloriatur.
+
+
+FOUNDATIONDIRECT.COM
+
+22713 Commerce Center Ct,
+Suite 160, VA 20166</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

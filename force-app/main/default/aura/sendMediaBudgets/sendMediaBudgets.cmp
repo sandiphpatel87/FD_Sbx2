@@ -1,0 +1,142 @@
+<aura:component controller="accountListToSendEmail" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    
+    <aura:attribute name="btnLabel" type="string"/>
+    <div class="slds-clearfix">
+        <div class="slds-float_right">
+            <!-- Brand variant: Identifies the primary action in a group of buttons -->
+            <lightning:button variant="brand" label="Media Decision Maker" title="Brand action" onclick="{!c.showExampleModal}" />
+            <!-- Brand variant: Identifies the primary action in a group of buttons -->
+            <lightning:button variant="brand" label="Primary/Secondray" title="Brand action" onclick="{!c.showExampleModal}" />
+            <!-- Brand variant: Identifies the primary action in a group of buttons -->
+            <lightning:button variant="brand" label="All Contacts" title="Brand action" onclick="{!c.showExampleModal}" />
+        </div></div>
+    <br/>
+    <!--Email Template related attributes -->
+    <aura:attribute name="options" type="List" access="PRIVATE"/>
+    <aura:attribute name="selectedValue" type="String" access="PRIVATE"/>
+    <aura:attribute name="conRelated" type="List" />
+    <!--aura:handler name="init" value="{!this}" action="{!c.initTemplate}" /-->
+    <!--Email Template End here -->
+    
+    <!-- lightning data table to display list of account records -->
+    <lightning:navigation aura:id="navigation"/>
+    <aura:attribute name="selected" type="Integer" default='0'/>
+    <aura:attribute name="totalrecord" type="Integer"/>
+    <aura:attribute name="accLst" type="Account[]"/>
+    <aura:attribute name="mycolumn" type="Object[]"/>
+    <aura:attribute name="templtList" type="string"/>
+    <aura:attribute name="selectedAccIds" type="Object[]" access="PUBLIC"/>
+    <aura:attribute name="sortBy" type="String"/>
+    <aura:attribute name="sortDirection" type="String" default="asc"/>
+    <aura:attribute name="paginationList" type="list"/>
+    <aura:attribute name="pageSize" type="Integer" default= "10"/>
+    
+    <aura:attribute name="totalSize" type="Integer"/>
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer"/>
+    <aura:attribute name="next" type="Boolean" default='true'/>
+    <aura:attribute name="previous" type="Boolean" default='true'/>
+     <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+    <aura:attribute name="rows" type="Map[]"/>
+    <aura:attribute name="cols" type="Map[]"/>
+    <lightning:card title="Accounts" iconName="standard:account">
+        <lightning:datatable
+                             data="{!v.accLst}"
+                             columns="{!v.mycolumn}"
+                             keyField="Id"
+                             hideCheckboxColumn="false"
+                             showRowNumberColumn="false"
+                             onrowselection="{! c.handleRowAction }" 
+                             sortedBy="{!v.sortBy}"
+                             sortedDirection="{!v.sortDirection}"
+                             onsort="{!c.handleSort}"
+                             />
+        <br/>
+        <div style='margin-left:13px;'><b>Selected {!v.selected} of total {!v.totalrecord}</b></div>
+    </lightning:card>
+    
+    <div aura:id="exampleModal"  class="slds-modal slds-fade-in-open hideDiv" aria-hidden="false" role="dialog">
+       
+        <div class="slds-backdrop slds-backdrop_open">
+            <aura:if isTrue="{!v.spinner}">
+                            <div aura:id="spinnerId" class="slds-spinner_container">
+                                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                    <span class="slds-assistive-text">Loading...</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </aura:if>
+            <div class="slds-modal__container" style="max-width:60rem;">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.hideExampleModal}">
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading--medium">Email Template</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="modalContent">
+                     
+                        <lightning:select name="tempId" label="Select Email Template:" aura:id="tempId" value="{!v.selectedValue}">
+                            <aura:iteration items="{!v.options}" var="option">
+                                <option text="{!option.label}" value="{!option.value}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <br/><br/>
+                        <span>Selected Contact</span>
+                        <span style="float: right;">
+                            <lightning:button variant="brand" disabled="{!v.start == 0}"  onclick="{!c.previous}">
+                                <lightning:icon iconName="utility:chevronleft" alternativeText="Previous" title="Previous" size="x-small" class='iconWhite' />
+                                Previous</lightning:button>
+                            &nbsp;
+                            <lightning:button variant="brand" disabled="{!v.end >= v.totalSize}" onclick="{!c.next}">
+                                Next <lightning:icon iconName="utility:chevronright" alternativeText="Next" title="Next"  size="x-small" class='iconWhite'/>
+                            </lightning:button></span>
+                        <br/><br/>
+                        <div class="slds-box">
+                            <table class="slds-table slds-table--bordered ">
+                                <thead>
+                                    <tr class="" style="background-color:#6cbcd2;color:white;font-weight:bold">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Contact Name">Contact Name</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Roles">Roles</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.paginationList}" var="con">
+                                        <aura:if  isTrue="{!con.Contact.Name}" >
+                                            <tr>
+                                                <td  data-label="Contact Name">
+                                                    <div class="slds-truncate" title="{!con.Contact.Name}">{!con.Contact.Name}</div>
+                                                </td>
+                                                <td data-label="Role">
+                                                    <div class="slds-truncate" title="{!con.Roles}">{!con.Roles}</div>
+                                                </td>
+                                            </tr>
+                                        </aura:if>
+                                    </aura:iteration>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.sendEmailTemplate}">Send Email</button>
+                    <button class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.hideExampleModal}">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+</aura:component>
