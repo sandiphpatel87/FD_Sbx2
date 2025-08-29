@@ -44,7 +44,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>OEM__c</field>
+            <field>Analytics_Franchise__c</field>
             <value>
                 <elementReference>$Record.OEM__c</elementReference>
             </value>
