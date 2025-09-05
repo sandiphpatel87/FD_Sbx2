@@ -38,16 +38,16 @@
         <inputAssignments>
             <field>Franchise_Type__c</field>
             <value>
-                <elementReference>$Record.OEM__c</elementReference>
+                <elementReference>$Record.Analytics_Franchise__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>OEM_Program__c</field>
+            <field>FND_OEM_Program__c</field>
             <value>
                 <elementReference>$Record.OEM_Program__c</elementReference>
             </value>
         </inputAssignments>
-        <inputReference>$Record.Credit_Requests__r</inputReference>
+        <inputReference>$Record.Foundation_Credit_Request__r</inputReference>
     </recordUpdates>
     <start>
         <locationX>50</locationX>
@@ -57,7 +57,7 @@
         </connector>
         <filterLogic>or</filterLogic>
         <filters>
-            <field>OEM__c</field>
+            <field>Analytics_Franchise__c</field>
             <operator>IsChanged</operator>
             <value>
                 <booleanValue>true</booleanValue>

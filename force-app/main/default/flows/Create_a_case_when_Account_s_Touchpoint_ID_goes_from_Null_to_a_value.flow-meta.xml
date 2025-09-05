@@ -95,21 +95,21 @@
             <name>If_Touchpoint_ID_changed</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Touchpoint_Master_ID__c</leftValueReference>
+                <leftValueReference>$Record.Foundation_Account__c</leftValueReference>
                 <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Touchpoint_Master_ID__c</leftValueReference>
+                <leftValueReference>$Record.Foundation_Account__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record__Prior.Touchpoint_Master_ID__c</leftValueReference>
+                <leftValueReference>$Record__Prior.Foundation_Account__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -353,7 +353,7 @@
         <inputAssignments>
             <field>Touchpoint_Master_ID__c</field>
             <value>
-                <elementReference>$Record.Touchpoint_Master_ID__c</elementReference>
+                <elementReference>$Record.Foundation_Account__c</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -648,7 +648,7 @@
         </connector>
         <filterLogic>(1 AND 5) OR ((2 OR 3) AND 4)</filterLogic>
         <filters>
-            <field>Touchpoint_Master_ID__c</field>
+            <field>Foundation_Account__c</field>
             <operator>IsNull</operator>
             <value>
                 <booleanValue>false</booleanValue>
@@ -676,7 +676,7 @@
             </value>
         </filters>
         <filters>
-            <field>Touchpoint_Master_ID__c</field>
+            <field>Foundation_Account__c</field>
             <operator>IsChanged</operator>
             <value>
                 <booleanValue>true</booleanValue>

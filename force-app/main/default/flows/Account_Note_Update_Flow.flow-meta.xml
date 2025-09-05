@@ -79,7 +79,7 @@
         <connector>
             <targetReference>RPM_Notes_Updated</targetReference>
         </connector>
-        <object>Onboarding__c</object>
+        <object>Foundation_Onboarding__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>

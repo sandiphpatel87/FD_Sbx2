@@ -66,7 +66,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Actual_Launch_Date__c</leftValueReference>
+                <leftValueReference>$Record.Category_Social_First_Billing_Date__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -95,7 +95,7 @@
             <name>TRUE_myRule_4</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Touchpoint_Master_ID__c</leftValueReference>
+                <leftValueReference>$Record.Foundation_Account__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -116,7 +116,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Team_Velocity_Master_Touchpoint_ID__c</leftValueReference>
+                <leftValueReference>$Record.QBIDV2__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
