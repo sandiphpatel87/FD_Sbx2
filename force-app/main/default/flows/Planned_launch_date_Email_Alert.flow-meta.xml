@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>sp1Onboarding_Handoff</name>
+        <label>Account.Onboarding_Handoff</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Account.Onboarding_Handoff</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Account.Onboarding_Handoff</nameSegment>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Migrated from the: Planned launch date Email Alert workflow rule
+Workflow rule description: &quot;</description>
+    <label>Planned launch date Email Alert</label>
+    <migratedFromWorkflowRuleName>Planned launch date Email Alert</migratedFromWorkflowRuleName>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Planned_Launch_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>ScheduledPath1</name>
+            <connector>
+                <targetReference>sp1Onboarding_Handoff</targetReference>
+            </connector>
+            <label>ScheduledPath1</label>
+            <offsetNumber>-2</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>Planned_Launch_Date__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

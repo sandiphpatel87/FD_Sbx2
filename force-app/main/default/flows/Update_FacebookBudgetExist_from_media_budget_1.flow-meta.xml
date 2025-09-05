@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>myRule_1</name>
+        <label>Facebook Budget Exist</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myRule_3</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Facebook Budget Exist</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Total_Facebook_Budget__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Facebook_Budget__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_1_A1</targetReference>
+            </connector>
+            <label>TRUE_Facebook Budget Exist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_3</name>
+        <label>Fb Budget not exist</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>FALSE_Fb Budget not exist</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_3</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Total_Facebook_Budget__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Facebook_Budget__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_3_A1</targetReference>
+            </connector>
+            <label>TRUE_Fb Budget not exist</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Update FacebookBudgetExist from media budget process using multiple criteria.</description>
+    <label>Update FacebookBudgetExist from media budget_1</label>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>Account Facebook Budget Exists</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Facebook_Budget_Exists__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_3_A1</name>
+        <label>Account facebook budget</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Facebook_Budget_Exists__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1</targetReference>
+        </connector>
+        <object>Media_Budget__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

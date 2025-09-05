@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>myRule_1</name>
+        <label>Check product name</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myRule_4</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Check product name</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Name</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Agency Fee</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.MRR__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_1_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Check product name</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_4</name>
+        <label>Volvo Pilot Product?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>FALSE_Volvo Pilot Product?</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Product2.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Foundation Direct - Volvo Post Pilot Pricing</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_4_A1</targetReference>
+            </connector>
+            <label>TRUE_Volvo Pilot Product?</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Update FD Agency Fee (ARR) and Exclude Flag process using multiple criteria.
+update on opportunity</description>
+    <formulas>
+        <name>formula_1_myRule_1_A1_7897732184</name>
+        <dataType>Number</dataType>
+        <expression>{!$Record.Opportunity.FD_Agency_Fee_ARR__c}  + {!$Record.MRR__c}</expression>
+        <scale>18</scale>
+    </formulas>
+    <label>Update FD Agency Fee (ARR) and Exclude Flag</label>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>update ARR</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_4</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>FD_Agency_Fee_ARR__c</field>
+            <value>
+                <elementReference>formula_1_myRule_1_A1_7897732184</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Opportunity</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_4_A1</name>
+        <label>Update Flag</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Exclude_for_Opportunity_Calculation__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1</targetReference>
+        </connector>
+        <object>OpportunityLineItem</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

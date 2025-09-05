@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Migrated from the: Capture Date for Demo Scheduled workflow rule
+Workflow rule description: &quot;</description>
+    <formulas>
+        <name>Update_Demo_Scheduled_Entered_DateFormula</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()</expression>
+    </formulas>
+    <label>Capture Date for Demo Scheduled</label>
+    <migratedFromWorkflowRuleName>Capture Date for Demo Scheduled</migratedFromWorkflowRuleName>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>mainUpdate</name>
+        <label>mainUpdate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Demo_Scheduled_Entered_Date__c</field>
+            <value>
+                <elementReference>Update_Demo_Scheduled_Entered_DateFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>mainUpdate</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Demo Scheduled</stringValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

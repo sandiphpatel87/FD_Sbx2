@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Migrated from the Update account from onboarding process using Check onboarding data criteria.</description>
+    <formulas>
+        <name>formula_10_myRule_1_A1_9507759814</name>
+        <dataType>String</dataType>
+        <expression>IF(
+NOT(
+ISBLANK({!$Record.GA4_Measurement_ID__c} )
+),
+{!$Record.GA4_Measurement_ID__c},  
+
+IF(
+NOT(
+ISBLANK({!$Record.Account__r.GA4_Measurement_ID__c})
+),
+{!$Record.Account__r.GA4_Measurement_ID__c},
+&apos;&apos;)
+
+)</expression>
+    </formulas>
+    <formulas>
+        <name>formula_11_myRule_1_A1_6138298900</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL(TEXT({!$Record.Inventory_Feed_Provider_New_Car__c} ) ) , TEXT({!$Record.Account__r.Inventory_Feed_Provider_New_Car__c})  ,  TEXT({!$Record.Inventory_Feed_Provider_New_Car__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_12_myRule_1_A1_9742430416</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL(TEXT({!$Record.Inventory_Feed_Provider_Used_Car__c} ) ) , TEXT({!$Record.Account__r.Inventory_Feed_Provider_Used_Car__c})  , 
+ TEXT({!$Record.Inventory_Feed_Provider_Used_Car__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_13_myRule_1_A1_0296191746</name>
+        <dataType>String</dataType>
+        <expression>IF(ISPICKVAL({!$Record.Secure_Google_Ads_Data_In_GA__c} ,&quot;&quot;)  , TEXT( {!$Record.Account__r.Link_Google_Ads_CID_to_GA4_Property__c} ) ,TEXT( {!$Record.Secure_Google_Ads_Data_In_GA__c} ) )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_14_myRule_1_A1_1762535034</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL(TEXT({!$Record.Measurement_Strategy__c} ) ) , TEXT({!$Record.Account__r.Measurement_Strategy__c} ) ,  TEXT({!$Record.Measurement_Strategy__c} ) )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_15_myRule_1_A1_4262208423</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!$Record.New_Car_Sales_Phone__c} ) , {!$Record.Account__r.New_Car_Sales_Phone__c}  ,{!$Record.New_Car_Sales_Phone__c}  )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_16_myRule_1_A1_5545539372</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISNULL({!$Record.Planned_Analysis_Date__c} ), 
+{!$Record.Account__r.Planned_Analysis_Date__c}	 , 
+{!$Record.Planned_Analysis_Date__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_17_myRule_1_A1_2952778974</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISNULL({!$Record.Planned_Launch_Date__c})  , {!$Record.Account__r.Planned_Launch_Date__c} , {!$Record.Planned_Launch_Date__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_18_myRule_1_A1_1724969072</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!$Record.Previous_Provider_View_ID__c} ) , {!$Record.Account__r.Previous_Provider_View_ID__c} ,  
+{!$Record.Previous_Provider_View_ID__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_19_myRule_1_A1_9713444310</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!$Record.Service_Phone__c} )  , {!$Record.Account__r.Service_Phone__c}  , {!$Record.Service_Phone__c}  )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_1_myRule_1_A1_8667262689</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISNULL({!$Record.Actual_Google_Launch_Date__c}) , 
+{!$Record.Account__r.Actual_Google_Launch_Date__c},
+{!$Record.Actual_Google_Launch_Date__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_20_myRule_1_A1_9337128550</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!$Record.Touchpoint_Master_ID__c} )  , {!$Record.Account__r.Touchpoint_Master_ID__c}  ,  {!$Record.Touchpoint_Master_ID__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_21_myRule_1_A1_4584974378</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!$Record.Used_Car_Sales_Phone__c} )  , {!$Record.Account__r.Used_Car_Sales_Phone__c}  , {!$Record.Used_Car_Sales_Phone__c}  )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_2_myRule_1_A1_6548488740</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISNULL({!$Record.Actual_Facebook_Launch_Date__c}), 
+{!$Record.Account__r.Actual_Launch_Date__c}, 
+{!$Record.Actual_Facebook_Launch_Date__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_3_myRule_1_A1_3548119611</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISNULL({!$Record.BI_Launch_Date__c} ),
+{!$Record.Account__r.BI_Launch_Date__c} ,
+{!$Record.BI_Launch_Date__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_4_myRule_1_A1_9811903143</name>
+        <dataType>String</dataType>
+        <expression>IF(ISPICKVAL({!$Record.DMA_Id__c}, &quot;&quot;) , TEXT({!$Record.Account__r.DMA_Id__c} )  ,  TEXT({!$Record.DMA_Id__c} ) )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_5_myRule_1_A1_3615661773</name>
+        <dataType>String</dataType>
+        <expression>IF(ISPICKVAL({!$Record.DMA_Name__c}, &quot;&quot;) , TEXT({!$Record.Account__r.DMA_Name__c} )  ,  
+TEXT({!$Record.DMA_Name__c} ) )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_6_myRule_1_A1_9921824269</name>
+        <dataType>String</dataType>
+        <expression>IF(
+NOT(
+ISBLANK({!$Record.Dashboard_View_ID__c})
+),
+{!$Record.Dashboard_View_ID__c},  
+
+IF(
+NOT(
+ISBLANK({!$Record.Account__r.Dashboard_View_ID__c} )
+),
+{!$Record.Account__r.Dashboard_View_ID__c},
+&apos;&apos;)
+
+)</expression>
+    </formulas>
+    <formulas>
+        <name>formula_7_myRule_1_A1_7973308585</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!$Record.Facebook_URL__c} )  , {!$Record.Account__r.Facebook__c}  , {!$Record.Facebook_URL__c} )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_8_myRule_1_A1_5568485242</name>
+        <dataType>String</dataType>
+        <expression>IF(
+NOT(
+ISBLANK({!$Record.Foundation_View_ID__c} )
+),
+{!$Record.Foundation_View_ID__c},  
+
+IF(
+NOT(
+ISBLANK({!$Record.Account__r.Foundation_View_ID__c})
+),
+ {!$Record.Account__r.Foundation_View_ID__c},
+&apos;&apos;)
+
+)</expression>
+    </formulas>
+    <formulas>
+        <name>formula_9_myRule_1_A1_4819050921</name>
+        <dataType>Date</dataType>
+        <expression>IF(ISNULL({!$Record.GTM_Container_Updated_for_GA4__c} ), 
+{!$Record.Account__r.GA4_Build_Complete__c} , 
+{!$Record.GTM_Container_Updated_for_GA4__c} )</expression>
+    </formulas>
+    <label>Update account from onboarding_1</label>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>Update account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1_A2</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Actual_Google_Launch_Date__c</field>
+            <value>
+                <elementReference>formula_1_myRule_1_A1_8667262689</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Actual_Launch_Date__c</field>
+            <value>
+                <elementReference>formula_2_myRule_1_A1_6548488740</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Auto_charge_monthly_fee__c</field>
+            <value>
+                <elementReference>$Record.Auto_charge_monthly_fee__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>BI_Launch_Date__c</field>
+            <value>
+                <elementReference>formula_3_myRule_1_A1_3548119611</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Coop_Pre_approval_Requested__c</field>
+            <value>
+                <elementReference>$Record.Co_Op_Pre_approval_Requested__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Coop__c</field>
+            <value>
+                <elementReference>$Record.Coop_Requested__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>DMA_Id__c</field>
+            <value>
+                <elementReference>formula_4_myRule_1_A1_9811903143</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>DMA_Name__c</field>
+            <value>
+                <elementReference>formula_5_myRule_1_A1_3615661773</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Dashboard_View_ID__c</field>
+            <value>
+                <elementReference>formula_6_myRule_1_A1_9921824269</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Facebook__c</field>
+            <value>
+                <elementReference>formula_7_myRule_1_A1_7973308585</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Foundation_View_ID__c</field>
+            <value>
+                <elementReference>formula_8_myRule_1_A1_5568485242</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>GA4_Build_Complete__c</field>
+            <value>
+                <elementReference>formula_9_myRule_1_A1_4819050921</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>GA4_Measurement_ID__c</field>
+            <value>
+                <elementReference>formula_10_myRule_1_A1_9507759814</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Hyundai_Coop__c</field>
+            <value>
+                <elementReference>$Record.Hyundai_Coop__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Inventory_Feed_Provider_New_Car__c</field>
+            <value>
+                <elementReference>formula_11_myRule_1_A1_6138298900</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Inventory_Feed_Provider_Used_Car__c</field>
+            <value>
+                <elementReference>formula_12_myRule_1_A1_9742430416</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Invoices_Requested__c</field>
+            <value>
+                <elementReference>$Record.Invoices_Requested__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Link_Google_Ads_CID_to_GA4_Property__c</field>
+            <value>
+                <elementReference>formula_13_myRule_1_A1_0296191746</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Measurement_Strategy__c</field>
+            <value>
+                <elementReference>formula_14_myRule_1_A1_1762535034</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>New_Car_Sales_Phone__c</field>
+            <value>
+                <elementReference>formula_15_myRule_1_A1_4262208423</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Planned_Analysis_Date__c</field>
+            <value>
+                <elementReference>formula_16_myRule_1_A1_5545539372</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Planned_Launch_Date__c</field>
+            <value>
+                <elementReference>formula_17_myRule_1_A1_2952778974</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Previous_Provider_View_ID__c</field>
+            <value>
+                <elementReference>formula_18_myRule_1_A1_1724969072</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Process_builder_update__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Service_Phone__c</field>
+            <value>
+                <elementReference>formula_19_myRule_1_A1_9713444310</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Touchpoint_Master_ID__c</field>
+            <value>
+                <elementReference>formula_20_myRule_1_A1_9337128550</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Used_Car_Sales_Phone__c</field>
+            <value>
+                <elementReference>formula_21_myRule_1_A1_4584974378</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_1_A2</name>
+        <label>Update PB flag to False</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Process_builder_update__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1_A1</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Service_Phone__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Inventory_Feed_Provider_New_Car__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Inventory_Feed_Provider_Used_Car__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Facebook_URL__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>New_Car_Sales_Phone__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Used_Car_Sales_Phone__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Measurement_Strategy__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Touchpoint_Master_ID__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Coop_Requested__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Actual_Google_Launch_Date__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Actual_Facebook_Launch_Date__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Planned_Launch_Date__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Auto_charge_monthly_fee__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Previous_Provider_View_ID__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Foundation_View_ID__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DMA_Name__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DMA_Id__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Dashboard_View_ID__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Coop_Requested__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Co_Op_Pre_approval_Requested__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Invoices_Requested__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Hyundai_Coop__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>GA4_Measurement_ID__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>BI_Launch_Date__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Secure_Google_Ads_Data_In_GA__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>GTM_Container_Updated_for_GA4__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Planned_Analysis_Date__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Onboarding__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
